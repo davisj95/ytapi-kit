@@ -26,6 +26,63 @@ YT_ENDPOINT: Final[str] = "https://youtubeanalytics.googleapis.com/v2/reports"
 # noinspection SpellCheckingInspection
 DEFAULT_TOKEN_CACHE = pathlib.Path("~/.ytanalytics_token_single.pickle").expanduser()
 
+ID = str | Iterable[str]
+# Possible Dimensions ---------------------------------------------------------
+RESOURCE_DIMENSIONS = {"video", "playlist", "channel"}
+GEOGRAPHIC_DIMENSIONS = {"country", "province", "dma", "city"}
+TIME_PERIOD_DIMENSIONS = {"day", "month"}
+PLAYBACK_LOCATION_DIMENSIONS = {"insightPlaybackLocationType",
+                                "insightPlaybackLocationDetail"}
+PLAYBACK_DETAIL_DIMENSIONS = {"creatorContentType","liveOrOnDemand",
+                              "subscribedStatus","youtubeProduct"}
+TRAFFIC_SOURCE_DIMENSIONS = {"insightTrafficSourceType",
+                             "insightTrafficSourceDetail"}
+DEVICE_DIMENSIONS = {"deviceType", "operatingSystem"}
+DEMOGRAPHIC_DIMENSIONS = {"ageGroup", "gender"}
+CONTENT_SHARING_DIMENSIONS = {"sharingService"}
+AUDIENCE_RETENTION_DIMENSIONS = {"elapsedVideoTimeRatio"}
+LIVESTREAM_DIMENSIONS = {"livestreamPosition"}
+MEMBERSHIP_CANCELLATION_DIMENSIONS = {"membershipsCancellationSurveyReason"}
+AD_PERFORMANCE_DIMENSIONS = {"adType"}
+
+# Possible Metrics ------------------------------------------------------------
+VIEW_METRICS = {"engagedViews", "views", "playlistViews", "redViews", "viewerPercentage"}
+WATCH_TIME_METRICS = {"estimatedMinutesWatched", "estimatedRedMinutesWatched",
+                      "averageViewDuration", "averageViewPercentage"}
+ENGAGEMENT_METRICS = {"comments", "likes", "dislikes", "shares",
+                      "subscribersGained", "subscribersLost",
+                      "videosAddedToPlaylists", "videosRemovedFromPlaylists"}
+PLAYLIST_METRICS = {"averageTimeInPlaylist", "playlistAverageViewDuration",
+                    "playlistEstimatedMinutesWatched", "playlistSaves",
+                    "playlistStarts", "playlistViews", "viewsPerPlaylistStart"}
+ANNOTATION_METRICS = {"annotationImpressions", "annotationClickableImpressions",
+                      "annotationClicks", "annotationClickThroughRate",
+                      "annotationClosableImpressions", "annotationCloses",
+                      "annotationCloseRate"}
+CARD_METRICS = {"cardImpressions", "cardClicks", "cardClickRate",
+                "cardTeaserImpressions", "cardTeaserClicks", "cardTeaserClickRate"}
+LIVESTREAM_METRICS = {"averageConcurrentViewers", "peakConcurrentViewers"}
+AUDIENCE_RETENTION_METRICS = {"audienceWatchRatio", "relativeRetentionPerformance",
+                              "startedWatching","stoppedWatching",
+                              "totalSegmentImpressions"}
+MEMBERSHIP_CANCELLATION_METRICS = {"membershipsCancellationSurveyResponses"}
+ESTIMATED_REVENUE_METRICS = {"estimatedRevenue", "estimatedAdRevenue",
+                             "estimatedRedPartnerRevenue"}
+AD_PERFORMANCE_METRICS = {"grossRevenue", "cpm", "adImpressions",
+                          "monetizedPlaybacks", "playbackBasedCpm"}
+
+# Possible Filters ------------------------------------------------------------
+
+RESOURCE_FILTERS = {*RESOURCE_DIMENSIONS, "group"}
+GEOGRAPHIC_FILTERS = {*GEOGRAPHIC_DIMENSIONS, "continent", "subContinent"}
+AUDIENCE_RETENTION_FILTERS = {"audienceType"}
+TRAFFIC_DETAIL_TYPES = {
+   "ADVERTISING", "CAMPAIGN_CARD", "END_SCREEN", "EXT_URL", "HASHTAGS",
+   "NOTIFICATION", "RELATED_VIDEO", "SOUND_PAGE", "SUBSCRIBER",
+   "YT_CHANNEL", "YT_OTHER_PAGE", "YT_SEARCH", "VIDEO_REMIXES"
+}
+AUDIENCE_TYPES = {"ORGANIC", "AD_INSTREAM", "AD_INDISPLAY"}
+
 # ----------------------------------------------------------------------------
 # 1.Auth helpers — build an *AuthorizedSession* ready for the client
 # ----------------------------------------------------------------------------
@@ -92,62 +149,7 @@ class QuotaExceeded(AnalyticsError):
 # 3. AnalyticsClient — thin façade around the reports endpoint
 # ----------------------------------------------------------------------------
 
-ID = str | Iterable[str]
-# Possible Dimensions ---------------------------------------------------------
-RESOURCE_DIMENSIONS = {"video", "playlist", "channel"}
-GEOGRAPHIC_DIMENSIONS = {"country", "province", "dma", "city"}
-TIME_PERIOD_DIMENSIONS = {"day", "month"}
-PLAYBACK_LOCATION_DIMENSIONS = {"insightPlaybackLocationType",
-                                "insightPlaybackLocationDetail"}
-PLAYBACK_DETAIL_DIMENSIONS = {"creatorContentType","liveOrOnDemand",
-                              "subscribedStatus","youtubeProduct"}
-TRAFFIC_SOURCE_DIMENSIONS = {"insightTrafficSourceType",
-                             "insightTrafficSourceDetail"}
-DEVICE_DIMENSIONS = {"deviceType", "operatingSystem"}
-DEMOGRAPHIC_DIMENSIONS = {"ageGroup", "gender"}
-CONTENT_SHARING_DIMENSIONS = {"sharingService"}
-AUDIENCE_RETENTION_DIMENSIONS = {"elapsedVideoTimeRatio"}
-LIVESTREAM_DIMENSIONS = {"livestreamPosition"}
-MEMBERSHIP_CANCELLATION_DIMENSIONS = {"membershipsCancellationSurveyReason"}
-AD_PERFORMANCE_DIMENSIONS = {"adType"}
 
-# Possible Metrics ------------------------------------------------------------
-VIEW_METRICS = {"engagedViews", "views", "playlistViews", "redViews", "viewerPercentage"}
-WATCH_TIME_METRICS = {"estimatedMinutesWatched", "estimatedRedMinutesWatched",
-                      "averageViewDuration", "averageViewPercentage"}
-ENGAGEMENT_METRICS = {"comments", "likes", "dislikes", "shares",
-                      "subscribersGained", "subscribersLost",
-                      "videosAddedToPlaylists", "videosRemovedFromPlaylists"}
-PLAYLIST_METRICS = {"averageTimeInPlaylist", "playlistAverageViewDuration",
-                    "playlistEstimatedMinutesWatched", "playlistSaves",
-                    "playlistStarts", "playlistViews", "viewsPerPlaylistStart"}
-ANNOTATION_METRICS = {"annotationImpressions", "annotationClickableImpressions",
-                      "annotationClicks", "annotationClickThroughRate",
-                      "annotationClosableImpressions", "annotationCloses",
-                      "annotationCloseRate"}
-CARD_METRICS = {"cardImpressions", "cardClicks", "cardClickRate",
-                "cardTeaserImpressions", "cardTeaserClicks", "cardTeaserClickRate"}
-LIVESTREAM_METRICS = {"averageConcurrentViewers", "peakConcurrentViewers"}
-AUDIENCE_RETENTION_METRICS = {"audienceWatchRatio", "relativeRetentionPerformance",
-                              "startedWatching","stoppedWatching",
-                              "totalSegmentImpressions"}
-MEMBERSHIP_CANCELLATION_METRICS = {"membershipsCancellationSurveyResponses"}
-ESTIMATED_REVENUE_METRICS = {"estimatedRevenue", "estimatedAdRevenue",
-                             "estimatedRedPartnerRevenue"}
-AD_PERFORMANCE_METRICS = {"grossRevenue", "cpm", "adImpressions",
-                          "monetizedPlaybacks", "playbackBasedCpm"}
-
-# Possible Filters ------------------------------------------------------------
-
-RESOURCE_FILTERS = {*RESOURCE_DIMENSIONS, "group"}
-GEOGRAPHIC_FILTERS = {*GEOGRAPHIC_DIMENSIONS, "continent", "subContinent"}
-AUDIENCE_RETENTION_FILTERS = {"audienceType"}
-TRAFFIC_DETAIL_TYPES = {
-   "ADVERTISING", "CAMPAIGN_CARD", "END_SCREEN", "EXT_URL", "HASHTAGS",
-   "NOTIFICATION", "RELATED_VIDEO", "SOUND_PAGE", "SUBSCRIBER",
-   "YT_CHANNEL", "YT_OTHER_PAGE", "YT_SEARCH", "VIDEO_REMIXES"
-}
-AUDIENCE_TYPES = {"ORGANIC", "AD_INSTREAM", "AD_INDISPLAY"}
 
 class AnalyticsClient:
     """Tiny Analytics client with retries, type‑coercion, and rate‑limit detection."""
