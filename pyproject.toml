@@ -67,7 +67,7 @@ exclude_lines = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest", "ruff", "mypy"]
+dev = ["pytest", "ruff", "mypy", "pytest-mock", "responses"]
 
 [tool.pytest.ini_options]
 addopts   = "-ra"
