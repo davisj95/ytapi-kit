@@ -183,6 +183,10 @@ class AnalyticsClient:
             dtype = dtype_map.get(h.get("dataType"))
             if dtype:
                 df[h["name"]] = df[h["name"]].astype(dtype, errors="ignore")
+
+        for col in {"day", "month"} & set(df.columns):
+            df[col] = pd.to_datetime(df[col], errors="ignore")
+
         return df
 
     @staticmethod
