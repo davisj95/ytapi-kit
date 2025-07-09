@@ -5,22 +5,12 @@ import io
 import re
 from typing import Iterator
 
+from ._util import _check_type
+
 class ReportingClient:
     def __init__(self, session):
         self.session = session
         self.base_url = "https://youtubereporting.googleapis.com/v1"
-
-    @staticmethod
-    def _check_type(value, expected, name: str) -> None:
-        """Raise TypeError if *value* is not None and not an *expected* type."""
-        if value is None:
-            return
-        if not isinstance(value, expected):
-            if isinstance(expected, tuple):
-                exp = " or ".join(t.__name__ for t in expected)
-            else:
-                exp = expected.__name__
-            raise TypeError(f"{name} must be {exp} | None")
 
     @staticmethod
     def _paged(func, *args, **kwargs) -> Iterator[pd.DataFrame]:
@@ -57,10 +47,10 @@ class ReportingClient:
         -------
         pandas.DataFrame
         """
-        self._check_type(include_system_managed, bool, "include_system_managed")
-        self._check_type(page_size, int, "page_size")
-        self._check_type(page_token, str, "page_token")
-        self._check_type(on_behalf_of_content_owner, str, "on_behalf_of_content_owner")
+        _check_type(include_system_managed, bool, "include_system_managed")
+        _check_type(page_size, int, "page_size")
+        _check_type(page_token, str, "page_token")
+        _check_type(on_behalf_of_content_owner, str, "on_behalf_of_content_owner")
 
         url = f"{self.base_url}/reportTypes"
         params: dict[str, object] = {}
@@ -102,9 +92,9 @@ class ReportingClient:
         -------
         pandas.DataFrame
         """
-        self._check_type(report_type_id, str, "report_type_id")
-        self._check_type(name, str, "name")
-        self._check_type(on_behalf_of_content_owner, str, "on_behalf_of_content_owner")
+        _check_type(report_type_id, str, "report_type_id")
+        _check_type(name, str, "name")
+        _check_type(on_behalf_of_content_owner, str, "on_behalf_of_content_owner")
 
         url = f"{self.base_url}/jobs"
         body = {
@@ -151,10 +141,10 @@ class ReportingClient:
               ``createTime``, ``expireTime``, ``systemManaged``
             • ``next_page_token`` – ``None`` when there are no more pages.
         """
-        self._check_type(include_system_managed, bool, "include_system_managed")
-        self._check_type(page_size, int, "page_size")
-        self._check_type(page_token, str, "page_token")
-        self._check_type(on_behalf_of_content_owner, str, "on_behalf_of_content_owner")
+        _check_type(include_system_managed, bool, "include_system_managed")
+        _check_type(page_size, int, "page_size")
+        _check_type(page_token, str, "page_token")
+        _check_type(on_behalf_of_content_owner, str, "on_behalf_of_content_owner")
 
         url = f"{self.base_url}/jobs"
         params: dict[str, object] = {}
@@ -196,8 +186,8 @@ class ReportingClient:
             • DataFrame with columns ``id``, ``name``, ``reportTypeId``,
               ``createTime``, ``expireTime``, ``systemManaged``
         """
-        self._check_type(job_id, str, "job_id")
-        self._check_type(on_behalf_of_content_owner, str, "on_behalf_of_content_owner")
+        _check_type(job_id, str, "job_id")
+        _check_type(on_behalf_of_content_owner, str, "on_behalf_of_content_owner")
 
         url = f"{self.base_url}/jobs/{job_id}"
         params: dict[str, object] = {}
@@ -233,8 +223,8 @@ class ReportingClient:
         Returns nothing, but prints message saying the job was successfully deleted if
             200 or 204 response code is returned by the API.
         """
-        self._check_type(job_id, str, "job_id")
-        self._check_type(on_behalf_of_content_owner, str, "on_behalf_of_content_owner")
+        _check_type(job_id, str, "job_id")
+        _check_type(on_behalf_of_content_owner, str, "on_behalf_of_content_owner")
 
         url = f"{self.base_url}/jobs/{job_id}"
         params: dict[str, object] = {}
@@ -281,11 +271,11 @@ class ReportingClient:
               ``endTime``, ``createTime``, ``downloadUrl``
             • ``next_page_token`` – ``None`` when there are no more pages.
         """
-        self._check_type(job_id, str, "job_id")
-        self._check_type(page_size, int, "page_size")
-        self._check_type(page_token, str, "page_token")
-        self._check_type(created_after, (datetime, str), "created_after")
-        self._check_type(on_behalf_of_content_owner, str, "on_behalf_of_content_owner")
+        _check_type(job_id, str, "job_id")
+        _check_type(page_size, int, "page_size")
+        _check_type(page_token, str, "page_token")
+        _check_type(created_after, (datetime, str), "created_after")
+        _check_type(on_behalf_of_content_owner, str, "on_behalf_of_content_owner")
 
         url = f"{self.base_url}/jobs/{job_id}/reports"
         params: dict[str, object] = {}
@@ -338,9 +328,9 @@ class ReportingClient:
             • DataFrame with columns ``id``, ``jobId``, ``startTime``,
               ``endTime``, ``createTime``, ``downloadUrl``
         """
-        self._check_type(job_id, str, "job_id")
-        self._check_type(report_id, str, "report_id")
-        self._check_type(on_behalf_of_content_owner, str, "on_behalf_of_content_owner")
+        _check_type(job_id, str, "job_id")
+        _check_type(report_id, str, "report_id")
+        _check_type(on_behalf_of_content_owner, str, "on_behalf_of_content_owner")
 
         url = f"{self.base_url}/jobs/{job_id}/reports/{report_id}"
         params: dict[str, object] = {}
@@ -374,7 +364,7 @@ class ReportingClient:
         -------
         pandas.DataFrame | bytes
         """
-        self._check_type(download_url, str, "download_url")
+        _check_type(download_url, str, "download_url")
 
         r = self.session.get(download_url, stream=True)
         r.raise_for_status()
