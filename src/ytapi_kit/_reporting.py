@@ -1,7 +1,6 @@
 
 import pandas as pd
 from datetime import datetime
-from ytapi_kit import user_session
 import io
 import re
 from typing import Iterator
@@ -78,13 +77,13 @@ class ReportingClient:
         resp.raise_for_status()
         payload = resp.json()
 
-        return payload.get("reportTypes", []), payload.get("nextPageToken")
+        return pd.DataFrame(payload.get("reportTypes", [])), payload.get("nextPageToken")
 
     def create_job(
             self,
             *,
             report_type_id: str,
-            name: str,
+            name: str | None = None,
             on_behalf_of_content_owner: str | None = None,
     ) -> dict:
         """
@@ -94,7 +93,7 @@ class ReportingClient:
         ----------
         report_type_id : str
             The type of report this job should create.
-        name : str
+        name : str, optional
             The name of the reporting job.
         on_behalf_of_content_owner : str, optional
             CMS content-owner ID when acting on behalf of a partner account.
@@ -108,13 +107,16 @@ class ReportingClient:
         self._check_type(on_behalf_of_content_owner, str, "on_behalf_of_content_owner")
 
         url = f"{self.base_url}/jobs"
-        params: dict[str, object] = {
-            "name": name,
+        body = {
+            "reportTypeId": report_type_id,
         }
+        if name is not None:
+            body["name"] = name
+        params: dict[str, object] = {}
         if on_behalf_of_content_owner:
             params["onBehalfOfContentOwner"] = on_behalf_of_content_owner
 
-        resp = self.session.post(url, params=params)
+        resp = self.session.post(url, params=params, json=body)
         resp.raise_for_status()
         return resp.json()
 
@@ -170,10 +172,6 @@ class ReportingClient:
         payload = resp.json()
         df = pd.DataFrame(payload.get("jobs", []))
 
-        # cast timestamps to datetime64[ns, UTC]
-        for ts in ("createTime", "expireTime"):
-            df[ts] = pd.to_datetime(df[ts], errors="coerce", utc=True)
-
         return df, payload.get("nextPageToken")
 
     def get_job(
@@ -194,15 +192,12 @@ class ReportingClient:
 
         Returns
         -------
-        (pandas.DataFrame, str | None)
+        pandas.DataFrame
             • DataFrame with columns ``id``, ``name``, ``reportTypeId``,
               ``createTime``, ``expireTime``, ``systemManaged``
-            • ``next_page_token`` – ``None`` when there are no more pages.
         """
-        if not isinstance(job_id, str) or not job_id:
-            raise TypeError("job_id must be a non-empty str")
-        if on_behalf_of_content_owner is not None and not isinstance(on_behalf_of_content_owner, str):
-            raise TypeError("on_behalf_of_content_owner must be str | None")
+        self._check_type(job_id, str, "job_id")
+        self._check_type(on_behalf_of_content_owner, str, "on_behalf_of_content_owner")
 
         url = f"{self.base_url}/jobs/{job_id}"
         params: dict[str, object] = {}
@@ -213,18 +208,9 @@ class ReportingClient:
         resp.raise_for_status()
         payload = resp.json()
 
-        df = pd.DataFrame(payload)
-
-        for col in ("id", "name", "reportTypeId",
-                    "createTime", "expireTime", "systemManaged"):
-            if col not in df.columns:
-                df[col] = pd.NA
-
-        for ts in ("createTime", "expireTime"):
-            df[ts] = pd.to_datetime(df[ts], errors="coerce", utc=True)
+        df = pd.DataFrame([payload])
 
         return df
-
 
     def delete_job(
             self,
@@ -247,10 +233,8 @@ class ReportingClient:
         Returns nothing, but prints message saying the job was successfully deleted if
             200 or 204 response code is returned by the API.
         """
-        if not isinstance(job_id, str) or not job_id:
-            raise TypeError("job_id must be a non-empty str")
-        if on_behalf_of_content_owner is not None and not isinstance(on_behalf_of_content_owner, str):
-            raise TypeError("on_behalf_of_content_owner must be str | None")
+        self._check_type(job_id, str, "job_id")
+        self._check_type(on_behalf_of_content_owner, str, "on_behalf_of_content_owner")
 
         url = f"{self.base_url}/jobs/{job_id}"
         params: dict[str, object] = {}
@@ -297,16 +281,11 @@ class ReportingClient:
               ``endTime``, ``createTime``, ``downloadUrl``
             • ``next_page_token`` – ``None`` when there are no more pages.
         """
-        if not isinstance(job_id, str) or not job_id:
-            raise TypeError("job_id must be a non-empty str")
-        if page_size is not None and not isinstance(page_size, int):
-            raise TypeError("page_size must be int | None")
-        if page_token is not None and not isinstance(page_token, str):
-            raise TypeError("page_token must be str | None")
-        if created_after is not None and not isinstance(created_after, (datetime, str)):
-            raise TypeError("created_after must be datetime | RFC3339 str | None")
-        if on_behalf_of_content_owner is not None and not isinstance(on_behalf_of_content_owner, str):
-            raise TypeError("on_behalf_of_content_owner must be str | None")
+        self._check_type(job_id, str, "job_id")
+        self._check_type(page_size, int, "page_size")
+        self._check_type(page_token, str, "page_token")
+        self._check_type(created_after, (datetime, str), "created_after")
+        self._check_type(on_behalf_of_content_owner, str, "on_behalf_of_content_owner")
 
         url = f"{self.base_url}/jobs/{job_id}/reports"
         params: dict[str, object] = {}
@@ -329,9 +308,6 @@ class ReportingClient:
         next_token = payload.get("nextPageToken")
 
         df = pd.DataFrame(items)
-        for col in ("id", "startTime", "endTime", "createTime", "downloadUrl"):
-            if col not in df.columns:
-                df[col] = pd.NA
         for ts in ("startTime", "endTime", "createTime"):
             df[ts] = pd.to_datetime(df[ts], errors="coerce", utc=True)
 
@@ -362,12 +338,9 @@ class ReportingClient:
             • DataFrame with columns ``id``, ``jobId``, ``startTime``,
               ``endTime``, ``createTime``, ``downloadUrl``
         """
-        if not isinstance(job_id, str) or not job_id:
-            raise TypeError("job_id must be a non-empty str")
-        if not isinstance(report_id, str) or not report_id:
-            raise TypeError("job_id must be a non-empty str")
-        if on_behalf_of_content_owner is not None and not isinstance(on_behalf_of_content_owner, str):
-            raise TypeError("on_behalf_of_content_owner must be str | None")
+        self._check_type(job_id, str, "job_id")
+        self._check_type(report_id, str, "report_id")
+        self._check_type(on_behalf_of_content_owner, str, "on_behalf_of_content_owner")
 
         url = f"{self.base_url}/jobs/{job_id}/reports/{report_id}"
         params: dict[str, object] = {}
@@ -377,12 +350,8 @@ class ReportingClient:
         resp = self.session.get(url, params=params)
         resp.raise_for_status()
         payload = resp.json()
-        items = payload.get("reports", [])
 
-        df = pd.DataFrame(items)
-        for col in ("id", "startTime", "endTime", "createTime", "downloadUrl"):
-            if col not in df.columns:
-                df[col] = pd.NA
+        df = pd.DataFrame([payload])
         for ts in ("startTime", "endTime", "createTime"):
             df[ts] = pd.to_datetime(df[ts], errors="coerce", utc=True)
 
@@ -405,8 +374,7 @@ class ReportingClient:
         -------
         pandas.DataFrame | bytes
         """
-        if not isinstance(download_url, str) or not download_url:
-            raise TypeError("download_url must be a non-empty str")
+        self._check_type(download_url, str, "download_url")
 
         r = self.session.get(download_url, stream=True)
         r.raise_for_status()
@@ -441,56 +409,30 @@ class ReportingClient:
             Parsed DataFrame (default) or raw CSV bytes.
         """
         # ------- gather all jobs (pagination handled) -------
-        jobs_df, next_tok = self.list_jobs(
-            include_system_managed=True
+        jobs_df = pd.concat(
+            self._paged(self.list_jobs),
+            ignore_index=True
         )
-        while next_tok:
-            page_df, next_tok = self.list_jobs(
-                include_system_managed=True,
-                page_token=next_tok
-            )
-            jobs_df = pd.concat([jobs_df, page_df], ignore_index=True)
 
-        # ------- pick the job matching identifier -------
-        mask_by_type = jobs_df["reportTypeId"].str.casefold() == identifier.casefold()
-        mask_by_name = jobs_df["name"].str.casefold() == identifier.casefold()
-
-        job_match = jobs_df[mask_by_type | mask_by_name]
-        if job_match.empty:
+        mask = (jobs_df["reportTypeId"].str.casefold() == identifier.casefold()) | \
+               (jobs_df["name"].str.casefold() == identifier.casefold())
+        match = jobs_df.loc[mask]
+        if match.empty:
             raise ValueError(f"No job found matching '{identifier}'")
 
-        # If multiple jobs match, take the newest createTime
-        job_match = job_match.sort_values("createTime", ascending=False)
-        job_id = job_match.iloc[0]["id"]
+        job_id = match.sort_values("createTime", ascending=False).iloc[0]["id"]
 
-        # ------- list all reports for that job -------
-        reports_df, next_tok = self.list_reports(
-            job_id,
-        )
-        while next_tok:
-            page_df, next_tok = self.list_reports(
-                job_id,
-                page_token=next_tok,
-            )
-            reports_df = pd.concat([reports_df, page_df], ignore_index=True)
-
+        reports_df = pd.concat(self._paged(self.list_reports, job_id), ignore_index=True)
         if reports_df.empty:
             raise ValueError(f"No reports available for job '{identifier}'")
 
-        # pick the most recent by startTime (falls back to createTime)
-        reports_df = reports_df.sort_values(
-            ["startTime", "createTime"], ascending=False, na_position="last"
-        )
-        latest = reports_df.iloc[0]
-        download_url = reports_df["downloadUrl"].iloc[0]
+        latest = reports_df.sort_values(
+            ["startTime", "createTime"], ascending=False
+        ).iloc[0]
 
-        # ------- fetch CSV -------
-        df = self.download_report(download_url)
-
-        # ------- console banner -------
-        start_str = pd.to_datetime(latest["startTime"]).date()
-        print(f"{identifier} successfully downloaded for {start_str}")
-
+        df = self.download_report(latest["downloadUrl"])
+        print(f"{identifier} successfully downloaded for "
+              f"{pd.to_datetime(latest['startTime']).date()}")
         return df
 
 
@@ -509,23 +451,10 @@ if __name__ == "__main__":
     allReportsList, _ = myBot.list_report_types()
     allJobsList, _ = myBot.list_jobs()
     allJobReports, _ = myBot.list_reports(allJobsList["id"].iloc[5])
+    testGetJob = myBot.get_job(allJobsList["id"].iloc[1])
     finalReport = myBot.download_report(allJobReports["downloadUrl"].iloc[1])
 
-    test = pd.to_datetime(finalReport["date"], format="%Y%m%d")
-
-    testPull = myBot.get_latest_report("channel_basic_a2")
-
-
-
-
-
-
-
-
-
-
-
-
+    testPull = myBot.get_latest_report("channel_device_os_a2")
 
 
 
