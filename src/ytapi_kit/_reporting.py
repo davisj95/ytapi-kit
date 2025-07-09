@@ -440,24 +440,6 @@ class ReportingClient:
 
 
 
-if __name__ == "__main__":
-
-    MainEng = user_session(
-        "/Users/Jacob.davis95/client_secrets.json",
-        token_cache="/Users/Jacob.davis95/.ytanalytics_token_single.pickle"
-    )
-    myBot = ReportingClient(MainEng)
-
-    allReportsList, _ = myBot.list_report_types()
-    allJobsList, _ = myBot.list_jobs()
-    allJobReports, _ = myBot.list_reports(allJobsList["id"].iloc[5])
-    testGetJob = myBot.get_job(allJobsList["id"].iloc[1])
-    finalReport = myBot.download_report(allJobReports["downloadUrl"].iloc[1])
-
-    testPull = myBot.get_latest_report("channel_device_os_a2")
-
-
-
 
 
 

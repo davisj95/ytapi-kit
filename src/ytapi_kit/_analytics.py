@@ -1,30 +1,14 @@
 from __future__ import annotations
 
-import pathlib
-import pickle
 from datetime import date
-from typing import Final, Iterable, Sequence
+from typing import Iterable, Sequence
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import pandas as pd
-from google.auth.credentials import Credentials as _BaseCreds
-from google.auth.transport.requests import AuthorizedSession, Request as _AuthRequest
-from google.oauth2.credentials import Credentials as _UserCreds
-from google.oauth2.service_account import Credentials as _SvcCreds
-from google_auth_oauthlib.flow import InstalledAppFlow
-from requests.adapters import HTTPAdapter
-from urllib3.util.retry import Retry
+from google.auth.transport.requests import AuthorizedSession
 
-# ----------------------------------------------------------------------------
-# Constants
-# ----------------------------------------------------------------------------
-SCOPES: Final[list[str]] = [
-    "https://www.googleapis.com/auth/yt-analytics.readonly",
-    "https://www.googleapis.com/auth/youtube.readonly",
-]
-YT_ENDPOINT: Final[str] = "https://youtubeanalytics.googleapis.com/v2/reports"
-# noinspection SpellCheckingInspection
-DEFAULT_TOKEN_CACHE = pathlib.Path("~/.ytanalytics_token_single.pickle").expanduser()
+from ._errors import *
+from ._util import *
 
 ID = str | Iterable[str]
 # Possible Dimensions ---------------------------------------------------------
@@ -87,68 +71,6 @@ AUDIENCE_TYPES = {"ORGANIC", "AD_INSTREAM", "AD_INDISPLAY"}
 # 1.Auth helpers — build an *AuthorizedSession* ready for the client
 # ----------------------------------------------------------------------------
 
-def _load_user_credentials(client_secrets: pathlib.Path, cache_path: pathlib.Path) -> _UserCreds:
-    """OAuth browser flow with local token caching."""
-    creds: _UserCreds | None = None
-    if cache_path.exists():
-        creds = pickle.loads(cache_path.read_bytes())
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(_AuthRequest())
-            cache_path.write_bytes(pickle.dumps(creds))
-
-    if not creds or not creds.valid:
-        flow = InstalledAppFlow.from_client_secrets_file(str(client_secrets), SCOPES)
-        creds = flow.run_local_server(port=0)
-        cache_path.write_bytes(pickle.dumps(creds))
-    return creds
-
-def _build_session(credentials: _BaseCreds, *, total: int = 5, backoff_factor: float = 0.5) -> AuthorizedSession:
-    """Return an AuthorizedSession with a sensible retry policy."""
-    session = AuthorizedSession(credentials)
-
-    retry_policy = Retry(
-        total=total,
-        backoff_factor=backoff_factor,  # exponential back‑off 0.5→8s
-        status_forcelist=[500, 502, 503, 504, 429],
-        allowed_methods={"GET"},
-        respect_retry_after_header=True,
-        raise_on_status=False,
-    )
-    adapter = HTTPAdapter(max_retries=retry_policy)
-    for scheme in ("https://", "http://"):
-        session.mount(scheme, adapter)
-    return session
-
-def user_session(
-    client_secrets: str | pathlib.Path,
-    *,
-    token_cache: str | pathlib.Path | None = None,
-) -> AuthorizedSession:
-    """Create an AuthorizedSession via OAuth user flow."""
-    client_secrets = pathlib.Path(client_secrets).expanduser()
-    cache_path = pathlib.Path(token_cache).expanduser() if token_cache else DEFAULT_TOKEN_CACHE
-    creds = _load_user_credentials(client_secrets, cache_path)
-    return _build_session(creds)
-
-def service_account_session(json_path: str | pathlib.Path) -> AuthorizedSession:
-    """Create an AuthorizedSession from a service‑account key."""
-    creds = _SvcCreds.from_service_account_file(str(pathlib.Path(json_path).expanduser()), scopes=SCOPES)
-    return _build_session(creds)
-
-# ----------------------------------------------------------------------------
-# 2. Exceptions
-# ----------------------------------------------------------------------------
-
-class AnalyticsError(Exception):
-    """Base error."""
-
-class QuotaExceeded(AnalyticsError):
-    """Raised when YouTube quota is exhausted (HTTP 403 quotaExceeded)."""
-
-# ----------------------------------------------------------------------------
-# 3. AnalyticsClient — thin façade around the reports endpoint
-# ----------------------------------------------------------------------------
-
 
 
 class AnalyticsClient:
@@ -156,6 +78,7 @@ class AnalyticsClient:
 
     def __init__(self, session: AuthorizedSession):
         self.session = session
+        self.base_url = "https://youtubeanalytics.googleapis.com/v2/reports"
 
     def __enter__(self):
         return self  # or return self.session if you prefer
@@ -166,12 +89,6 @@ class AnalyticsClient:
     # -------------------------------------------------------------------------
     # Helper Methods
     # -------------------------------------------------------------------------
-    @staticmethod
-    def _quota_reason(resp) -> str:
-        try:
-            return resp.json()["error"]["errors"][0]["reason"]
-        except Exception:  # noqa: BLE001
-            return "unknown"
 
     @staticmethod
     def _to_dataframe(data: dict) -> pd.DataFrame:
@@ -201,17 +118,6 @@ class AnalyticsClient:
             e = pd.to_datetime(end_date)
             return (e.year - s.year) * 12 + (e.month - s.month) + 1
         raise ValueError("time_period must be 'day' or 'month' when max_results is omitted")
-
-    @staticmethod
-    def _string_to_tuple(dims: str | Iterable[str]) -> tuple[str, ...]:
-        """Accept a single string *or* an iterable; always return a tuple."""
-        return (dims,) if isinstance(dims, str) else tuple(dims)
-
-    @staticmethod
-    def _raise_invalid_argument(param: str, value: str, allowed: Iterable[str]) -> None:
-        allowed_set = sorted(set(allowed))
-        bullets = "\n  • " + "\n  • ".join(allowed_set)
-        raise ValueError(f"{param}={value!r} is invalid. Allowed values:{bullets}")
 
     def analytics_request(
             self,
@@ -270,8 +176,7 @@ class AnalyticsClient:
         Raises:
             QuotaExceeded: If the API replies with HTTP 403 and a quota-related
                 error code (``quotaExceeded``, ``userRateLimitExceeded`` …).
-            AnalyticsError: For any non-200 response that isn’t quota-related.
-                The full API error payload is tucked into the exception text.
+            YTAPIError: For any other failure (4xx, 5xx).
 
         Example:
             >>> yt = AnalyticsClient(creds)
@@ -313,18 +218,8 @@ class AnalyticsClient:
         if include_historical_channel_data is not None:
             params["includeHistoricalChannelData"] = str(include_historical_channel_data).lower()
 
-        resp = self.session.get(YT_ENDPOINT, params=params, timeout=60)
-
-        if resp.status_code == 403 and self._quota_reason(resp) in {
-            "quotaExceeded",
-            "dailyLimitExceeded",
-            "userRateLimitExceeded",
-            "rateLimitExceeded",
-        }:
-            raise QuotaExceeded("YouTube Analytics quota exhausted.")
-
-        if resp.status_code != 200:
-            raise AnalyticsError(f"Analytics API error {resp.status_code}: {resp.text}")
+        resp = self.session.get(self.base_url, params=params, timeout=60)
+        raise_for_status(resp)
 
         return self._to_dataframe(resp.json())
 
@@ -394,7 +289,7 @@ class AnalyticsClient:
             >>> df.head()
         """
         if geo_dim not in GEOGRAPHIC_DIMENSIONS:
-            self._raise_invalid_argument("geo_dim", geo_dim, GEOGRAPHIC_DIMENSIONS)
+            _raise_invalid_argument("geo_dim", geo_dim, GEOGRAPHIC_DIMENSIONS)
         return self.__per_id(
             id_kind="video",
             id_vals=video_ids,
@@ -435,7 +330,7 @@ class AnalyticsClient:
             >>> df.head()
         """
         if geo_dim not in GEOGRAPHIC_DIMENSIONS:
-            self._raise_invalid_argument("geo_dim", geo_dim, GEOGRAPHIC_DIMENSIONS)
+            _raise_invalid_argument("geo_dim", geo_dim, GEOGRAPHIC_DIMENSIONS)
         return self.analytics_request(
             dimensions=(geo_dim,),
             max_results=max_results,
@@ -574,7 +469,7 @@ class AnalyticsClient:
             >>> df.head()
         """
         if detail not in PLAYBACK_DETAIL_DIMENSIONS:
-            self._raise_invalid_argument("detail", detail, PLAYBACK_DETAIL_DIMENSIONS)
+            _raise_invalid_argument("detail", detail, PLAYBACK_DETAIL_DIMENSIONS)
         return self.__per_id(
             id_kind="video",
             id_vals=video_ids,
@@ -614,7 +509,7 @@ class AnalyticsClient:
             >>> df.head()
         """
         if detail not in PLAYBACK_DETAIL_DIMENSIONS:
-            self._raise_invalid_argument("detail", detail, PLAYBACK_DETAIL_DIMENSIONS)
+            _raise_invalid_argument("detail", detail, PLAYBACK_DETAIL_DIMENSIONS)
         return self.analytics_request(
             dimensions=(detail,),
             **kw
@@ -665,9 +560,9 @@ class AnalyticsClient:
             ... )
             >>> df.head()
         """
-        dims = self._string_to_tuple(device_info)
+        dims = _string_to_tuple(device_info)
         if not set(dims).issubset(DEVICE_DIMENSIONS):
-            self._raise_invalid_argument("device_info", device_info,
+            _raise_invalid_argument("device_info", device_info,
                                          DEVICE_DIMENSIONS)
         return self.__per_id(
             id_kind="video",
@@ -711,9 +606,9 @@ class AnalyticsClient:
             ... )
             >>> df.head()
         """
-        dims = self._string_to_tuple(device_info)
+        dims = _string_to_tuple(device_info)
         if not set(dims).issubset(DEVICE_DIMENSIONS):
-            self._raise_invalid_argument("device_info", device_info,
+            _raise_invalid_argument("device_info", device_info,
                                          DEVICE_DIMENSIONS)
         return self.analytics_request(dimensions=dims, **kw)
 
@@ -761,9 +656,9 @@ class AnalyticsClient:
             ... )
             >>> df.head()
         """
-        dims = self._string_to_tuple(demographic)
+        dims = _string_to_tuple(demographic)
         if not set(dims).issubset(DEMOGRAPHIC_DIMENSIONS):
-            self._raise_invalid_argument("demographic", demographic,
+            _raise_invalid_argument("demographic", demographic,
                                          DEMOGRAPHIC_DIMENSIONS)
         return self.__per_id(
             id_kind="video",
@@ -807,9 +702,9 @@ class AnalyticsClient:
             ... )
             >>> df.head()
         """
-        dims = self._string_to_tuple(demographic)
+        dims = _string_to_tuple(demographic)
         if not set(dims).issubset(DEMOGRAPHIC_DIMENSIONS):
-            self._raise_invalid_argument("demographic", demographic,
+            _raise_invalid_argument("demographic", demographic,
                                          DEMOGRAPHIC_DIMENSIONS)
         return self.analytics_request(dimensions=dims, **kw)
 
@@ -1011,7 +906,7 @@ class AnalyticsClient:
             >>> df.head()
         """
         if time_period not in TIME_PERIOD_DIMENSIONS:
-            self._raise_invalid_argument("time_period", time_period,
+            _raise_invalid_argument("time_period", time_period,
                                          TIME_PERIOD_DIMENSIONS)
         resolved_max = self._resolve_max_results(time_period, start_date, end_date, max_results)
         return self.__per_id(
@@ -1062,7 +957,7 @@ class AnalyticsClient:
             >>> df.head()
         """
         if time_period not in TIME_PERIOD_DIMENSIONS:
-            self._raise_invalid_argument("time_period", time_period,
+            _raise_invalid_argument("time_period", time_period,
                                          TIME_PERIOD_DIMENSIONS)
         resolved_max = self._resolve_max_results(time_period, start_date, end_date, max_results)
         return self.analytics_request(
@@ -1196,7 +1091,7 @@ class AnalyticsClient:
             >>> df.head()
         """
         if detail is not None and detail not in TRAFFIC_DETAIL_TYPES:
-            self._raise_invalid_argument("detail", detail,
+            _raise_invalid_argument("detail", detail,
                                          TRAFFIC_DETAIL_TYPES)
         dim = "insightTrafficSourceDetail" if detail is not None \
             else "insightTrafficSourceType"
@@ -1252,7 +1147,7 @@ class AnalyticsClient:
             >>> df.head()
         """
         if detail is not None and detail not in TRAFFIC_DETAIL_TYPES:
-            self._raise_invalid_argument("detail", detail,
+            _raise_invalid_argument("detail", detail,
                                          TRAFFIC_DETAIL_TYPES)
         dim = "insightTrafficSourceDetail" if detail \
             else "insightTrafficSourceType"
@@ -1312,7 +1207,7 @@ class AnalyticsClient:
             >>> df.head()
         """
         if audience_type is not None and audience_type not in AUDIENCE_TYPES:
-            self._raise_invalid_argument("audience_type", audience_type,
+            _raise_invalid_argument("audience_type", audience_type,
                                          AUDIENCE_TYPES)
         extras = (f"audienceType=={audience_type}",) if audience_type is not None \
             else ()
@@ -1369,9 +1264,9 @@ class AnalyticsClient:
             ... )
             >>> df.head()
         """
-        mets = self._string_to_tuple(metrics)
+        mets = _string_to_tuple(metrics)
         if not mets or not set(mets).issubset(LIVESTREAM_METRICS):
-            self._raise_invalid_argument("metrics", metrics,
+            _raise_invalid_argument("metrics", metrics,
                                          LIVESTREAM_METRICS)
 
         return self.__per_id(

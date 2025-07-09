@@ -15,16 +15,26 @@ from importlib import metadata as _metadata
 # Re-export PUBLIC objects from the internal implementation modules
 # (everything in _analytics.py is an implementation detail)
 # ─────────────────────────────────────────────────────────────────────────────
-from ._analytics import (
-    AnalyticsClient,
-    user_session,
-    service_account_session,
-)
+from ._auth import user_session, service_account_session
+from ._analytics import AnalyticsClient
+from ._reporting import ReportingClient
+from ._data import DataClient
+from ._errors import (YTAPIError, QuotaExceeded, RateLimited, NotAuthorized,
+                      Forbidden, InvalidRequest, raise_for_status)
 
 __all__: list[str] = [
-    "AnalyticsClient",
     "user_session",
     "service_account_session",
+    "AnalyticsClient",
+    "ReportingClient",
+    "DataClient",
+    "YTAPIError",
+    "QuotaExceeded",
+    "RateLimited",
+    "NotAuthorized",
+    "Forbidden",
+    "InvalidRequest",
+    "raise_for_status"
 ]
 
 # ─────────────────────────────────────────────────────────────────────────────
