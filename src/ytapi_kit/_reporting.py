@@ -5,7 +5,7 @@ import io
 import re
 from typing import Iterator
 
-from ._util import _check_type
+from ._util import runtime_typecheck
 
 class ReportingClient:
     def __init__(self, session):
@@ -21,6 +21,7 @@ class ReportingClient:
             page, token = func(*args, page_token=token, **kwargs)
             yield page
 
+    @runtime_typecheck
     def list_report_types(
             self,
             *,
@@ -47,10 +48,6 @@ class ReportingClient:
         -------
         pandas.DataFrame
         """
-        _check_type(include_system_managed, bool, "include_system_managed")
-        _check_type(page_size, int, "page_size")
-        _check_type(page_token, str, "page_token")
-        _check_type(on_behalf_of_content_owner, str, "on_behalf_of_content_owner")
 
         url = f"{self.base_url}/reportTypes"
         params: dict[str, object] = {}
@@ -69,6 +66,7 @@ class ReportingClient:
 
         return pd.DataFrame(payload.get("reportTypes", [])), payload.get("nextPageToken")
 
+    @runtime_typecheck
     def create_job(
             self,
             *,
@@ -92,9 +90,6 @@ class ReportingClient:
         -------
         pandas.DataFrame
         """
-        _check_type(report_type_id, str, "report_type_id")
-        _check_type(name, str, "name")
-        _check_type(on_behalf_of_content_owner, str, "on_behalf_of_content_owner")
 
         url = f"{self.base_url}/jobs"
         body = {
@@ -110,6 +105,7 @@ class ReportingClient:
         resp.raise_for_status()
         return resp.json()
 
+    @runtime_typecheck
     def list_jobs(
             self,
             *,
@@ -141,10 +137,6 @@ class ReportingClient:
               ``createTime``, ``expireTime``, ``systemManaged``
             • ``next_page_token`` – ``None`` when there are no more pages.
         """
-        _check_type(include_system_managed, bool, "include_system_managed")
-        _check_type(page_size, int, "page_size")
-        _check_type(page_token, str, "page_token")
-        _check_type(on_behalf_of_content_owner, str, "on_behalf_of_content_owner")
 
         url = f"{self.base_url}/jobs"
         params: dict[str, object] = {}
@@ -164,6 +156,7 @@ class ReportingClient:
 
         return df, payload.get("nextPageToken")
 
+    @runtime_typecheck
     def get_job(
             self,
             job_id: str,
@@ -186,8 +179,6 @@ class ReportingClient:
             • DataFrame with columns ``id``, ``name``, ``reportTypeId``,
               ``createTime``, ``expireTime``, ``systemManaged``
         """
-        _check_type(job_id, str, "job_id")
-        _check_type(on_behalf_of_content_owner, str, "on_behalf_of_content_owner")
 
         url = f"{self.base_url}/jobs/{job_id}"
         params: dict[str, object] = {}
@@ -202,6 +193,7 @@ class ReportingClient:
 
         return df
 
+    @runtime_typecheck
     def delete_job(
             self,
             job_id: str,
@@ -223,8 +215,6 @@ class ReportingClient:
         Returns nothing, but prints message saying the job was successfully deleted if
             200 or 204 response code is returned by the API.
         """
-        _check_type(job_id, str, "job_id")
-        _check_type(on_behalf_of_content_owner, str, "on_behalf_of_content_owner")
 
         url = f"{self.base_url}/jobs/{job_id}"
         params: dict[str, object] = {}
@@ -239,6 +229,7 @@ class ReportingClient:
 
         return None
 
+    @runtime_typecheck
     def list_reports(
             self,
             job_id: str,
@@ -271,11 +262,6 @@ class ReportingClient:
               ``endTime``, ``createTime``, ``downloadUrl``
             • ``next_page_token`` – ``None`` when there are no more pages.
         """
-        _check_type(job_id, str, "job_id")
-        _check_type(page_size, int, "page_size")
-        _check_type(page_token, str, "page_token")
-        _check_type(created_after, (datetime, str), "created_after")
-        _check_type(on_behalf_of_content_owner, str, "on_behalf_of_content_owner")
 
         url = f"{self.base_url}/jobs/{job_id}/reports"
         params: dict[str, object] = {}
@@ -303,6 +289,7 @@ class ReportingClient:
 
         return df, next_token
 
+    @runtime_typecheck
     def get_reports(
             self,
             job_id: str,
@@ -328,9 +315,6 @@ class ReportingClient:
             • DataFrame with columns ``id``, ``jobId``, ``startTime``,
               ``endTime``, ``createTime``, ``downloadUrl``
         """
-        _check_type(job_id, str, "job_id")
-        _check_type(report_id, str, "report_id")
-        _check_type(on_behalf_of_content_owner, str, "on_behalf_of_content_owner")
 
         url = f"{self.base_url}/jobs/{job_id}/reports/{report_id}"
         params: dict[str, object] = {}
@@ -347,6 +331,7 @@ class ReportingClient:
 
         return df
 
+    @runtime_typecheck
     def download_report(
             self,
             download_url: str,
@@ -364,7 +349,6 @@ class ReportingClient:
         -------
         pandas.DataFrame | bytes
         """
-        _check_type(download_url, str, "download_url")
 
         r = self.session.get(download_url, stream=True)
         r.raise_for_status()
