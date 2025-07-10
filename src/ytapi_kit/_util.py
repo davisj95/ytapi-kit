@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 import inspect, functools, typing
+import collections.abc as _abc
 
 __all__ = [
     "_string_to_tuple",
     "_raise_invalid_argument",
-    "runtime_typecheck"
+    "runtime_typecheck",
+    "_validate_enum",
+    "_prune_none"
 ]
 
 def _string_to_tuple(value: str | typing.Iterable[str]) -> tuple[str, ...]:
@@ -47,3 +50,34 @@ def runtime_typecheck(func):
         return func(*args, **kwargs)
 
     return wrapper
+
+def _validate_enum(
+    param_name: str,
+    value: str | typing.Sequence[str],
+    allowed: set[str],
+    *,
+    allow_multi: bool = True,
+) -> tuple[str, ...]:
+    """Normalise *value* to a tuple and verify every element is in *allowed*."""
+
+    if isinstance(value, str):
+        items = [s.strip() for s in value.split(",")] if allow_multi else [value]
+    elif isinstance(value, _abc.Iterable):
+        items = list(value)
+    else:
+        raise TypeError(f"{param_name} must be str or Sequence[str]")
+
+    if not items:
+        raise ValueError(f"{param_name} cannot be empty")
+
+    if not set(items).issubset(allowed):
+        _raise_invalid_argument(param_name, value, allowed)
+
+    if not allow_multi and len(items) != 1:
+        _raise_invalid_argument(param_name, value, allowed)
+
+    return tuple(dict.fromkeys(items))
+
+def _prune_none(mapping: typing.Mapping[str, object]) -> dict[str, object]:
+    """Return a new dict without the None-valued keys."""
+    return {k: v for k, v in mapping.items() if v is not None}
