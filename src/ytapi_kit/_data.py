@@ -181,7 +181,7 @@ class DataClient:
             mine: bool | None = None,
             hl: str | None = None,
             on_behalf_of_content_owner: str | None = None,
-    ) -> tuple[pd.DataFrame, str | None]:
+    ) -> pd.DataFrame:
         """Wrapper for **channel sections.list**."""
         if sum(map(bool, (channel_id, id, mine))) != 1:
             raise ValueError("Supply exactly one of channel_id, id, or mine=True.")
@@ -198,7 +198,8 @@ class DataClient:
             "onBehalfOfContentOwner": on_behalf_of_content_owner,
         })
 
-        return self._list_helper("channelSections", params=params)
+        df, _ = self._list_helper("channelSections", params=params)
+        return df
 
     @runtime_typecheck
     def list_comments(
@@ -239,7 +240,7 @@ class DataClient:
         return self._list_helper("comments", params=params)
 
     @runtime_typecheck
-    def list_comment_treads(
+    def list_comment_threads(
             self,
             *,
             part: str | Sequence[str] = "snippet",
@@ -293,7 +294,7 @@ class DataClient:
         return self._list_helper("commentThreads", params=params)
 
     @runtime_typecheck
-    def list_i18nLanguages(
+    def list_i18n_languages(
             self,
             part: str = "snippet",
             hl: str | None = None,
@@ -311,7 +312,7 @@ class DataClient:
         return df
 
     @runtime_typecheck
-    def list_i18nRegions(
+    def list_i18n_regions(
             self,
             part: str = "snippet",
             hl: str | None = None,
@@ -338,7 +339,7 @@ class DataClient:
             page_token: str | None = None,
             has_access_to_level: str | None = None,
             filter_by_member_channel_id: str | None = None,
-    ) -> pd.DataFrame:
+    ) -> tuple[pd.DataFrame, str]:
         """Wrapper for **members.list**."""
 
         if part != "snippet":
@@ -356,8 +357,7 @@ class DataClient:
             "filterByMemberChannelId": filter_by_member_channel_id,
         })
 
-        df, _ = self._list_helper("members", params=params)
-        return df
+        return self._list_helper("members", params=params)
 
     @runtime_typecheck
     def list_membership_levels(
