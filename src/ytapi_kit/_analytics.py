@@ -119,7 +119,7 @@ class AnalyticsClient:
             return (e.year - s.year) * 12 + (e.month - s.month) + 1
         raise ValueError("time_period must be 'day' or 'month' when max_results is omitted")
 
-    def analytics_request(
+    def reports_query(
             self,
             *,
             ids: str = "channel==MINE",
@@ -180,7 +180,7 @@ class AnalyticsClient:
 
         Example:
             >>> yt = AnalyticsClient(creds)
-            >>> df = yt.analytics_request(
+            >>> df = yt.reports_query(
             ...     metrics=["views", "likes"],
             ...     dimensions=["day"],
             ...     start_date="2024-01-01",
@@ -240,14 +240,14 @@ class AnalyticsClient:
 
         def _one(_id: str) -> pd.DataFrame:
             filters = ";".join([*extra_filters, f"{id_kind}=={_id}"]) if extra_filters else f"{id_kind}=={_id}"
-            return self.analytics_request(filters=filters, **kw)
+            return self.reports_query(filters=filters, **kw)
 
         # Pool size = min(concurrency, #ids) so we don't spawn useless threads
         with ThreadPoolExecutor(max_workers=min(concurrency, len(ids_list))) as pool:
             # Submit tasks
             futures = [pool.submit(_one, _id) for _id in ids_list]
 
-            # Collect as they finish (maintains retry/back-off behaviour inside analytics_request)
+            # Collect as they finish (maintains retry/back-off behaviour inside reports_query)
             frames = [future.result() for future in as_completed(futures)]
 
         return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
@@ -268,7 +268,7 @@ class AnalyticsClient:
                 ``'country'`` (default), ``'province'``, ``'dma'``, or ``'city'``.
             max_results (int, optional): Maximum rows per API page. Defaults to 200.
             **kw: Extra keyword arguments forwarded intact to
-                :py:meth:`analytics_request` (e.g. ``start_date``, ``end_date``).
+                :py:meth:`reports_query` (e.g. ``start_date``, ``end_date``).
 
         Returns:
             pandas.DataFrame: A dataframe with one row per *video × geo_dim*.
@@ -276,7 +276,7 @@ class AnalyticsClient:
         Raises:
             ValueError: If *geo_dim* is not one of the allowed values.
             QuotaExceeded / AnalyticsError: Propagated from
-                :py:meth:`analytics_request`.
+                :py:meth:`reports_query`.
 
         Example:
             >>> yt = AnalyticsClient(creds)
@@ -309,7 +309,7 @@ class AnalyticsClient:
                 ``'country'`` (default), ``'province'``, ``'dma'``, or ``'city'``.
             max_results (int, optional): Maximum rows per API page. Defaults to 200.
             **kw: Extra keyword arguments forwarded intact to
-                :py:meth:`analytics_request` (e.g. ``start_date``, ``end_date``).
+                :py:meth:`reports_query` (e.g. ``start_date``, ``end_date``).
 
         Returns:
             pandas.DataFrame: A dataframe with one row per *geo_dim*.
@@ -317,7 +317,7 @@ class AnalyticsClient:
         Raises:
             ValueError: If *geo_dim* is not one of the allowed values.
             QuotaExceeded / AnalyticsError: Propagated from
-                :py:meth:`analytics_request`.
+                :py:meth:`reports_query`.
 
 
         Example:
@@ -331,7 +331,7 @@ class AnalyticsClient:
         """
         if geo_dim not in GEOGRAPHIC_DIMENSIONS:
             _raise_invalid_argument("geo_dim", geo_dim, GEOGRAPHIC_DIMENSIONS)
-        return self.analytics_request(
+        return self.reports_query(
             dimensions=(geo_dim,),
             max_results=max_results,
             **kw,
@@ -358,14 +358,14 @@ class AnalyticsClient:
             max_results (int, optional): Requested page size. Ignored
                 when *detail* is ``True`` because the API hard-caps it.
             **kw: Extra keyword arguments forwarded verbatim to
-                :py:meth:`analytics_request` (e.g. ``start_date``, ``end_date``).
+                :py:meth:`reports_query` (e.g. ``start_date``, ``end_date``).
 
         Returns:
             pandas.DataFrame: One row per *video × playback-location*
 
         Raises:
             QuotaExceeded / AnalyticsError: Propagated from
-                :py:meth:`analytics_request`.
+                :py:meth:`reports_query`.
 
         Example:
             >>> yt = AnalyticsClient(creds)
@@ -404,14 +404,14 @@ class AnalyticsClient:
             max_results (int, optional): Requested page size. Ignored
                 when *detail* is ``True`` because the API hard-caps it.
             **kw: Extra keyword arguments forwarded verbatim to
-                :py:meth:`analytics_request` (e.g. ``start_date``, ``end_date``).
+                :py:meth:`reports_query` (e.g. ``start_date``, ``end_date``).
 
         Returns:
             pandas.DataFrame: One row per *playback-location*.
 
         Raises:
             QuotaExceeded / AnalyticsError: Propagated from
-                :py:meth:`analytics_request`.
+                :py:meth:`reports_query`.
 
         Example:
             >>> yt = AnalyticsClient(creds)
@@ -424,7 +424,7 @@ class AnalyticsClient:
         """
         dim = "insightPlaybackLocationDetail" if detail else "insightPlaybackLocationType"
         filters = "insightPlaybackLocationType==EMBEDDED" if detail else None
-        return self.analytics_request(
+        return self.reports_query(
             dimensions=(dim,),
             filters=filters,
             max_results=max_results if not detail else 25,
@@ -448,7 +448,7 @@ class AnalyticsClient:
                 ``'subscribedStatus'``, ``'youtubeProduct'``.
                 Defaults to ``'liveOrOnDemand'``.
             **kw: Extra keyword arguments forwarded verbatim to
-                :py:meth:`analytics_request` (e.g. ``start_date``, ``metrics``).
+                :py:meth:`reports_query` (e.g. ``start_date``, ``metrics``).
 
         Returns:
             pandas.DataFrame: One row per *video × detail*.
@@ -456,7 +456,7 @@ class AnalyticsClient:
         Raises:
             ValueError: If *detail* is not one of the allowed literals.
             QuotaExceeded / AnalyticsError: Propagated from
-                :py:meth:`analytics_request`.
+                :py:meth:`reports_query`.
 
         Example:
             >>> yt = AnalyticsClient(creds)
@@ -488,7 +488,7 @@ class AnalyticsClient:
                 ``'subscribedStatus'``, ``'youtubeProduct'``.
                 Defaults to ``'liveOrOnDemand'``.
             **kw: Extra keyword arguments forwarded verbatim to
-                :py:meth:`analytics_request` (e.g. ``start_date``, ``metrics``).
+                :py:meth:`reports_query` (e.g. ``start_date``, ``metrics``).
 
         Returns:
             pandas.DataFrame: One row per *detail* value, with the metrics
@@ -497,7 +497,7 @@ class AnalyticsClient:
         Raises:
             ValueError: If *detail* is not one of the allowed literals.
             QuotaExceeded / AnalyticsError: Propagated from
-                :py:meth:`analytics_request`.
+                :py:meth:`reports_query`.
 
         Example:
             >>> yt = AnalyticsClient(creds)
@@ -510,7 +510,7 @@ class AnalyticsClient:
         """
         if detail not in PLAYBACK_DETAIL_DIMENSIONS:
             _raise_invalid_argument("detail", detail, PLAYBACK_DETAIL_DIMENSIONS)
-        return self.analytics_request(
+        return self.reports_query(
             dimensions=(detail,),
             **kw
         )
@@ -536,7 +536,7 @@ class AnalyticsClient:
                 You may pass both to get a multi-dimension report, e.g.
                 ``device_info=("deviceType", "operatingSystem")``.
             **kw: Additional keyword arguments forwarded unchanged to
-                :py:meth:`analytics_request` (such as ``start_date``, ``metrics``).
+                :py:meth:`reports_query` (such as ``start_date``, ``metrics``).
 
         Returns:
             pandas.DataFrame: One row per *video × device combo* containing the
@@ -547,7 +547,7 @@ class AnalyticsClient:
             ValueError: If *device_info* contains anything outside
                 ``{"deviceType", "operatingSystem"}``.
             QuotaExceeded / AnalyticsError: Propagated from
-                :py:meth:`analytics_request`.
+                :py:meth:`reports_query`.
 
 
         Example:
@@ -586,7 +586,7 @@ class AnalyticsClient:
                 You may pass both to get a multi-dimension report, e.g.
                 ``device_info=("deviceType", "operatingSystem")``.
             **kw: Additional keyword arguments forwarded unchanged to
-                :py:meth:`analytics_request` (such as ``start_date``, ``metrics``).
+                :py:meth:`reports_query` (such as ``start_date``, ``metrics``).
 
         Returns:
             pandas.DataFrame: One row per device characteristic.
@@ -595,7 +595,7 @@ class AnalyticsClient:
             ValueError: If *device_info* contains anything outside
                 ``{"deviceType", "operatingSystem"}``.
             QuotaExceeded / AnalyticsError: Propagated from
-                :py:meth:`analytics_request`.
+                :py:meth:`reports_query`.
 
         Example:
             >>> yt = AnalyticsClient(creds)
@@ -610,7 +610,7 @@ class AnalyticsClient:
         if not set(dims).issubset(DEVICE_DIMENSIONS):
             _raise_invalid_argument("device_info", device_info,
                                          DEVICE_DIMENSIONS)
-        return self.analytics_request(dimensions=dims, **kw)
+        return self.reports_query(dimensions=dims, **kw)
 
     # -------------------------------------------------------------------------
     # Demographic Functions ---------------------------------------------------
@@ -631,7 +631,7 @@ class AnalyticsClient:
                 Pass both to obtain a multi-dimension report, e.g.
                 ``demographic=("ageGroup", "gender")``.
             **kw: Extra keyword arguments forwarded verbatim to
-                :py:meth:`analytics_request` (for example ``start_date``,
+                :py:meth:`reports_query` (for example ``start_date``,
                 ``end_date``, or a custom ``metrics`` tuple).
 
         Returns:
@@ -643,7 +643,7 @@ class AnalyticsClient:
             ValueError: If *demographic* contains anything outside
                 ``{"ageGroup", "gender"}``.
             QuotaExceeded / AnalyticsError: Propagated from
-                :py:meth:`analytics_request`.
+                :py:meth:`reports_query`.
 
 
         Example:
@@ -681,7 +681,7 @@ class AnalyticsClient:
                 Pass both to obtain a multi-dimension report, e.g.
                 ``demographic=("ageGroup", "gender")``.
             **kw: Extra keyword arguments forwarded verbatim to
-                :py:meth:`analytics_request` (for example ``start_date``,
+                :py:meth:`reports_query` (for example ``start_date``,
                 ``end_date``, or a custom ``metrics`` tuple).
 
         Returns:
@@ -691,7 +691,7 @@ class AnalyticsClient:
             ValueError: If *demographic* contains anything outside
                 ``{"ageGroup", "gender"}``.
             QuotaExceeded / AnalyticsError: Propagated from
-                :py:meth:`analytics_request`.
+                :py:meth:`reports_query`.
 
         Example:
             >>> yt = AnalyticsClient(creds)
@@ -706,7 +706,7 @@ class AnalyticsClient:
         if not set(dims).issubset(DEMOGRAPHIC_DIMENSIONS):
             _raise_invalid_argument("demographic", demographic,
                                          DEMOGRAPHIC_DIMENSIONS)
-        return self.analytics_request(dimensions=dims, **kw)
+        return self.reports_query(dimensions=dims, **kw)
 
 
     # -------------------------------------------------------------------------
@@ -718,13 +718,13 @@ class AnalyticsClient:
         Get stats for one or more videos.
 
         This is a generic video stats helper: whatever metrics/dimensions you pass
-        through ``**kw`` pass to :py:meth:`analytics_request`, which means
+        through ``**kw`` pass to :py:meth:`reports_query`, which means
         you can ask for any Analytics combo without creating a new wrapper.
 
         Args:
             video_ids (str | Iterable[str]): One or more YouTube video IDs.
             **kw:  Keyword arguments forwarded verbatim to
-                :py:meth:`analytics_request` — for example ``metrics``,
+                :py:meth:`reports_query` — for example ``metrics``,
                 ``dimensions``, ``start_date``, ``end_date``, ``filters``, etc.
 
         Returns:
@@ -734,7 +734,7 @@ class AnalyticsClient:
 
         Raises:
             QuotaExceeded / AnalyticsError: Propagated from
-                :py:meth:`analytics_request`.
+                :py:meth:`reports_query`.
 
 
         Example:
@@ -758,12 +758,12 @@ class AnalyticsClient:
         Get stats for a channel.
 
         This is a generic channel stats helper: whatever metrics/dimensions you pass
-        through ``**kw`` pass to :py:meth:`analytics_request`, which means
+        through ``**kw`` pass to :py:meth:`reports_query`, which means
         you can ask for any Analytics combo without creating a new wrapper.
 
         Args:
             **kw:  Keyword arguments forwarded verbatim to
-                :py:meth:`analytics_request` — for example ``metrics``,
+                :py:meth:`reports_query` — for example ``metrics``,
                 ``dimensions``, ``start_date``, ``end_date``, ``filters``, etc.
 
         Returns:
@@ -771,7 +771,7 @@ class AnalyticsClient:
 
         Raises:
             QuotaExceeded / AnalyticsError: Propagated from
-                :py:meth:`analytics_request`.
+                :py:meth:`reports_query`.
 
 
         Example:
@@ -783,7 +783,7 @@ class AnalyticsClient:
             ... )
             >>> df.head()
         """
-        return self.analytics_request(
+        return self.reports_query(
             **kw
         )
 
@@ -802,7 +802,7 @@ class AnalyticsClient:
         Args:
             video_ids (str | Iterable[str]): One or more YouTube video IDs.
             **kw: Keyword arguments forwarded unchanged to
-                :py:meth:`analytics_request` – e.g. ``start_date``, ``end_date``,
+                :py:meth:`reports_query` – e.g. ``start_date``, ``end_date``,
                 or a custom ``filters`` string.
 
         Returns:
@@ -810,7 +810,7 @@ class AnalyticsClient:
 
         Raises:
             QuotaExceeded / AnalyticsError: Propagated from
-                :py:meth:`analytics_request`.
+                :py:meth:`reports_query`.
 
         Example:
             >>> yt = AnalyticsClient(creds)
@@ -836,7 +836,7 @@ class AnalyticsClient:
 
         Args:
             **kw: Keyword arguments forwarded unchanged to
-                :py:meth:`analytics_request` – e.g. ``start_date``, ``end_date``,
+                :py:meth:`reports_query` – e.g. ``start_date``, ``end_date``,
                 or a custom ``filters`` string.
 
         Returns:
@@ -844,7 +844,7 @@ class AnalyticsClient:
 
         Raises:
             QuotaExceeded / AnalyticsError: Propagated from
-               :py:meth:`analytics_request`.
+               :py:meth:`reports_query`.
 
 
         Example:
@@ -855,7 +855,7 @@ class AnalyticsClient:
             ... )
             >>> df.head()
         """
-        return self.analytics_request(
+        return self.reports_query(
             dimensions=("sharingService",),
             metrics=("shares",),
             **kw
@@ -883,7 +883,7 @@ class AnalyticsClient:
                 marking the end of the reporting window (inclusive).
             max_results (int | None, optional): Number of rows to return.
             **kw: Keyword arguments forwarded unchanged to
-                :py:meth:`analytics_request` – e.g. ``start_date``, ``end_date``,
+                :py:meth:`reports_query` – e.g. ``start_date``, ``end_date``,
                 or a custom ``filters`` string.
 
         Returns:
@@ -893,7 +893,7 @@ class AnalyticsClient:
         Raises:
             ValueError: If *time_period* is not ``"day"`` or ``"month"``.
             QuotaExceeded / AnalyticsError: Propagated from
-                :py:meth:`analytics_request`.
+                :py:meth:`reports_query`.
 
         Example:
             >>> yt = AnalyticsClient(creds)
@@ -936,7 +936,7 @@ class AnalyticsClient:
                 marking the end of the reporting window (inclusive).
             max_results (int | None, optional): Number of rows to return.
             **kw: Keyword arguments forwarded unchanged to
-                :py:meth:`analytics_request` – e.g. ``start_date``, ``end_date``,
+                :py:meth:`reports_query` – e.g. ``start_date``, ``end_date``,
                 or a custom ``filters`` string.
 
         Returns:
@@ -945,7 +945,7 @@ class AnalyticsClient:
         Raises:
             ValueError: If *time_period* is not ``"day"`` or ``"month"``.
             QuotaExceeded / AnalyticsError: Propagated from
-                :py:meth:`analytics_request`.
+                :py:meth:`reports_query`.
 
         Example:
             >>> yt = AnalyticsClient(creds)
@@ -960,7 +960,7 @@ class AnalyticsClient:
             _raise_invalid_argument("time_period", time_period,
                                          TIME_PERIOD_DIMENSIONS)
         resolved_max = self._resolve_max_results(time_period, start_date, end_date, max_results)
-        return self.analytics_request(
+        return self.reports_query(
             dimensions=(time_period,),
             start_date=start_date,
             end_date=end_date,
@@ -980,7 +980,7 @@ class AnalyticsClient:
         Args:
             playlist_ids (str | Iterable[str]): One or more YouTube playlist IDs.
             **kw: Keyword arguments forwarded unchanged to
-                :py:meth:`analytics_request` – e.g. ``start_date``, ``end_date``,
+                :py:meth:`reports_query` – e.g. ``start_date``, ``end_date``,
                 or a custom ``filters`` string.
 
         Returns:
@@ -989,7 +989,7 @@ class AnalyticsClient:
 
         Raises:
             QuotaExceeded / AnalyticsError: Propagated from
-                :py:meth:`analytics_request`.
+                :py:meth:`reports_query`.
 
         Example:
             >>> yt = AnalyticsClient(creds)
@@ -1015,7 +1015,7 @@ class AnalyticsClient:
 
         Args:
             **kw: Keyword arguments forwarded unchanged to
-                :py:meth:`analytics_request` – e.g. ``start_date``, ``end_date``,
+                :py:meth:`reports_query` – e.g. ``start_date``, ``end_date``,
                 or a custom ``filters`` string.
 
         Returns:
@@ -1023,7 +1023,7 @@ class AnalyticsClient:
 
         Raises:
             QuotaExceeded / AnalyticsError: Propagated from
-                :py:meth:`analytics_request`.
+                :py:meth:`reports_query`.
 
 
         Example:
@@ -1035,7 +1035,7 @@ class AnalyticsClient:
             ... )
             >>> df.head()
         """
-        return self.analytics_request(
+        return self.reports_query(
             dimensions=("video",),
             **kw
         )
@@ -1062,7 +1062,7 @@ class AnalyticsClient:
                   "VIDEO_REMIXES"}`` – drill into
                   **insightTrafficSourceDetail** for that specific type.
             **kw: Keyword arguments forwarded unchanged to
-                :py:meth:`analytics_request` – e.g. ``start_date``, ``end_date``,
+                :py:meth:`reports_query` – e.g. ``start_date``, ``end_date``,
                 or a custom ``filters`` string.
 
         Returns:
@@ -1078,7 +1078,7 @@ class AnalyticsClient:
             ValueError: If *detail* is not ``None`` and not in the allowed literal
                 set shown above.
             QuotaExceeded / AnalyticsError: Propagated from
-                :py:meth:`analytics_request`.
+                :py:meth:`reports_query`.
 
         Example:
             >>> yt = AnalyticsClient(creds)
@@ -1123,7 +1123,7 @@ class AnalyticsClient:
                   "VIDEO_REMIXES"}`` – drill into
                   **insightTrafficSourceDetail** for that specific type.
             **kw: Keyword arguments forwarded unchanged to
-                :py:meth:`analytics_request` – e.g. ``start_date``, ``end_date``,
+                :py:meth:`reports_query` – e.g. ``start_date``, ``end_date``,
                 or a custom ``filters`` string.
 
         Returns:
@@ -1135,7 +1135,7 @@ class AnalyticsClient:
             ValueError: If *detail* is not ``None`` and not in the allowed literal
                 set shown above.
             QuotaExceeded / AnalyticsError: Propagated from
-                :py:meth:`analytics_request`.
+                :py:meth:`reports_query`.
 
         Example:
             >>> yt = AnalyticsClient(creds)
@@ -1154,7 +1154,7 @@ class AnalyticsClient:
         filters = f"insightTrafficSourceType=={detail}" if detail \
             else None
 
-        return self.analytics_request(
+        return self.reports_query(
             dimensions=(dim,),
             filters=filters,
             max_results=25,
@@ -1183,7 +1183,7 @@ class AnalyticsClient:
 
                 Any other literal triggers a tidy bullet-listed `ValueError`.
             **kw: Keyword arguments forwarded unchanged to
-                :py:meth:`analytics_request` – e.g. ``start_date``, ``end_date``,
+                :py:meth:`reports_query` – e.g. ``start_date``, ``end_date``,
                 or a custom ``filters`` string.
 
         Returns:
@@ -1194,7 +1194,7 @@ class AnalyticsClient:
             ValueError: If *audience_type* is not ``None`` and not in
                 ``{"ORGANIC", "AD_INSTREAM", "AD_INDISPLAY"}``.
             QuotaExceeded / AnalyticsError: Propagated from
-                :py:meth:`analytics_request`.
+                :py:meth:`reports_query`.
 
         Example:
             >>> yt = AnalyticsClient(creds)
@@ -1241,7 +1241,7 @@ class AnalyticsClient:
                 - ``"peakConcurrentViewers"`` *(default)*
                 Pass a list/tuple when you need both.
             **kw: Keyword arguments forwarded unchanged to
-                :py:meth:`analytics_request` – e.g. ``start_date``, ``end_date``,
+                :py:meth:`reports_query` – e.g. ``start_date``, ``end_date``,
                 or a custom ``filters`` string.
 
         Returns:
@@ -1252,7 +1252,7 @@ class AnalyticsClient:
             ValueError: If *metrics* is empty or contains anything outside
                 ``{"averageConcurrentViewers", "peakConcurrentViewers"}``.
             QuotaExceeded / AnalyticsError: Propagated from
-                :py:meth:`analytics_request`.
+                :py:meth:`reports_query`.
 
         Example:
             >>> yt = AnalyticsClient(creds)
@@ -1291,7 +1291,7 @@ class AnalyticsClient:
 
         Args:
             **kw: Keyword arguments forwarded unchanged to
-                :py:meth:`analytics_request` – e.g. ``start_date``, ``end_date``,
+                :py:meth:`reports_query` – e.g. ``start_date``, ``end_date``,
                 or a custom ``filters`` string.
 
         Returns:
@@ -1300,7 +1300,7 @@ class AnalyticsClient:
 
         Raises:
             QuotaExceeded / AnalyticsError: Propagated from
-                :py:meth:`analytics_request`.
+                :py:meth:`reports_query`.
 
 
         Example:
@@ -1311,7 +1311,7 @@ class AnalyticsClient:
             ... )
             >>> df.head()
         """
-        return self.analytics_request(
+        return self.reports_query(
             dimensions=("membershipCancellationSurveyReason",),
             metrics ="membershipsCancellationSurveyResponses", **kw
         )
@@ -1331,7 +1331,7 @@ class AnalyticsClient:
 
         Args:
             **kw: Keyword arguments forwarded unchanged to
-                :py:meth:`analytics_request` – e.g. ``start_date``, ``end_date``,
+                :py:meth:`reports_query` – e.g. ``start_date``, ``end_date``,
                 or a custom ``filters`` string.
 
         Returns:
@@ -1340,7 +1340,7 @@ class AnalyticsClient:
 
         Raises:
             QuotaExceeded / AnalyticsError: Propagated from
-                :py:meth:`analytics_request`.
+                :py:meth:`reports_query`.
 
 
         Example:
@@ -1352,4 +1352,4 @@ class AnalyticsClient:
             ... )
             >>> df.head()
         """
-        return self.analytics_request(dimensions=("adType",), metrics=("adRate",), **kw)
+        return self.reports_query(dimensions=("adType",), metrics=("adRate",), **kw)
