@@ -9,14 +9,14 @@ Every sub‑module (*_analytics.py*, *_reporting.py*, *_data.py*) should
 from ytapi_kit._errors import QuotaExceeded, InvalidRequest
 
 try:
-    yt.analytics_request(...)
+    yt.reports_query(...)
 except QuotaExceeded:
     sleep_until_midnight()
 except InvalidRequest as e:
     logger.warning("bad parameter: %s", e)
 ```"""
 
-from typing import Final, Mapping, MutableMapping
+from typing import Final
 
 __all__ = [
     "YTAPIError",

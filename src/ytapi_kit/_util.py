@@ -2,13 +2,15 @@ from __future__ import annotations
 
 import inspect, functools, typing
 import collections.abc as _abc
+import pandas as pd
 
 __all__ = [
     "_string_to_tuple",
     "_raise_invalid_argument",
     "runtime_typecheck",
     "_validate_enum",
-    "_prune_none"
+    "_prune_none",
+    "_paged_list"
 ]
 
 def _string_to_tuple(value: str | typing.Iterable[str]) -> tuple[str, ...]:
@@ -81,3 +83,17 @@ def _validate_enum(
 def _prune_none(mapping: typing.Mapping[str, object]) -> dict[str, object]:
     """Return a new dict without the None-valued keys."""
     return {k: v for k, v in mapping.items() if v is not None}
+
+def _paged_list(fn, **first_call_kwargs) -> pd.DataFrame:
+    """
+    Generic paginator: keeps calling *fn* until no `nextPageToken`.
+    `fn` must return (DataFrame, next_token_or_None).
+    """
+    dfs, token = fn(**first_call_kwargs)
+    frames = [dfs]
+
+    while token:
+        page_df, token = fn(page_token=token, **first_call_kwargs)
+        frames.append(page_df)
+
+    return pd.concat(frames, ignore_index=True)

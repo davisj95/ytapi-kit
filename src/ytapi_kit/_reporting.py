@@ -5,21 +5,19 @@ import io
 import re
 from typing import Iterator
 
-from ._util import runtime_typecheck
+from ._util import runtime_typecheck, _paged_list
 
 class ReportingClient:
     def __init__(self, session):
         self.session = session
         self.base_url = "https://youtubereporting.googleapis.com/v1"
 
-    @staticmethod
-    def _paged(func, *args, **kwargs) -> Iterator[pd.DataFrame]:
-        """Yield successive DataFrame pages until the API returns no next token."""
-        page, token = func(*args, **kwargs)
-        yield page
-        while token:
-            page, token = func(*args, page_token=token, **kwargs)
-            yield page
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc, tb):
+        self.session.close()
+
 
     @runtime_typecheck
     def list_report_types(
@@ -364,6 +362,7 @@ class ReportingClient:
             df[c] = pd.to_datetime(df[c],  format="%Y%m%d")
         return df
 
+    @runtime_typecheck
     def get_latest_report(
             self,
             identifier: str,
@@ -383,10 +382,7 @@ class ReportingClient:
             Parsed DataFrame (default) or raw CSV bytes.
         """
         # ------- gather all jobs (pagination handled) -------
-        jobs_df = pd.concat(
-            self._paged(self.list_jobs),
-            ignore_index=True
-        )
+        jobs_df = pd.concat(_paged_list(self.list_jobs), ignore_index=True)
 
         mask = (jobs_df["reportTypeId"].str.casefold() == identifier.casefold()) | \
                (jobs_df["name"].str.casefold() == identifier.casefold())
@@ -396,7 +392,7 @@ class ReportingClient:
 
         job_id = match.sort_values("createTime", ascending=False).iloc[0]["id"]
 
-        reports_df = pd.concat(self._paged(self.list_reports, job_id), ignore_index=True)
+        reports_df = pd.concat(_paged_list(self.list_reports, job_id), ignore_index=True)
         if reports_df.empty:
             raise ValueError(f"No reports available for job '{identifier}'")
 

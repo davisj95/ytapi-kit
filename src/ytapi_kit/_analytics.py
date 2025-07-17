@@ -81,7 +81,7 @@ class AnalyticsClient:
         self.base_url = "https://youtubeanalytics.googleapis.com/v2/reports"
 
     def __enter__(self):
-        return self  # or return self.session if you prefer
+        return self
 
     def __exit__(self, exc_type, exc, tb):
         self.session.close()
@@ -119,6 +119,7 @@ class AnalyticsClient:
             return (e.year - s.year) * 12 + (e.month - s.month) + 1
         raise ValueError("time_period must be 'day' or 'month' when max_results is omitted")
 
+    @runtime_typecheck
     def reports_query(
             self,
             *,
@@ -226,7 +227,7 @@ class AnalyticsClient:
     # -------------------------------------------------------------------------
     # Helper to fan‑out over many IDs
     # -------------------------------------------------------------------------
-    def __per_id(
+    def _per_id(
             self,
             *,
             id_kind: str,
@@ -255,7 +256,7 @@ class AnalyticsClient:
     # -------------------------------------------------------------------------
     # Geographic Functions ----------------------------------------------------
     # -------------------------------------------------------------------------
-
+    @runtime_typecheck
     def video_geography(self, video_ids: ID, *, geo_dim: str = "country",
             max_results: int = 200, **kw
     ) -> pd.DataFrame:
@@ -290,7 +291,7 @@ class AnalyticsClient:
         """
         if geo_dim not in GEOGRAPHIC_DIMENSIONS:
             _raise_invalid_argument("geo_dim", geo_dim, GEOGRAPHIC_DIMENSIONS)
-        return self.__per_id(
+        return self._per_id(
             id_kind="video",
             id_vals=video_ids,
             dimensions=("video", geo_dim),
@@ -298,6 +299,7 @@ class AnalyticsClient:
             **kw,
         )
 
+    @runtime_typecheck
     def channel_geography(self, *, geo_dim: str = "country",
                     max_results: int = 200, **kw
     ) -> pd.DataFrame:
@@ -340,7 +342,7 @@ class AnalyticsClient:
     # -------------------------------------------------------------------------
     # Playback Location Functions ---------------------------------------------
     # -------------------------------------------------------------------------
-
+    @runtime_typecheck
     def video_playback_location(self, video_ids: ID, *, detail: bool = False,
                                 max_results: int = 200, **kw
     ) -> pd.DataFrame:
@@ -379,7 +381,7 @@ class AnalyticsClient:
         """
         dim = "insightPlaybackLocationDetail" if detail else "insightPlaybackLocationType"
         extras = ["insightPlaybackLocationType==EMBEDDED"] if detail else []
-        return self.__per_id(
+        return self._per_id(
             id_kind="video",
             id_vals=video_ids,
             extra_filters=extras,
@@ -388,6 +390,7 @@ class AnalyticsClient:
             **kw,
         )
 
+    @runtime_typecheck
     def channel_playback_location(self, *, detail: bool = False,
                                   max_results: int = 200, **kw
     ) -> pd.DataFrame:
@@ -434,7 +437,7 @@ class AnalyticsClient:
     # -------------------------------------------------------------------------
     # Playback Details Functions ----------------------------------------------
     # -------------------------------------------------------------------------
-
+    @runtime_typecheck
     def video_playback_details(self, video_ids: ID, *,
                                detail: str = "liveOrOnDemand", **kw
     ) -> pd.DataFrame:
@@ -470,13 +473,14 @@ class AnalyticsClient:
         """
         if detail not in PLAYBACK_DETAIL_DIMENSIONS:
             _raise_invalid_argument("detail", detail, PLAYBACK_DETAIL_DIMENSIONS)
-        return self.__per_id(
+        return self._per_id(
             id_kind="video",
             id_vals=video_ids,
             dimensions=(detail,),
             **kw,
         )
 
+    @runtime_typecheck
     def channel_playback_details(self, *, detail: str = "liveOrOnDemand", **kw,
     ) -> pd.DataFrame:
         """
@@ -518,7 +522,7 @@ class AnalyticsClient:
     # -------------------------------------------------------------------------
     # Device Functions --------------------------------------------------------
     # -------------------------------------------------------------------------
-
+    @runtime_typecheck
     def video_devices(self, video_ids: ID, *,
                       device_info: str | Sequence[str] = "deviceType", **kw,
     ) -> pd.DataFrame:
@@ -564,13 +568,14 @@ class AnalyticsClient:
         if not set(dims).issubset(DEVICE_DIMENSIONS):
             _raise_invalid_argument("device_info", device_info,
                                          DEVICE_DIMENSIONS)
-        return self.__per_id(
+        return self._per_id(
             id_kind="video",
             id_vals=video_ids,
             dimensions=dims,
             **kw,
         )
 
+    @runtime_typecheck
     def channel_devices(self, *,
                         device_info: str | Sequence[str] = "deviceType", **kw,
     ) -> pd.DataFrame:
@@ -615,7 +620,7 @@ class AnalyticsClient:
     # -------------------------------------------------------------------------
     # Demographic Functions ---------------------------------------------------
     # -------------------------------------------------------------------------
-
+    @runtime_typecheck
     def video_demographics(self, video_ids: ID, *,
             demographic: str | Sequence[str] = "ageGroup", **kw,
     ) -> pd.DataFrame:
@@ -660,13 +665,14 @@ class AnalyticsClient:
         if not set(dims).issubset(DEMOGRAPHIC_DIMENSIONS):
             _raise_invalid_argument("demographic", demographic,
                                          DEMOGRAPHIC_DIMENSIONS)
-        return self.__per_id(
+        return self._per_id(
             id_kind="video",
             id_vals=video_ids,
             dimensions=dims,
             **kw,
         )
 
+    @runtime_typecheck
     def channel_demographics(self, *,
             demographic: str | Sequence[str] = "ageGroup", **kw,
     ) -> pd.DataFrame:
@@ -712,7 +718,7 @@ class AnalyticsClient:
     # -------------------------------------------------------------------------
     # Statistics Functions ----------------------------------------------------
     # -------------------------------------------------------------------------
-
+    @runtime_typecheck
     def video_stats(self, video_ids: str | Iterable[str], **kw) -> pd.DataFrame:
         """
         Get stats for one or more videos.
@@ -747,12 +753,13 @@ class AnalyticsClient:
             ... )
             >>> df.head()
         """
-        return self.__per_id(
+        return self._per_id(
             id_kind="video",
             id_vals=video_ids,
             **kw,
         )
 
+    @runtime_typecheck
     def channel_stats(self, **kw) -> pd.DataFrame:
         """
         Get stats for a channel.
@@ -788,13 +795,9 @@ class AnalyticsClient:
         )
 
     # -------------------------------------------------------------------------
-    # Metadata ----------------------------------------------------------------
-    # -------------------------------------------------------------------------
-
-    # -------------------------------------------------------------------------
     # Sharing Services Functions ----------------------------------------------
     # -------------------------------------------------------------------------
-
+    @runtime_typecheck
     def video_sharing_services(self, video_ids: str | Iterable[str], **kw) -> pd.DataFrame:
         """
         Show which social / messaging platforms drove shares for each video.
@@ -822,7 +825,7 @@ class AnalyticsClient:
             >>> df.head()
         """
 
-        return self.__per_id(
+        return self._per_id(
             id_kind="video",
             id_vals=video_ids,
             dimensions=("sharingService",),
@@ -830,6 +833,7 @@ class AnalyticsClient:
             **kw,
         )
 
+    @runtime_typecheck
     def channel_sharing_services(self, **kw) -> pd.DataFrame:
         """
         Show which social / messaging platforms drove shares to the channel.
@@ -864,7 +868,7 @@ class AnalyticsClient:
     # -------------------------------------------------------------------------
     # Time Period Functions ---------------------------------------------------
     # -------------------------------------------------------------------------
-
+    @runtime_typecheck
     def video_time_period(self, video_ids: str | Iterable[str], *,
                           time_period: str = "month", start_date: str | date,
                           end_date: str | date, max_results: int | None = None,
@@ -909,7 +913,7 @@ class AnalyticsClient:
             _raise_invalid_argument("time_period", time_period,
                                          TIME_PERIOD_DIMENSIONS)
         resolved_max = self._resolve_max_results(time_period, start_date, end_date, max_results)
-        return self.__per_id(
+        return self._per_id(
             id_kind="video",
             id_vals=video_ids,
             dimensions=(time_period,),
@@ -920,6 +924,7 @@ class AnalyticsClient:
             **kw,
         )
 
+    @runtime_typecheck
     def channel_time_period(self, *, time_period: str = "month",
                             start_date: str | date, end_date: str | date,
                             max_results: int | None = None, **kw,
@@ -972,7 +977,7 @@ class AnalyticsClient:
     # -------------------------------------------------------------------------
     # Top Videos Functions ----------------------------------------------------
     # -------------------------------------------------------------------------
-
+    @runtime_typecheck
     def playlist_top_videos(self, playlist_ids: str | Iterable[str], **kw) -> pd.DataFrame:
         """
         Return the top-performing videos within one or more playlists.
@@ -1001,7 +1006,7 @@ class AnalyticsClient:
             ... )
             >>> df.head()
         """
-        return self.__per_id(
+        return self._per_id(
             id_kind="playlist",
             id_vals=playlist_ids,
             dimensions=("video",),
@@ -1009,6 +1014,7 @@ class AnalyticsClient:
             **kw,
         )
 
+    @runtime_typecheck
     def channel_top_videos(self, **kw) -> pd.DataFrame:
         """
         Return the top-performing videos in the channel.
@@ -1043,7 +1049,7 @@ class AnalyticsClient:
     # -------------------------------------------------------------------------
     # Traffic Sources Functions -----------------------------------------------
     # -------------------------------------------------------------------------
-
+    @runtime_typecheck
     def video_traffic_sources(self, video_ids: ID, *,
                               detail: str | None = None, **kw
     ) -> pd.DataFrame:
@@ -1098,7 +1104,7 @@ class AnalyticsClient:
         extras = (f"insightTrafficSourceType=={detail}",) if detail is not None \
             else ()
 
-        return self.__per_id(
+        return self._per_id(
             id_kind="video",
             id_vals=video_ids,
             extra_filters=extras,
@@ -1107,6 +1113,7 @@ class AnalyticsClient:
             **kw,
         )
 
+    @runtime_typecheck
     def channel_traffic_sources(self, *, detail: str | None = None, **kw
     ) -> pd.DataFrame:
         """
@@ -1164,7 +1171,7 @@ class AnalyticsClient:
     # -------------------------------------------------------------------------
     # Audience retention (videos only) ----------------------------------------
     # -------------------------------------------------------------------------
-
+    @runtime_typecheck
     def video_audience_retention(self, video_ids: ID, *,
                                  audience_type: str | None = None, **kw
     ) -> pd.DataFrame:
@@ -1211,7 +1218,7 @@ class AnalyticsClient:
                                          AUDIENCE_TYPES)
         extras = (f"audienceType=={audience_type}",) if audience_type is not None \
             else ()
-        return self.__per_id(
+        return self._per_id(
             id_kind="video",
             id_vals=video_ids,
             extra_filters=extras,
@@ -1223,6 +1230,7 @@ class AnalyticsClient:
     # ------------------------------------------------------------------
     # Live‑streaming position (videos only) -----------------------------
     # ------------------------------------------------------------------
+    @runtime_typecheck
     def video_live_position(self, video_ids: ID, *,
                             metrics: str | Sequence[str] = "peakConcurrentViewers",
                             **kw
@@ -1269,7 +1277,7 @@ class AnalyticsClient:
             _raise_invalid_argument("metrics", metrics,
                                          LIVESTREAM_METRICS)
 
-        return self.__per_id(
+        return self._per_id(
             id_kind="video",
             id_vals=video_ids,
             dimensions=("liveStreamPosition",),
@@ -1280,6 +1288,7 @@ class AnalyticsClient:
     # ------------------------------------------------------------------
     # Membership cancellation (channel only) ---------------------------
     # ------------------------------------------------------------------
+    @runtime_typecheck
     def channel_membership_cancellation(self, **kw) -> pd.DataFrame:
         """
         Analyse **why** paying members cancel their channel memberships.
@@ -1319,6 +1328,7 @@ class AnalyticsClient:
     # ------------------------------------------------------------------
     # Ad‑performance ----------------------------------------------------
     # ------------------------------------------------------------------
+    @runtime_typecheck
     def channel_ad_performance(self, **kw) -> pd.DataFrame:
         """
         Inspect ad-revenue performance for the authenticated channel.

@@ -1,7 +1,7 @@
 # ytapi-kit
-*Typed Python helpers for the YouTube Analytics API – the numbers you see in Studio, now in Pandas.*
+*Python helpers for YouTube's Analytics, Reporting, and Data APIs.*
 
-
+[![Docs](https://img.shields.io/badge/docs-latest-brightgreen)](https://davisj95.github.io/ytapi-kit/)
 [![PyPI - Version](https://img.shields.io/pypi/v/ytapi-kit.svg)](https://pypi.org/project/ytapi-kit)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/ytapi-kit.svg)](https://pypi.org/project/ytapi-kit)
 [![tests](https://github.com/davisj95/ytapi-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/davisj95/ytapi-kit/actions)
@@ -14,18 +14,101 @@
 - [Overview](#overview)
 - [Installation](#installation)
 - [Authentication](#authentication-oauth-20)
-- [Details](#feature-table)
-- [Examples](#examples)
+- [Data API](#data-api)
+- [Analytics API](#analytics-api)
+- [Reporting API](#reporting-api)
 - [Roadmap](#roadmap)
 - [Contributing](#contributing)
 - [License](#license)
 
 ## Overview
 
-`ytapi-kit` pulls **YouTube Studio analytics** directly into Python so you can analyse, join, or visualise without copy-pasting CSVs.
+`ytapi-kit` is a Python wrapper over three of YouTube's official API services - **Data v3**, **Analytics v2**, and **Reporting v1**. Under the hood the library is organized around three client classes - **DataClient**, **AnalyticsClient**, and **ReportingClient**, each containing 1-to-1 methods that mirror Google's REST endpoints (e.g. `reports_query()`, `list_videos()`, `list_jobs()`, etc.) In addition to those low-level calls, we have added additional functions that pre-fill the most common parameters and return tidy `pandas` DataFrames in a single line of code (e.g. `video_geographies()`, `get_latest_report()`, etc.). More details are provided in subsequent sections.
 
-**Data you can pull:**
+## Installation
+```
+python -m pip install ytapi-kit
 
+# For the development version:
+git clone https://github.com/davisj95/ytapi-kit.git
+cd ytapi-kit && python -m pip install -e '.[dev]'
+```
+Requires Python ≥ 3.9. Dependencies (pandas, google-auth, requests) install automatically.
+
+## Authentication (OAuth 2.0)
+While Google allows several authentication methods (API key, OAuth 2.0, etc.), currently this package uses OAuth 2.0 since all three APIs support OAuth.
+1. Create a project in Google Cloud Console → enable YouTube Data. Analytics, and Reporting APIs (or whichever ones are applicable for your needs).
+2. Download OAuth client secrets JSON → save as `client_secrets.json`
+```python
+from ytapi_kit import user_session, AnalyticsClient
+
+session = user_session("client_secrets.json")  # browser popup when authentication required
+yt = AnalyticsClient(session)
+```
+`ytapi-kit` caches/refreshes tokens automatically (default ~/.ytapi.pickle).
+
+## Quickstart
+```python
+from ytapi_kit import user_session, AnalyticsClient, DataClient, ReportingClient
+
+session = user_session("client_secrets.json")
+
+# 1) Analytics: fetch daily views for a video
+yt_analytics = AnalyticsClient(session)
+views = yt_analytics.video_stats(
+    video_ids="dQw4w9WgXcQ",
+    start_date="2023-01-01",
+    end_date="2023-02-01",
+)
+print(views.head())
+
+# 2) Data: lookup video metadata
+yt_data = DataClient(session)
+meta = yt_data.video_metadata("dQw4w9WgXcQ")
+print(meta["title"], meta["viewCount"])
+
+# 3) Reporting: get latest channel_basics_a2 report
+yt_reporting = ReportingClient(session)
+report_types = yt_reporting.get_latest_report("channel_basics_a2")
+print(report_types.head())
+```
+---
+## Data API
+The [YouTube Data API](https://developers.google.com/youtube/v3/getting-started) lets you discover, inspect, create, update, or delete nearly every YouTube resource—videos, channels, playlists, comments, and more.  You interact with it through the `DataClient`, which exposes both:
+
+- 1‑to‑1 endpoint wrappers (`list_videos()`, `list_playlists()`, `list_comments()`, etc.) for advanced users who need every optional parameter, and
+
+- Convenience helpers like `video_metadata()` and `channel_videos()` that hide pagination and pre‑fill the most common parts.
+
+##### What can you do?
+
+- Search public YouTube for any query and get back the same results users see on YouTube.
+
+- Pull public stats (views, likes, duration, thumbnails) for any video on the platform—not just your own.
+
+- Enumerate an entire channel’s library.
+
+Currently, only `list` endpoints have been written for this package, with others on the way.
+
+### Examples 
+#### 1. Get all of your channel videos
+```python
+all_vids = yt_data.channel_videos(mine=True)
+```
+#### 2. Search for "Never Gonna Give You Up"
+```python
+rick_results = yt_data.list_search(q="Never Gonna Give You Up")
+```
+#### 3. Show a video's metadata (Title, description, runtime, etc)
+```python
+vid_meta = yt_data.video_metadata(video_id="dQw4w9WgXcQ")
+```
+
+---
+
+## Analytics API
+
+The [YouTube Analytics API](https://developers.google.com/youtube/analytics/data_model) provides analytics that can be found in YouTube Studio, providing in-depth insights for areas such as the following:
 - **Resources**
 - **Geographic areas**
 - **Time Periods**
@@ -33,105 +116,49 @@
 - **Playback Details**
 - **Traffic Sources**
 - **Devices**
-- **Demographics**
-- **Engagement & Content Sharing**
-- **Audience Retention**
-- **Live Streaming**
-- **Membership Cancellations**
-- **Ad Performance**
 
+and more. For the most customization in an api request, you can call the `reports_query` method, but wrapper functions have been written to simplify calling data and making your code easier to read. Below are some examples.
+
+### Examples
+#### 1. Channel stats (all-time)
 ```python
-from ytapi_kit import AnalyticsClient, user_session
-
-yt = AnalyticsClient(user_session("client_secrets.json"))
-df = yt.channel_time_period(time_period="day", metrics=("views",), last_n_days=30)
-print(df.tail())
+df = yt_analytics.channel_stats(metrics=("views","averageViewDuration","subscribersGained"))
 ```
-*Details can be found in the [Details](#details) section*
-
----
-
-## Installation
-```
-python -m pip install ytapi-kit
-```
-### Development Install
-```
-git clone https://github.com/davisj95/ytapi-kit.git
-cd ytapi-kit && python -m pip install -e '.[dev]'
-```
-Requires Python ≥ 3.9. Dependencies (pandas, google-auth, requests) install automatically.
-
-## Authentication (OAuth 2.0)
-1. Create a project in Google Cloud Console → enable YouTube Analytics API
-2. Download OAuth client secrets JSON → save as `client_secrets.json`
+#### 2. Last month's views by country
 ```python
-from ytapi_kit import user_session, AnalyticsClient
-
-session = user_session("client_secrets.json")  # browser popup on first run
-yt = AnalyticsClient(session)
-```
-
-`ytapi-kit` caches/refreshes tokens automatically (default ~/.ytapi_kit_token.pickle).
-
-## Feature Table
-| Data&nbsp;Type | What the helper returns (key args in *italics*)                                                                                                      | Functions |
-|---------------|------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|
-| Geography | Metrics broken down by country / province / DMA / city &nbsp;(*geo_dim="country"\|…*). Can also filter other requests by "continent" or "subContinent" | `video_geography`, `channel_geography` |
-| Playback&nbsp;location | Where viewers watched—YouTube, embedded, etc. &nbsp;(*detail=True* drills into embedded domains)                                                     | `video_playback_location`, `channel_playback_location` |
-| Playback&nbsp;details | Split stats by `creatorContentType`, `liveOrOnDemand`, `subscribedStatus`, `youtubeProduct` &nbsp;(*detail="liveOrOnDemand"* by default)             | `video_playback_details`, `channel_playback_details` |
-| Time&nbsp;period | Daily / monthly aggregates for any metrics &nbsp;(*time_period="day"&#124;"month"*)                                                                        | `video_time_period`, `channel_time_period` |
-| Traffic&nbsp;sources | High-level sources (YT_SEARCH, RELATED_VIDEO…) or fine-grain detail by including the *detail* argument, such as  *detail="YT_SEARCH"*                | `video_traffic_sources`, `channel_traffic_sources` |
-| Devices | Viewer device type and/or OS &nbsp;(*device_info=("deviceType","operatingSystem")*)                                                                  | `video_devices`, `channel_devices` |
-| Demographics | Audience age groups and/or gender                                                                                                                    | `video_demographics`, `channel_demographics` |
-| Audience&nbsp;retention | Watch-ratio curve by elapsed-time bucket &nbsp;(*audience_type="ORGANIC"\|AD_INSTREAM…*)                                                             | `video_audience_retention` |
-| Sharing&nbsp;services | Which social / messaging platforms drove shares                                                                                                      | `video_sharing_services`, `channel_sharing_services` |
-| Ad&nbsp;performance | Revenue / CPM by ad type (display, skippable, bumper…)                                                                                               | `channel_ad_performance` |
-| Top&nbsp;videos | Best-performing videos within a playlist or channel                                                                                                  | `playlist_top_videos`, `channel_top_videos` |
-| Generic&nbsp;stats | Catch-all wrappers for any custom metrics × dimensions                                                                                               | `video_stats`, `channel_stats`|
-
-See **docstrings** (`help(AnalyticsClient)`) or the [API reference](docs/API.md) for the full helper list.
-
-
-## Examples
-### 1. Channel stats (all-time)
-```python
-df = yt.channel_stats(metrics=("views","averageViewDuration","subscribersGained"))
-```
-### 2. Last month's views by country
-```python
-df = yt.channel_geography(
+df = yt_analytics.channel_geography(
         geo_dim    ="country",
         start_date ="2025-05-01",
         end_date   ="2025-05-31",
         metrics    =("views",)          # default is views + minutesWatched
 )
 ```
-### 3. Audience retention for a single video
+#### 3. Audience retention for a single video
 ```python
-df = yt.video_audience_retention(
+df = yt_analytics.video_audience_retention(
         video_ids   ="dQw4w9WgXcQ",
         audience_type="ORGANIC",        # or AD_INSTREAM, AD_INDISPLAY
         start_date  ="2025-01-01",
         end_date    ="2025-01-31",
 )
 ```
-### 4. Top videos in a playlist
-```python
-df = yt.playlist_top_videos(
-        ["PL9tY0BWXOZFtQ-GG8X2E8oia-MfeLeGKv"],
-        metrics=("views", "likes", "comments"),
-        start_date="2024-01-01",
-        end_date="2024-06-30",
-)
-```
+Every helper returns a `pandas.DataFrame`.
 
-Every helper returns a **typed** `pandas.DataFrame` ready for analysis or plotting.
+---
+## Reporting API
+The [YouTube Reporting API](https://developers.google.com/youtube/reporting/v1/reports) is designed for high-volume, historical reports that are exported daily. You first create a *job*, YouTube will generate the report on its schedule, and then you download the resulting CSV file. As mentioned above, you can interact with each endpoint directly, but a convenient wrapper `get_latest_report()` combines a multi-step workflow into one easy-to-use function to get the latest report.
+
+### Example
+#### Get the latest "channel_basics_a2" report
+```python
+latest_report = yt_reporting.get_latest_report("channel_basics_a2")
+```
+---
 
 ## Roadmap
-- YouTube Data API implementation
-- YouTube Reporting API implementation
-- Added support for service account authentication
+- Add remaining endpoints in YouTube Data API
+- Add `Groups` and `Groupitems` endpoints in YouTube Analytics API
+- Added support for service account authentication and other methods of authentication
 - Potential CLI wrapper: `ytapi-kit geostats video_id --last 30d --csv out.csv`
 
 Up-vote an issue or open a PR to help me prioritize
