@@ -71,7 +71,7 @@ class DataClient:
 
     """
 
-    def __init__(self, session, base_url: str = "https://googleapis.com/youtube/v3"):
+    def __init__(self, session, base_url: str = "https://www.googleapis.com/youtube/v3"):
         self.session = session
         self.base_url = base_url
 
@@ -1606,13 +1606,13 @@ class DataClient:
         all_videos = pd.concat(video_frames, ignore_index=True)
         return all_videos.drop_duplicates(subset="contentDetails.videoId").reset_index(drop=True)
 
-    def video_metadata(self, video_id: str | Iterable[str],
+    def video_metadata(self, video_id: str | Sequence[str],
                        part: str | Sequence[str] = ("snippet", "contentDetails")) -> pd.DataFrame:
         """
         Return metadata for one or more videos.
 
         Args:
-            video_id (str | Iterable[str]):
+            video_id (str | Sequence[str]):
                 **Required.** ID of the video(s) to get metadata for.
             part (str | Sequence[str]):
                 **Required.** Most relevant parts are:

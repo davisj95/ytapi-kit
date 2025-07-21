@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from datetime import date
-from typing import Iterable, Sequence
+from typing import Sequence
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import pandas as pd
@@ -10,7 +10,6 @@ from google.auth.transport.requests import AuthorizedSession
 from ._errors import *
 from ._util import *
 
-ID = str | Iterable[str]
 # Possible Dimensions ---------------------------------------------------------
 RESOURCE_DIMENSIONS = {"video", "playlist", "channel"}
 GEOGRAPHIC_DIMENSIONS = {"country", "province", "dma", "city"}
@@ -124,8 +123,8 @@ class AnalyticsClient:
             self,
             *,
             ids: str = "channel==MINE",
-            metrics: Iterable[str] | None = None,
-            dimensions: Iterable[str] | None = None,
+            metrics: str | Sequence[str] | None = None,
+            dimensions: str | Sequence[str] | None = None,
             sort: str | None = None,
             max_results: int | None = 10,
             filters: str | None = None,
@@ -137,7 +136,7 @@ class AnalyticsClient:
     ) -> pd.DataFrame:
         """
         Send a single *YouTube Analytics* `reports.query` request and return the
-        result as a typed :class:`~pandas.DataFrame`.
+        result as a pandas DataFrame`.
 
         Most other functions in this package are wrappers for this function with
         some arguments already populated. If none of the other prebuilt functions
@@ -147,7 +146,7 @@ class AnalyticsClient:
             ids (str, optional): The `ids` request parameter.  Defaults to
                 ``"channel==MINE"`` (i.e. the authorised user’s own channel).
             metrics (Iterable[str] | str, optional): Comma-separated string *or*
-                iterable of metric names.  Defaults to
+                iterable of metric names.  If None, defaults to
                 ``("views", "estimatedMinutesWatched")``.  **Must** contain at
                 least one metric.
             dimensions (Iterable[str] | str, optional): Comma-separated string or
@@ -231,7 +230,7 @@ class AnalyticsClient:
             self,
             *,
             id_kind: str,
-            id_vals: ID,
+            id_vals: str | Sequence[str],
             extra_filters: Sequence[str] = (),
             concurrency: int = 8,  # tweak to taste (≤10 QPS is safe)
             **kw,
@@ -257,14 +256,14 @@ class AnalyticsClient:
     # Geographic Functions ----------------------------------------------------
     # -------------------------------------------------------------------------
     @runtime_typecheck
-    def video_geography(self, video_ids: ID, *, geo_dim: str = "country",
+    def video_geography(self, video_ids: str | Sequence[str], *, geo_dim: str = "country",
             max_results: int = 200, **kw
     ) -> pd.DataFrame:
         """
         Returns video stats by geographical region (e.g. "country", "city", etc.)
 
         Args:
-            video_ids (str | Iterable[str]): One or more YouTube video IDs.
+            video_ids (str | Sequence[str]): One or more YouTube video IDs.
             geo_dim (str, optional): Geographic granularity—
                 ``'country'`` (default), ``'province'``, ``'dma'``, or ``'city'``.
             max_results (int, optional): Maximum rows per API page. Defaults to 200.
@@ -343,14 +342,14 @@ class AnalyticsClient:
     # Playback Location Functions ---------------------------------------------
     # -------------------------------------------------------------------------
     @runtime_typecheck
-    def video_playback_location(self, video_ids: ID, *, detail: bool = False,
+    def video_playback_location(self, video_ids: str | Sequence[str], *, detail: bool = False,
                                 max_results: int = 200, **kw
     ) -> pd.DataFrame:
         """
         Return where viewers watched each video (YouTube, embedded players, etc.).
 
         Args:
-            video_ids (str | Iterable[str]): One or more YouTube video IDs.
+            video_ids (str | Sequence[str]): One or more YouTube video IDs.
             detail (bool, optional):
                 * **False** (default) – group results by high-level
                   ``insightPlaybackLocationType`` (e.g. *EMBEDDED*, *YOUTUBE*).
@@ -438,14 +437,14 @@ class AnalyticsClient:
     # Playback Details Functions ----------------------------------------------
     # -------------------------------------------------------------------------
     @runtime_typecheck
-    def video_playback_details(self, video_ids: ID, *,
+    def video_playback_details(self, video_ids: str | Sequence[str], *,
                                detail: str = "liveOrOnDemand", **kw
     ) -> pd.DataFrame:
         """
         Break down each video by a playback-detail dimension (live vs. VOD, etc.).
 
         Args:
-            video_ids (str | Iterable[str]): One or more YouTube video IDs.
+            video_ids (str | Sequence[str]): One or more YouTube video IDs.
             detail (str, optional): Dimension to split by—must be one of
                 ``'creatorContentType'``, ``'liveOrOnDemand'``,
                 ``'subscribedStatus'``, ``'youtubeProduct'``.
@@ -523,7 +522,7 @@ class AnalyticsClient:
     # Device Functions --------------------------------------------------------
     # -------------------------------------------------------------------------
     @runtime_typecheck
-    def video_devices(self, video_ids: ID, *,
+    def video_devices(self, video_ids: str | Sequence[str], *,
                       device_info: str | Sequence[str] = "deviceType", **kw,
     ) -> pd.DataFrame:
 
@@ -531,7 +530,7 @@ class AnalyticsClient:
         Break down each video by viewers’ device characteristics.
 
         Args:
-            video_ids (str | Iterable[str]): One or more YouTube video IDs.
+            video_ids (str | Sequence[str]): One or more YouTube video IDs.
             device_info (str | Sequence[str], optional):
                 Either a single literal or an iterable drawn from:
                 - ``"deviceType"`` – desktop, mobile, tablet, TV, etc. *(default)*
@@ -621,14 +620,14 @@ class AnalyticsClient:
     # Demographic Functions ---------------------------------------------------
     # -------------------------------------------------------------------------
     @runtime_typecheck
-    def video_demographics(self, video_ids: ID, *,
+    def video_demographics(self, video_ids: str | Sequence[str], *,
             demographic: str | Sequence[str] = "ageGroup", **kw,
     ) -> pd.DataFrame:
         """
         Break down each video’s audience by age and/or gender.
 
         Args:
-            video_ids (str | Iterable[str]): One or more YouTube video IDs.
+            video_ids (str | Sequence[str]): One or more YouTube video IDs.
             demographic (str | Sequence[str], optional):
                 A single literal or an iterable chosen from:
                 - ``"ageGroup"`` – 13-17, 18-24, …, 65-plus *(default)*
@@ -719,7 +718,7 @@ class AnalyticsClient:
     # Statistics Functions ----------------------------------------------------
     # -------------------------------------------------------------------------
     @runtime_typecheck
-    def video_stats(self, video_ids: str | Iterable[str], **kw) -> pd.DataFrame:
+    def video_stats(self, video_ids: str | Sequence[str], **kw) -> pd.DataFrame:
         """
         Get stats for one or more videos.
 
@@ -728,7 +727,7 @@ class AnalyticsClient:
         you can ask for any Analytics combo without creating a new wrapper.
 
         Args:
-            video_ids (str | Iterable[str]): One or more YouTube video IDs.
+            video_ids (str | Sequence[str]): One or more YouTube video IDs.
             **kw:  Keyword arguments forwarded verbatim to
                 :py:meth:`reports_query` — for example ``metrics``,
                 ``dimensions``, ``start_date``, ``end_date``, ``filters``, etc.
@@ -798,12 +797,12 @@ class AnalyticsClient:
     # Sharing Services Functions ----------------------------------------------
     # -------------------------------------------------------------------------
     @runtime_typecheck
-    def video_sharing_services(self, video_ids: str | Iterable[str], **kw) -> pd.DataFrame:
+    def video_sharing_services(self, video_ids: str | Sequence[str], **kw) -> pd.DataFrame:
         """
         Show which social / messaging platforms drove shares for each video.
 
         Args:
-            video_ids (str | Iterable[str]): One or more YouTube video IDs.
+            video_ids (str | Sequence[str]): One or more YouTube video IDs.
             **kw: Keyword arguments forwarded unchanged to
                 :py:meth:`reports_query` – e.g. ``start_date``, ``end_date``,
                 or a custom ``filters`` string.
@@ -869,7 +868,7 @@ class AnalyticsClient:
     # Time Period Functions ---------------------------------------------------
     # -------------------------------------------------------------------------
     @runtime_typecheck
-    def video_time_period(self, video_ids: str | Iterable[str], *,
+    def video_time_period(self, video_ids: str | Sequence[str], *,
                           time_period: str = "month", start_date: str | date,
                           end_date: str | date, max_results: int | None = None,
                           **kw,
@@ -878,7 +877,7 @@ class AnalyticsClient:
         Summarise video performance by calendar **day** or **month**.
 
         Args:
-            video_ids (str | Iterable[str]): One or more YouTube video IDs.
+            video_ids (str | Sequence[str]): One or more YouTube video IDs.
             time_period (str, optional): Reporting grain—either ``"day"`` or
                 ``"month"``. Defaults to ``"month"``.
             start_date (str | datetime.date): ISO ``YYYY-MM-DD`` or date object
@@ -978,12 +977,12 @@ class AnalyticsClient:
     # Top Videos Functions ----------------------------------------------------
     # -------------------------------------------------------------------------
     @runtime_typecheck
-    def playlist_top_videos(self, playlist_ids: str | Iterable[str], **kw) -> pd.DataFrame:
+    def playlist_top_videos(self, playlist_ids: str | Sequence[str], **kw) -> pd.DataFrame:
         """
         Return the top-performing videos within one or more playlists.
 
         Args:
-            playlist_ids (str | Iterable[str]): One or more YouTube playlist IDs.
+            playlist_ids (str | Sequence[str]): One or more YouTube playlist IDs.
             **kw: Keyword arguments forwarded unchanged to
                 :py:meth:`reports_query` – e.g. ``start_date``, ``end_date``,
                 or a custom ``filters`` string.
@@ -1050,14 +1049,14 @@ class AnalyticsClient:
     # Traffic Sources Functions -----------------------------------------------
     # -------------------------------------------------------------------------
     @runtime_typecheck
-    def video_traffic_sources(self, video_ids: ID, *,
+    def video_traffic_sources(self, video_ids: str | Sequence[str], *,
                               detail: str | None = None, **kw
     ) -> pd.DataFrame:
         """
         Break down traffic sources for one or more videos.
 
         Args:
-            video_ids (str | Iterable[str]): One or more YouTube video IDs.
+            video_ids (str | Sequence[str]): One or more YouTube video IDs.
             detail (str | None, optional):
                 * ``None`` (default) – group rows by high-level
                   **insightTrafficSourceType** (e.g. *YT_SEARCH*, *RELATED_VIDEO*).
@@ -1172,14 +1171,14 @@ class AnalyticsClient:
     # Audience retention (videos only) ----------------------------------------
     # -------------------------------------------------------------------------
     @runtime_typecheck
-    def video_audience_retention(self, video_ids: ID, *,
+    def video_audience_retention(self, video_ids: str | Sequence[str], *,
                                  audience_type: str | None = None, **kw
     ) -> pd.DataFrame:
         """
         Chart how well viewers stick around for each video (audience‐retention).
 
         Args:
-            video_ids (str | Iterable[str]): One or more YouTube video IDs.
+            video_ids (str | Sequence[str]): One or more YouTube video IDs.
             audience_type (str | None, optional):
                 Filter the report by viewer origin:
 
@@ -1231,7 +1230,7 @@ class AnalyticsClient:
     # Live‑streaming position (videos only) -----------------------------
     # ------------------------------------------------------------------
     @runtime_typecheck
-    def video_live_position(self, video_ids: ID, *,
+    def video_live_position(self, video_ids: str | Sequence[str], *,
                             metrics: str | Sequence[str] = "peakConcurrentViewers",
                             **kw
                             ) -> pd.DataFrame:
@@ -1242,7 +1241,7 @@ class AnalyticsClient:
         was into the stream when they joined (0–10 %, 10–25 %, etc.).
 
         Args:
-            video_ids (str | Iterable[str]): One or more YouTube video IDs.
+            video_ids (str | Sequence[str]): One or more YouTube video IDs.
             metrics (str | Sequence[str], optional): Metric name or collection
                 drawn from:
                 - ``"averageConcurrentViewers"``

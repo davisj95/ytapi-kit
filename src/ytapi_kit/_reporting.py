@@ -345,7 +345,7 @@ class ReportingClient:
 
         Returns
         -------
-        pandas.DataFrame | bytes
+        pandas.DataFrame
         """
 
         r = self.session.get(download_url, stream=True)

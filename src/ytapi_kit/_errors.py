@@ -90,14 +90,14 @@ def _reason(resp) -> str:  # noqa: ANN001
     """Return the *reason* field from Google’s error payload or ``"unknown"``."""
     try:
         return resp.json()["error"]["errors"][0]["reason"]
-    except Exception:  # noqa: BLE001
+    except Exception:
         return "unknown"
 
 
 def raise_for_status(resp) -> None:  # noqa: ANN001
     """Raise the appropriate *ytapi_kit* exception for *resp*.
 
-    Does **nothing** when the response code is < 400.
+    Does **nothing** when the response code is 400.
     """
     if resp.status_code < 400:
         return

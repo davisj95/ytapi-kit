@@ -1,8 +1,12 @@
 from __future__ import annotations
 
-import inspect, functools, typing
+import inspect, functools
 import collections.abc as _abc
 import pandas as pd
+
+from typing import Iterable, Any, Sequence, get_origin, get_args, Union, get_type_hints, Mapping
+
+from collections.abc import Sequence as ABCSequence
 
 __all__ = [
     "_string_to_tuple",
@@ -13,49 +17,57 @@ __all__ = [
     "_paged_list"
 ]
 
-def _string_to_tuple(value: str | typing.Iterable[str]) -> tuple[str, ...]:
+def _string_to_tuple(value: str | Iterable[str]) -> tuple[str, ...]:
     if isinstance(value, str):
         # split on commas, trim whitespace, drop empties
         return tuple(s.strip() for s in value.split(",") if s.strip())
     return tuple(value)
 
-def _raise_invalid_argument(param: str, value: str, allowed: typing.Iterable[str]) -> None:
+def _raise_invalid_argument(param: str, value: str, allowed: Iterable[str]) -> None:
     allowed_set = sorted(set(allowed))
     bullets = "\n  • " + "\n  • ".join(allowed_set)
     raise ValueError(f"{param}={value!r} is invalid. Allowed values:{bullets}")
 
-def runtime_typecheck(func):
+def _is_instance(val: Any, anno: Any) -> bool:
 
-    sig   = inspect.signature(func)
-    hints = typing.get_type_hints(func)
+    origin = get_origin(anno)
 
-    @functools.wraps(func)
+    if origin is ABCSequence and isinstance(val, (str, bytes)):
+        return False
+
+    if origin is None:
+        return anno is Any or isinstance(val, anno)
+
+    if origin is Union:
+        return any(_is_instance(val, arg) for arg in get_args(anno))
+
+    if origin is Sequence and get_args(anno) == (str,):
+        return isinstance(val, Sequence) and all(isinstance(v, str) for v in val)
+
+    return isinstance(val, origin)
+
+def runtime_typecheck(fn):
+
+    sig   = inspect.signature(fn)
+    hints = get_type_hints(fn)
+
+    @functools.wraps(fn)
     def wrapper(*args, **kwargs):
-
         bound = sig.bind_partial(*args, **kwargs)
-        bound.apply_defaults()
-
         for name, value in bound.arguments.items():
-            if value is None:
-                continue
-            expected = hints.get(name)
-            if expected is None:
-                continue
-
-            origin = typing.get_origin(expected)
-            allowed = typing.get_args(expected) if origin is typing.Union else (expected,)
-
-            if not isinstance(value, allowed):
-                typestr = " or ".join(t.__name__ for t in allowed)
-                raise TypeError(f"{name} must be {typestr} | None")
-
-        return func(*args, **kwargs)
+            anno = hints.get(name)
+            if anno and not _is_instance(value, anno):
+                raise TypeError(
+                    f"{fn.__name__}() argument '{name}' "
+                    f"expects {anno}, got {type(value).__name__}"
+                )
+        return fn(*args, **kwargs)
 
     return wrapper
 
 def _validate_enum(
     param_name: str,
-    value: str | typing.Sequence[str],
+    value: str | Sequence[str],
     allowed: set[str],
     *,
     allow_multi: bool = True,
@@ -80,7 +92,7 @@ def _validate_enum(
 
     return tuple(dict.fromkeys(items))
 
-def _prune_none(mapping: typing.Mapping[str, object]) -> dict[str, object]:
+def _prune_none(mapping: Mapping[str, object]) -> dict[str, object]:
     """Return a new dict without the None-valued keys."""
     return {k: v for k, v in mapping.items() if v is not None}
 
