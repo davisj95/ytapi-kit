@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import inspect, functools
 import collections.abc as _abc
+import types
+
 import pandas as pd
 
 from typing import Iterable, Any, Sequence, get_origin, get_args, Union, get_type_hints, Mapping
@@ -30,19 +32,19 @@ def _raise_invalid_argument(param: str, value: str, allowed: Iterable[str]) -> N
 
 def _is_instance(val: Any, anno: Any) -> bool:
 
-    origin = get_origin(anno)
+    origin = get_origin(anno) or anno
 
     if origin is ABCSequence and isinstance(val, (str, bytes)):
         return False
 
-    if origin is None:
+    if origin is anno:                     # no generics involved
         return anno is Any or isinstance(val, anno)
 
-    if origin is Union:
+    if origin in (Union, types.UnionType):
         return any(_is_instance(val, arg) for arg in get_args(anno))
 
-    if origin is Sequence and get_args(anno) == (str,):
-        return isinstance(val, Sequence) and all(isinstance(v, str) for v in val)
+    if origin is ABCSequence and get_args(anno) == (str,):
+        return isinstance(val, ABCSequence) and all(isinstance(v, str) for v in val)
 
     return isinstance(val, origin)
 
