@@ -98,7 +98,7 @@ class DataClient:
         # Try to coerce any ISO date-time strings
         dt_like = [c for c in df.columns if re.search(r"(date|time|At)$", c, re.IGNORECASE)]
         for c in dt_like:
-            df[c] = pd.to_datetime(df[c], errors="ignore", utc=True)
+            df[c] = pd.to_datetime(df[c], utc=True)
 
         return df
 
