@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "ytapi-kit"
 dynamic = ["version"]
-description = ''
+description = 'All-in-one YouTube API SDK: Analytics, Reporting, & Data'
 readme = "README.md"
 requires-python = ">=3.8"
 license = "MIT"
