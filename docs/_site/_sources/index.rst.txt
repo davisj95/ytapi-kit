@@ -1,9 +1,3 @@
-ytapi-kit documentation
-=======================
+.. raw:: html
 
-.. toctree::
-   :hidden:
-
-   api/_data
-   api/_analytics
-   api/_reporting
+   <meta http-equiv="refresh" content="0; url=README.html">
