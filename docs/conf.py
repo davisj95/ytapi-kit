@@ -10,3 +10,7 @@ extensions = [
 ]
 
 html_theme = "sphinx_rtd_theme"
+
+from importlib.metadata import version as pkg_version
+release = pkg_version("ytapi_kit")          # 0.2.1
+version = ".".join(release.split(".")[:2])  # 0.2
