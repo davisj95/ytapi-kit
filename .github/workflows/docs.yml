@@ -9,14 +9,29 @@ permissions:
   id-token: write
 
 jobs:
-  build-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
-        with: {python-version: '3.x'}
-      - run: pip install sphinx sphinx-rtd-theme myst-parser
-      - run: sphinx-build -b html docs _site
-      - uses: actions/upload-pages-artifact@v2
-        with: {path: _site}
-      - uses: actions/deploy-pages@v2
+        with: { python-version: '3.x' }
+      - run: pip install sphinx myst-parser sphinx-rtd-theme
+      - run: sphinx-build -b html docs/source _site
+      - name: Upload static site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
