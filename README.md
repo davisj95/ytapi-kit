@@ -23,7 +23,14 @@
 
 ## Overview
 
-`ytapi-kit` is a Python wrapper over three of YouTube's official API services - **Data v3**, **Analytics v2**, and **Reporting v1**. Under the hood the library is organized around three client classes - **DataClient**, **AnalyticsClient**, and **ReportingClient**, each containing 1-to-1 methods that mirror Google's REST endpoints (e.g. `reports_query()`, `list_videos()`, `list_jobs()`, etc.) In addition to those low-level calls, we have added additional functions that pre-fill the most common parameters and return tidy `pandas` DataFrames in a single line of code (e.g. `video_geographies()`, `get_latest_report()`, etc.). More details are provided in subsequent sections.
+`ytapi-kit` is a single Python wrapper around three of YouTube's official API services:
+- **Data v3** 
+- **Analytics v2**
+- **Reporting v1**. 
+
+Under the hood the library is organized around three client classes - **DataClient**, **AnalyticsClient**, and **ReportingClient**, each containing 1-to-1 methods that mirror Google's REST endpoints (e.g. `reports_query()`, `list_videos()`, `list_jobs()`, etc.) 
+
+In addition to those low-level calls, we have added functions that pre-fill the most common parameters and return tidy `pandas` DataFrames in a single line of code (e.g. `video_geographies()`, `get_latest_report()`, etc.). More details are provided in subsequent sections.
 
 ## Installation
 ```
