@@ -23,10 +23,7 @@
 
 ## Overview
 
-`ytapi-kit` is a single Python wrapper around three of YouTube's official API services:
-- **Data v3** 
-- **Analytics v2**
-- **Reporting v1**. 
+`ytapi-kit` is a single Python wrapper around YouTube's Data, Analytics, and Reporting APIs.
 
 Under the hood the library is organized around three client classes - **DataClient**, **AnalyticsClient**, and **ReportingClient**, each containing 1-to-1 methods that mirror Google's REST endpoints (e.g. `reports_query()`, `list_videos()`, `list_jobs()`, etc.) 
 
@@ -180,3 +177,12 @@ Even small tweaks are welcome.
 
 ## License
 `ytapi-kit` is released under the MIT License (see`LICENSE`)
+
+
+```{toctree}
+:hidden:
+
+api/_data
+api/_analytics
+api/_reporting
+```

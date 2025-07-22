@@ -1064,8 +1064,8 @@ class AnalyticsClient:
                   ``{"ADVERTISING", "CAMPAIGN_CARD", "END_SCREEN", "EXT_URL",
                   "HASHTAGS", "NOTIFICATION", "RELATED_VIDEO", "SOUND_PAGE",
                   "SUBSCRIBER", "YT_CHANNEL", "YT_OTHER_PAGE", "YT_SEARCH",
-                  "VIDEO_REMIXES"}`` – drill into
-                  **insightTrafficSourceDetail** for that specific type.
+                  "VIDEO_REMIXES"}`` – drill into **insightTrafficSourceDetail** for that specific type.
+
             **kw: Keyword arguments forwarded unchanged to
                 :py:meth:`reports_query` – e.g. ``start_date``, ``end_date``,
                 or a custom ``filters`` string.
@@ -1076,6 +1076,7 @@ class AnalyticsClient:
               insightTrafficSourceType*.
             * If *detail* is provided – one row per *video ×
               insightTrafficSourceDetail*.
+
             Metrics default to ``views`` and ``estimatedMinutesWatched`` unless
             overridden via ``**kw``.
 

@@ -59,7 +59,7 @@ class DataClient:
             Propagated from the underlying session if the network fails.
         ytapi_kit.RateLimitError:
             Raised when the API returns *429 Too Many Requests* or a quota
-            error; see :pyfunc:`ytapi_kit._errors.raise_for_status`.
+            error; see :py:func:`ytapi_kit._errors.raise_for_status`.
         ValueError, TypeError:
             Argument-validation errors surfaced verbatim from individual
             endpoint helpers.
@@ -177,9 +177,9 @@ class DataClient:
                 pagination via *page_token*.
 
         Returns:
-        tuple[pandas.DataFrame, str | None]:
-            - DataFrame containing the activities.
-            - ``nextPageToken`` if more data are available, else ``None``.
+            tuple[pandas.DataFrame, str | None]:
+                - DataFrame containing the activities.
+                - ``nextPageToken`` if more data are available, else ``None``.
 
         Raises:
             ValueError: If both or neither of *channel_id* and *mine* are supplied.
@@ -278,12 +278,13 @@ class DataClient:
                     - "brandingSettings"
                     - "contentDetails"
                     - "contentOwnerDetails"
-                     - "id"
-                     - "localizations"
-                     - "snippet"
-                     - "statistics"
-                     - "status"
-                     - "topicDetails"
+                    - "id"
+                    - "localizations"
+                    - "snippet"
+                    - "statistics"
+                    - "status"
+                    - "topicDetails"
+
             for_handle (str | None):
                 Handle of specific channel. **Exactly one** of *for_handle* , *for_username*,
                 *id*, *managed_by_me*, or *mine* must be supplied.
@@ -357,9 +358,10 @@ class DataClient:
                     - "contentDetails"
                      - "id"
                      - "snippet"
+
             channel_id (str | None):
                 **Required.** ID of specific channel. **Exactly one** of *channel_id* ,
-                *id*, or *mine* must be supplied.
+                *channel_section_id*, or *mine* must be supplied.
             channel_section_id (str | None):
                 ID of specific `channelSection` resource.
             mine (bool | None):
@@ -988,11 +990,13 @@ class DataClient:
                 Restrict search to a particular type of channel. Acceptable values are:
                 - "any"
                 - "show"
+
             event_type (str | None):
                 Only include broadcasts of this type. Acceptable values are:
                     - "completed",
                     - "live",
                     - "upcoming"
+
                 This parameter requires *type="video"*
             location (str | None):
                 Latitude/longitude of search centre (e.g. ``"37.42307,-122.08427"``).
@@ -1012,6 +1016,7 @@ class DataClient:
                     - "title",
                     - "videoCount",
                     - "viewCount"
+
             page_token (str | None):
                 Token that identifies the results page to return
             published_after (datetime | date | str | None):
@@ -1027,6 +1032,7 @@ class DataClient:
                 - "moderate",
                 - "none",
                 - "strict"
+
             topic_id (str | None):
                 ID of topic to show results of.
             type (str | None):
@@ -1034,11 +1040,13 @@ class DataClient:
                 - "video"
                 - "channel"
                 - "playlist"
+
             video_caption (str | None):
                 Caption filter for video results. Acceptable values are:
                 - "any",
                 - "closedCaption",
                 - "none"
+
                 Requires *type="video"*
             video_category_id (str | None):
                 ID of video category to show results of.
@@ -1048,46 +1056,54 @@ class DataClient:
                 - "any",
                 - "high",
                 - "standard"
+
                 Requires *type="video"*
             video_dimensions (str | None):
                 Video dimensions to show results of. Acceptable values are:
                 - "2d",
                 - "3d",
                 - "any"
+
                 Requires *type="video"*
             video_duration (str | None):
                 Video duration to show results of. Acceptable values are:
-                - "any",
-                - "long",
-                - "medium",
-                - "short",
+                - "any"
+                - "long"
+                - "medium"
+                - "short"
+
                 Requires *type="video"*
             video_embeddable (str | None):
                 Show videos that can only be embedded into a webpage. Acceptable values are:
                 - "any"
                 - "true"
+
                 Requires *type="video"*
             video_license (str | None):
                 License of videos to show results of. Acceptable values are:
                 - "any"
                 - "creativeCommon"
                 - "youtube"
+
                 Requires *type="video"*
             video_paid_product_placement (str | None):
                 Show videos that have paid product placement. Acceptable values are:
                 - "any"
                 - "true"
+
                 Requires *type="video"*
             video_syndicated (str | None):
                 Show videos that can be played outside YouTube.com. Acceptable values are:
                 - "any"
                 - "true"
+
                 Requires *type="video"*
             video_type (str | None):
                 Type of video to show results of. Acceptable values are:
                 - "any"
                 - "episode"
                 - "movie"
+
                 Requires *type="video"*
 
         Returns:
