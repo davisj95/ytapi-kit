@@ -1,0 +1,22 @@
+name: docs
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.x'}
+      - run: pip install sphinx sphinx-rtd-theme myst-parser
+      - run: sphinx-build -b html docs _site
+      - uses: actions/upload-pages-artifact@v2
+        with: {path: _site}
+      - uses: actions/deploy-pages@v2
