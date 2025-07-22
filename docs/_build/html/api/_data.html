@@ -1,0 +1,1172 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>&lt;no title&gt; &mdash; ytapi-kit 0.1.0.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=540db47b"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            ytapi-kit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">DataClient</span></code></a><ul>
+<li><a class="reference internal" href="#ytapi_kit._data.DataClient.session"><code class="docutils literal notranslate"><span class="pre">DataClient.session</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._data.DataClient.base_url"><code class="docutils literal notranslate"><span class="pre">DataClient.base_url</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._data.DataClient.channel_playlists"><code class="docutils literal notranslate"><span class="pre">DataClient.channel_playlists()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._data.DataClient.channel_videos"><code class="docutils literal notranslate"><span class="pre">DataClient.channel_videos()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._data.DataClient.list_activities"><code class="docutils literal notranslate"><span class="pre">DataClient.list_activities()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._data.DataClient.list_captions"><code class="docutils literal notranslate"><span class="pre">DataClient.list_captions()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._data.DataClient.list_channel_sections"><code class="docutils literal notranslate"><span class="pre">DataClient.list_channel_sections()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._data.DataClient.list_channels"><code class="docutils literal notranslate"><span class="pre">DataClient.list_channels()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._data.DataClient.list_comment_threads"><code class="docutils literal notranslate"><span class="pre">DataClient.list_comment_threads()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._data.DataClient.list_comments"><code class="docutils literal notranslate"><span class="pre">DataClient.list_comments()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._data.DataClient.list_i18n_languages"><code class="docutils literal notranslate"><span class="pre">DataClient.list_i18n_languages()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._data.DataClient.list_i18n_regions"><code class="docutils literal notranslate"><span class="pre">DataClient.list_i18n_regions()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._data.DataClient.list_members"><code class="docutils literal notranslate"><span class="pre">DataClient.list_members()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._data.DataClient.list_membership_levels"><code class="docutils literal notranslate"><span class="pre">DataClient.list_membership_levels()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._data.DataClient.list_playlist_images"><code class="docutils literal notranslate"><span class="pre">DataClient.list_playlist_images()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._data.DataClient.list_playlist_items"><code class="docutils literal notranslate"><span class="pre">DataClient.list_playlist_items()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._data.DataClient.list_playlists"><code class="docutils literal notranslate"><span class="pre">DataClient.list_playlists()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._data.DataClient.list_search"><code class="docutils literal notranslate"><span class="pre">DataClient.list_search()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._data.DataClient.list_subscriptions"><code class="docutils literal notranslate"><span class="pre">DataClient.list_subscriptions()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._data.DataClient.list_video_abuse_report_reasons"><code class="docutils literal notranslate"><span class="pre">DataClient.list_video_abuse_report_reasons()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._data.DataClient.list_video_categories"><code class="docutils literal notranslate"><span class="pre">DataClient.list_video_categories()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._data.DataClient.list_videos"><code class="docutils literal notranslate"><span class="pre">DataClient.list_videos()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._data.DataClient.playlist_videos"><code class="docutils literal notranslate"><span class="pre">DataClient.playlist_videos()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._data.DataClient.video_metadata"><code class="docutils literal notranslate"><span class="pre">DataClient.video_metadata()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ytapi-kit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">&lt;no title&gt;</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/_data.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <dl class="py class" id="module-ytapi_kit._data">
+<dt class="sig sig-object py" id="ytapi_kit._data.DataClient">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ytapi_kit._data.</span></span><span class="sig-name descname"><span class="pre">DataClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'https://www.googleapis.com/youtube/v3'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ytapi_kit/_data.html#DataClient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._data.DataClient" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>High-level wrapper around the <strong>YouTube Data API v3</strong>.</p>
+<p>The client offers:</p>
+<ul class="simple">
+<li><p>Wrappers for every “<strong>.list</strong>” GET endpoint
+(<code class="docutils literal notranslate"><span class="pre">list_videos</span></code>, <code class="docutils literal notranslate"><span class="pre">list_playlists</span></code>, <code class="docutils literal notranslate"><span class="pre">list_search</span></code> …).</p></li>
+<li><p>Automatic pagination, ID-chunking, and JSON→DataFrame conversion.</p></li>
+<li><p>Convenient aggregators such as
+<a class="reference internal" href="#ytapi_kit._data.DataClient.channel_playlists" title="ytapi_kit._data.DataClient.channel_playlists"><code class="xref py py-meth docutils literal notranslate"><span class="pre">channel_playlists()</span></code></a>, <a class="reference internal" href="#ytapi_kit._data.DataClient.playlist_videos" title="ytapi_kit._data.DataClient.playlist_videos"><code class="xref py py-meth docutils literal notranslate"><span class="pre">playlist_videos()</span></code></a>,
+<a class="reference internal" href="#ytapi_kit._data.DataClient.channel_videos" title="ytapi_kit._data.DataClient.channel_videos"><code class="xref py py-meth docutils literal notranslate"><span class="pre">channel_videos()</span></code></a>, and <a class="reference internal" href="#ytapi_kit._data.DataClient.video_metadata" title="ytapi_kit._data.DataClient.video_metadata"><code class="xref py py-meth docutils literal notranslate"><span class="pre">video_metadata()</span></code></a>.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>session</strong> (<em>google.auth.transport.requests.AuthorizedSession</em>) – Pre-authenticated HTTP session.  The client never refreshes or
+mutates the credentials object; bring your own refresh logic if
+needed.</p></li>
+<li><p><strong>base_url</strong> (<em>str</em><em>, </em><em>optional</em>) – API root to use instead of the default
+<code class="docutils literal notranslate"><span class="pre">&quot;https://youtube.googleapis.com/youtube/v3/&quot;</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ytapi_kit._data.DataClient.session">
+<span class="sig-name descname"><span class="pre">session</span></span><a class="headerlink" href="#ytapi_kit._data.DataClient.session" title="Link to this definition"></a></dt>
+<dd><p>The underlying HTTP session.  Closed automatically when the client
+is used as a context manager <em>and</em> the session was created inside
+the client.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>AuthorizedSession</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ytapi_kit._data.DataClient.base_url">
+<span class="sig-name descname"><span class="pre">base_url</span></span><a class="headerlink" href="#ytapi_kit._data.DataClient.base_url" title="Link to this definition"></a></dt>
+<dd><p>Root prefix for every endpoint path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Core</span> <span class="pre">list</span> <span class="pre">wrappers</span></span></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">list_activities</span></code>, <code class="docutils literal notranslate"><span class="pre">list_captions</span></code>, <code class="docutils literal notranslate"><span class="pre">list_channels</span></code>,
+<code class="docutils literal notranslate"><span class="pre">list_channel_sections</span></code>, <code class="docutils literal notranslate"><span class="pre">list_comments</span></code>, <code class="docutils literal notranslate"><span class="pre">list_comment_threads</span></code>,
+<code class="docutils literal notranslate"><span class="pre">list_i18n_languages</span></code>, <code class="docutils literal notranslate"><span class="pre">list_i18n_regions</span></code>, <code class="docutils literal notranslate"><span class="pre">list_members</span></code>,
+<code class="docutils literal notranslate"><span class="pre">list_membership_levels</span></code>, <code class="docutils literal notranslate"><span class="pre">list_playlist_images</span></code>,
+<code class="docutils literal notranslate"><span class="pre">list_playlist_items</span></code>, <code class="docutils literal notranslate"><span class="pre">list_playlists</span></code>, <code class="docutils literal notranslate"><span class="pre">list_search</span></code>,
+<code class="docutils literal notranslate"><span class="pre">list_subscriptions</span></code>, <code class="docutils literal notranslate"><span class="pre">list_video_abuse_report_reasons</span></code>,
+<code class="docutils literal notranslate"><span class="pre">list_video_categories</span></code>, <code class="docutils literal notranslate"><span class="pre">list_videos</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">High-level</span> <span class="pre">helpers</span></span></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">channel_playlists</span></code>, <code class="docutils literal notranslate"><span class="pre">playlist_videos</span></code>, <code class="docutils literal notranslate"><span class="pre">channel_videos</span></code>,
+<code class="docutils literal notranslate"><span class="pre">video_metadata</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Raises:</span></span></dt>
+<dd><dl class="simple">
+<dt>google.auth.exceptions.TransportError:</dt><dd><p>Propagated from the underlying session if the network fails.</p>
+</dd>
+<dt>ytapi_kit.RateLimitError:</dt><dd><p>Raised when the API returns <em>429 Too Many Requests</em> or a quota
+error; see <a href="#id1"><span class="problematic" id="id2">:pyfunc:`ytapi_kit._errors.raise_for_status`</span></a>.</p>
+</dd>
+<dt>ValueError, TypeError:</dt><dd><p>Argument-validation errors surfaced verbatim from individual
+endpoint helpers.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Examples:</span></span></dt>
+<dd><p>dc = DataClient(AuthorizedSession(creds))
+playlists = dc.channel_playlists(mine=True)
+playlists[[“id”, “snippet.title”]].head()</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._data.DataClient.channel_playlists">
+<span class="sig-name descname"><span class="pre">channel_playlists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">part</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'contentDetails'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mine</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_data.html#DataClient.channel_playlists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._data.DataClient.channel_playlists" title="Link to this definition"></a></dt>
+<dd><p>Return <strong>all</strong> playlists owned by a channel.</p>
+<p>This helper  calls <code class="xref py py-meth docutils literal notranslate"><span class="pre">playlists.list()</span></code> until every page has
+been retrieved and concatenates the results into a single DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>part</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em>) – <strong>Required.</strong> One or more of:
+- “contentDetails”
+- “id”
+- “localizations”
+- “player”
+- “snippet”
+- “status”</p></li>
+<li><p><strong>channel_id</strong> (<em>str</em><em> | </em><em>None</em>) – Channel whose playlists should be returned.</p></li>
+<li><p><strong>mine</strong> (<em>bool</em><em> | </em><em>None</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> to fetch playlists for the authenticated user instead of
+specifying <em>channel_id</em>.</p></li>
+<li><p><strong>supplied.</strong> (<em>**Exactly one**</em><em> of </em><em>channel_id</em><em> or </em><em>mine must be</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>All playlists owned by the channel.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If both or neither of <em>channel_id</em> and <em>mine</em> are supplied.</p></li>
+<li><p><strong>TypeError</strong> – If a parameter has an invalid type.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._data.DataClient.channel_videos">
+<span class="sig-name descname"><span class="pre">channel_videos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mine</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_data.html#DataClient.channel_videos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._data.DataClient.channel_videos" title="Link to this definition"></a></dt>
+<dd><p>Return <strong>all videos</strong> contained in a channel.</p>
+<p>NOTE: A bug has persisted for several years, where not all channel videos
+are returned solely by querying videos in the “uploads” playlist.
+For this reason, this function lists <strong>ALL</strong> playlists in a channel
+(including the “uploads” playlist), and then lists videos in each playlist
+and aggregates them into a single DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_id</strong> (<em>str</em><em> | </em><em>None</em>) – ID of channel whose playlists should be returned.</p></li>
+<li><p><strong>mine</strong> (<em>bool</em><em> | </em><em>None</em>) – <p><code class="docutils literal notranslate"><span class="pre">True</span></code> to fetch playlists for the authenticated user instead of
+specifying <em>channel_id</em>.</p>
+<p><strong>Exactly one</strong> of <em>channel_id</em> or <em>mine</em> must be supplied.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>All videos in channel.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If a parameter has an invalid type.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._data.DataClient.list_activities">
+<span class="sig-name descname"><span class="pre">list_activities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mine</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">part</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">('contentDetails',</span> <span class="pre">'snippet')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">published_after</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">date</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">published_before</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">date</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_data.html#DataClient.list_activities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._data.DataClient.list_activities" title="Link to this definition"></a></dt>
+<dd><p>Wrapper for the <strong>activities.list</strong> endpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_id</strong> (<em>str</em><em> | </em><em>None</em>) – ID of a specific channel. <strong>Exactly one</strong> of <em>channel_id</em> or
+<em>mine</em> must be supplied.</p></li>
+<li><p><strong>mine</strong> (<em>bool</em><em> | </em><em>None</em>) – Set to <code class="docutils literal notranslate"><span class="pre">True</span></code> to fetch activities for the authenticated user’s
+own channel.</p></li>
+<li><p><strong>part</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em>) – <strong>Required.</strong> One or more of:
+- <code class="docutils literal notranslate"><span class="pre">&quot;contentDetails&quot;</span></code>
+- <code class="docutils literal notranslate"><span class="pre">&quot;id&quot;</span></code>
+- <code class="docutils literal notranslate"><span class="pre">&quot;snippet&quot;</span></code></p></li>
+<li><p><strong>published_after</strong> (<em>datetime</em><em> | </em><em>date</em><em> | </em><em>str</em><em> | </em><em>None</em>) – Earliest date/time (inclusive) the activity occurred.</p></li>
+<li><p><strong>published_before</strong> (<em>datetime</em><em> | </em><em>date</em><em> | </em><em>str</em><em> | </em><em>None</em>) – Latest date/time (exclusive) the activity occurred.</p></li>
+<li><p><strong>region_code</strong> (<em>str</em><em> | </em><em>None</em>) – Two-letter ISO 3166-1 alpha-2 region code used to filter results.</p></li>
+<li><p><strong>page_token</strong> (<em>str</em><em> | </em><em>None</em>) – Token that identifies the results page to return.</p></li>
+<li><p><strong>max_results</strong> (<em>int</em><em> | </em><em>None</em>) – Maximum items per page (1–50). Larger result sets require
+pagination via <em>page_token</em>.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Returns:
+tuple[pandas.DataFrame, str | None]:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>DataFrame containing the activities.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nextPageToken</span></code> if more data are available, else <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If both or neither of <em>channel_id</em> and <em>mine</em> are supplied.</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p><a class="reference external" href="https://developers.google.com/youtube/v3/docs/activities/list">https://developers.google.com/youtube/v3/docs/activities/list</a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._data.DataClient.list_captions">
+<span class="sig-name descname"><span class="pre">list_captions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">part</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">('id',</span> <span class="pre">'snippet')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">video_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caption_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_behalf_of_content_owner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_data.html#DataClient.list_captions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._data.DataClient.list_captions" title="Link to this definition"></a></dt>
+<dd><p>Wrapper for the <strong>captions.list</strong> endpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>part</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em>) – <dl class="simple">
+<dt><strong>Required.</strong> Set to one or more of the following values:</dt><dd><ul>
+<li><p>”id”</p></li>
+<li><p>”snippet</p></li>
+</ul>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>video_id</strong> (<em>str</em>) – <strong>Required.</strong> ID of specific video</p></li>
+<li><p><strong>caption_id</strong> (<em>str</em><em> | </em><em>None</em>) – ID of specific caption resource to be retrieved</p></li>
+<li><p><strong>on_behalf_of_content_owner</strong> (<em>str</em><em> | </em><em>None</em>) – ID of content owner</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dataframe containing the captions.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.Dataframe</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If part is not an allowed value.</p></li>
+<li><p><strong>TypeError</strong> – If any arguments passed are invalid.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p><a class="reference external" href="https://developers.google.com/youtube/v3/docs/captions/list">https://developers.google.com/youtube/v3/docs/captions/list</a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._data.DataClient.list_channel_sections">
+<span class="sig-name descname"><span class="pre">list_channel_sections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">part</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">('contentDetails',</span> <span class="pre">'snippet')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_section_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mine</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_behalf_of_content_owner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_data.html#DataClient.list_channel_sections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._data.DataClient.list_channel_sections" title="Link to this definition"></a></dt>
+<dd><p>Wrapper for the <strong>channelSections.list</strong> endpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>part</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em>) – <dl>
+<dt><strong>Required.</strong> Set to one or more of the following values:</dt><dd><ul>
+<li><p>”contentDetails”</p></li>
+</ul>
+<blockquote>
+<div><ul>
+<li><p>”id”</p></li>
+<li><p>”snippet”</p></li>
+</ul>
+</div></blockquote>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>channel_id</strong> (<em>str</em><em> | </em><em>None</em>) – <strong>Required.</strong> ID of specific channel. <strong>Exactly one</strong> of <em>channel_id</em> ,
+<em>id</em>, or <em>mine</em> must be supplied.</p></li>
+<li><p><strong>channel_section_id</strong> (<em>str</em><em> | </em><em>None</em>) – ID of specific <cite>channelSection</cite> resource.</p></li>
+<li><p><strong>mine</strong> (<em>bool</em><em> | </em><em>None</em>) – Set to <code class="docutils literal notranslate"><span class="pre">True</span></code> to fetch channels owned by the user.</p></li>
+<li><p><strong>on_behalf_of_content_owner</strong> (<em>str</em><em> | </em><em>None</em>) – ID of content owner</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>DataFrame containing the channel sections.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If not exactly one of <em>channel_id</em>, <em>channel_section_id</em>, or <em>mine</em> are supplied.</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p><a class="reference external" href="https://developers.google.com/youtube/v3/docs/channels/list">https://developers.google.com/youtube/v3/docs/channels/list</a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._data.DataClient.list_channels">
+<span class="sig-name descname"><span class="pre">list_channels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">part</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">('contentDetails',</span> <span class="pre">'snippet')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">for_handle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">for_username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">managed_by_me</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mine</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_behalf_of_content_owner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_data.html#DataClient.list_channels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._data.DataClient.list_channels" title="Link to this definition"></a></dt>
+<dd><p>Wrapper for the <strong>channels.list</strong> endpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>part</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em>) – <dl>
+<dt><strong>Required.</strong> Set to one or more of the following values:</dt><dd><ul>
+<li><p>”auditDetails”</p></li>
+<li><p>”brandingSettings”</p></li>
+<li><p>”contentDetails”</p></li>
+<li><p>”contentOwnerDetails”</p></li>
+</ul>
+<blockquote>
+<div><ul>
+<li><p>”id”</p></li>
+<li><p>”localizations”</p></li>
+<li><p>”snippet”</p></li>
+<li><p>”statistics”</p></li>
+<li><p>”status”</p></li>
+<li><p>”topicDetails”</p></li>
+</ul>
+</div></blockquote>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>for_handle</strong> (<em>str</em><em> | </em><em>None</em>) – Handle of specific channel. <strong>Exactly one</strong> of <em>for_handle</em> , <em>for_username</em>,
+<em>id</em>, <em>managed_by_me</em>, or <em>mine</em> must be supplied.</p></li>
+<li><p><strong>for_username</strong> (<em>str</em><em> | </em><em>None</em>) – Username of specific channel.</p></li>
+<li><p><strong>channel_id</strong> (<em>str</em><em> | </em><em>None</em>) – ID of specific channel.</p></li>
+<li><p><strong>managed_by_me</strong> (<em>bool</em><em> | </em><em>None</em>) – Set to <code class="docutils literal notranslate"><span class="pre">True</span></code> to fetch channels managed by the user.</p></li>
+<li><p><strong>mine</strong> (<em>bool</em><em> | </em><em>None</em>) – Set to <code class="docutils literal notranslate"><span class="pre">True</span></code> to fetch channels owned by the user.</p></li>
+<li><p><strong>hl</strong> (<em>str</em><em> | </em><em>None</em>) – A specified language that the YouTube website supports.</p></li>
+<li><p><strong>max_results</strong> (<em>int</em><em> | </em><em>None</em>) – Maximum items per page (1–50). Larger result sets require
+pagination via <em>page_token</em>.</p></li>
+<li><p><strong>on_behalf_of_content_owner</strong> (<em>str</em><em> | </em><em>None</em>) – ID of content owner</p></li>
+<li><p><strong>page_token</strong> (<em>str</em><em> | </em><em>None</em>) – Token that identifies the results page to return.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>DataFrame containing the activities.</p></li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nextPageToken</span></code> if more data are available, else <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+</ul>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[pandas.DataFrame, str | None]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If both or neither of <em>channel_id</em> and <em>mine</em> are supplied.</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p><a class="reference external" href="https://developers.google.com/youtube/v3/docs/channels/list">https://developers.google.com/youtube/v3/docs/channels/list</a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._data.DataClient.list_comment_threads">
+<span class="sig-name descname"><span class="pre">list_comment_threads</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">part</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'snippet'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_threads_related_to_channel_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comment_thread_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">video_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">moderation_status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_data.html#DataClient.list_comment_threads"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._data.DataClient.list_comment_threads" title="Link to this definition"></a></dt>
+<dd><p>Wrapper for the <strong>commentThreads.list</strong> endpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>part</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em>) – <strong>Required.</strong> One or more of:
+- “id”
+- “replies”
+- “snippet”</p></li>
+<li><p><strong>video_id</strong> (<em>str</em><em> | </em><em>None</em>) – Retrieve comment threads for the <strong>video</strong> identified by this ID.</p></li>
+<li><p><strong>comment_thread_id</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None</em>) – Comma-separated list of comment-thread IDs to retrieve.</p></li>
+<li><p><strong>all_threads_related_to_channel_id</strong> (<em>str</em><em> | </em><em>None</em>) – <p>Retrieve threads for <em>any</em> video uploaded to the specified channel.</p>
+<p><strong>Exactly one</strong> of <em>video_id</em>, <em>id</em>, or
+<em>all_threads_related_to_channel_id</em> must be supplied.</p>
+</p></li>
+<li><p><strong>max_results</strong> (<em>int</em><em> | </em><em>None</em>) – Maximum items per page (1–100). Larger result sets require
+pagination via <em>page_token</em>.</p></li>
+<li><p><strong>moderation_status</strong> (<em>str</em><em> | </em><em>None</em>) – Filter threads by moderation status. Acceptable values are:
+- “heldForReview”
+- “likelySpam”
+- “published”</p></li>
+<li><p><strong>order</strong> (<em>str</em><em> | </em><em>None</em>) – Sort order of returned threads. Acceptable values are:
+- “time”
+- “relevance”</p></li>
+<li><p><strong>page_token</strong> (<em>str</em><em> | </em><em>None</em>) – Token that identifies the results page to return.</p></li>
+<li><p><strong>search_terms</strong> (<em>str</em><em> | </em><em>None</em>) – Restrict results to threads that contain the specified text.</p></li>
+<li><p><strong>text_format</strong> (<em>str</em><em> | </em><em>None</em>) – Output format for comment text. Acceptable values are:
+- “html”
+- “plainText”</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>DataFrame containing the comment threads.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nextPageToken</span></code> if more data are available, else <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[pandas.DataFrame, str | None]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If not exactly one of <em>video_id</em>, <em>id</em>, or
+    <em>all_threads_related_to_channel_id</em> is supplied.</p></li>
+<li><p><strong>TypeError</strong> – If an invalid type is supplied.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p><a class="reference external" href="https://developers.google.com/youtube/v3/docs/commentThreads/list">https://developers.google.com/youtube/v3/docs/commentThreads/list</a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._data.DataClient.list_comments">
+<span class="sig-name descname"><span class="pre">list_comments</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">part</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">('contentDetails',</span> <span class="pre">'snippet')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comment_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_data.html#DataClient.list_comments"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._data.DataClient.list_comments" title="Link to this definition"></a></dt>
+<dd><p>Wrapper for the <strong>comments.list</strong> endpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>part</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em>) – <strong>Required.</strong> Set to one or more of the following values:
+- “id”
+- “snippet”</p></li>
+<li><p><strong>comment_id</strong> (<em>str</em><em> | </em><em>None</em>) – ID of specific <cite>comments</cite>. <strong>Exactly one</strong> of <em>id</em> or <em>parent_id</em> must be supplied.</p></li>
+<li><p><strong>parent_id</strong> (<em>str</em><em> | </em><em>None</em>) – ID of specific <cite>comments</cite> for which replies should be retrieved.</p></li>
+<li><p><strong>max_results</strong> (<em>int</em><em> | </em><em>None</em>) – Maximum items per page (1–50). Larger result sets require
+pagination via <em>page_token</em>.</p></li>
+<li><p><strong>page_token</strong> (<em>str</em><em> | </em><em>None</em>) – Token that identifies the results page to return.</p></li>
+<li><p><strong>text_format</strong> (<em>str</em><em> | </em><em>None</em>) – Format comments should be returned in. Acceptable values are:
+- “html”
+- “plainText”</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>DataFrame containing the channel sections.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nextPageToken</span></code> if more data are available, else <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[pandas.DataFrame, str | None]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If not exactly one of <em>id</em> or <em>parent_id</em> are supplied.</p></li>
+<li><p><strong>TypeError</strong> – If an invalid type is supplied.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p><a class="reference external" href="https://developers.google.com/youtube/v3/docs/comments/list">https://developers.google.com/youtube/v3/docs/comments/list</a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._data.DataClient.list_i18n_languages">
+<span class="sig-name descname"><span class="pre">list_i18n_languages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_data.html#DataClient.list_i18n_languages"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._data.DataClient.list_i18n_languages" title="Link to this definition"></a></dt>
+<dd><p>Wrapper for the <strong>i18nLanguages.list</strong> endpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>hl</strong> (<em>str</em><em> | </em><em>None</em>) – Language code (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;en_US&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;es_MX&quot;</span></code>) used to
+localise the language names in the response.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame containing the supported interface
+languages.  Each row represents one language.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If an invalid type is supplied.</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p><a class="reference external" href="https://developers.google.com/youtube/v3/docs/i18nLanguages/list">https://developers.google.com/youtube/v3/docs/i18nLanguages/list</a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._data.DataClient.list_i18n_regions">
+<span class="sig-name descname"><span class="pre">list_i18n_regions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_data.html#DataClient.list_i18n_regions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._data.DataClient.list_i18n_regions" title="Link to this definition"></a></dt>
+<dd><p>Wrapper for the <strong>i18nRegions.list</strong> endpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>hl</strong> (<em>str</em><em> | </em><em>None</em>) – Language code (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;en_US&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;es_MX&quot;</span></code>) used to
+localise the language names in the response.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame containing the supported YouTube regions
+(each row is an ISO 3166-1 alpha-2 country code and its human-readable
+name).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If an invalid type is supplied.</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p><a class="reference external" href="https://developers.google.com/youtube/v3/docs/i18nRegions/list">https://developers.google.com/youtube/v3/docs/i18nRegions/list</a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._data.DataClient.list_members">
+<span class="sig-name descname"><span class="pre">list_members</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">has_access_to_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_by_member_channel_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_data.html#DataClient.list_members"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._data.DataClient.list_members" title="Link to this definition"></a></dt>
+<dd><p>Wrapper for the <strong>members.list</strong> endpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mode</strong> (<em>str</em><em> | </em><em>None</em>) – Determines which members are included. Acceptable values are:
+- “all_current” (default)
+- “updates”</p></li>
+<li><p><strong>max_results</strong> (<em>int</em><em> | </em><em>None</em>) – Maximum items per page (1–1000). Larger result sets require
+pagination via <em>page_token</em>.</p></li>
+<li><p><strong>page_token</strong> (<em>str</em><em> | </em><em>None</em>) – Token identifying the results page to return.</p></li>
+<li><p><strong>has_access_to_level</strong> (<em>str</em><em> | </em><em>None</em>) – Return only members who have at minimum access to the specified level ID.</p></li>
+<li><p><strong>filter_by_member_channel_id</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None</em>) – Channel IDs whose membership status should
+be checked (max 100 IDs)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>DataFrame containing the members.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nextPageToken</span></code> if more data are available, else <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[pandas.DataFrame, str | None]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If an argument has an invalid type.</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p><a class="reference external" href="https://developers.google.com/youtube/v3/docs/members/list">https://developers.google.com/youtube/v3/docs/members/list</a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._data.DataClient.list_membership_levels">
+<span class="sig-name descname"><span class="pre">list_membership_levels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">part</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'snippet'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_data.html#DataClient.list_membership_levels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._data.DataClient.list_membership_levels" title="Link to this definition"></a></dt>
+<dd><p>Wrapper for the <strong>membershipsLevels.list</strong> endpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>part</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em>) – <strong>Required.</strong> One or more of:
+- <code class="docutils literal notranslate"><span class="pre">&quot;id&quot;</span></code>
+- <code class="docutils literal notranslate"><span class="pre">&quot;snippet&quot;</span></code></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame containing the channel’s membership levels.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If an argument has an invalid type.</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p><a class="reference external" href="https://developers.google.com/youtube/v3/docs/membershipsLevels/list">https://developers.google.com/youtube/v3/docs/membershipsLevels/list</a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._data.DataClient.list_playlist_images">
+<span class="sig-name descname"><span class="pre">list_playlist_images</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">part</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">playlist_image_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">playlist_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_behalf_of_content_owner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_behalf_of_content_owner_channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_data.html#DataClient.list_playlist_images"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._data.DataClient.list_playlist_images" title="Link to this definition"></a></dt>
+<dd><p>Wrapper for the <strong>playlistImages.list</strong> endpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>part</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em>) – <strong>Required.</strong></p></li>
+<li><p><strong>playlist_image_id</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None</em>) – Playlist-image IDs to retrieve.</p></li>
+<li><p><strong>playlist_id</strong> (<em>str</em><em> | </em><em>None</em>) – <p>Playlist id to retrieve images from.</p>
+<p><strong>Exactly one</strong> of <em>playlist_id</em> or <em>id</em> must be supplied.</p>
+</p></li>
+<li><p><strong>max_results</strong> (<em>int</em><em> | </em><em>None</em>) – Maximum items per page (0–50). Larger result sets require
+pagination via <em>page_token</em>.</p></li>
+<li><p><strong>on_behalf_of_content_owner</strong> (<em>str</em><em> | </em><em>None</em>) – ID of content owner</p></li>
+<li><p><strong>on_behalf_of_content_owner_channel</strong> (<em>str</em><em> | </em><em>None</em>) – ID of the channel to which a video is being added.</p></li>
+<li><p><strong>page_token</strong> (<em>str</em><em> | </em><em>None</em>) – Token that identifies the results page to return.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>DataFrame containing the playlist images.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nextPageToken</span></code> if more data are available, else <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[pandas.DataFrame, str | None]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If not exactly one of <em>playlist_id</em> or <em>id</em> is supplied.</p></li>
+<li><p><strong>TypeError</strong> – If an invalid type is supplied.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p><a class="reference external" href="https://developers.google.com/youtube/v3/docs/playlistImages/list">https://developers.google.com/youtube/v3/docs/playlistImages/list</a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._data.DataClient.list_playlist_items">
+<span class="sig-name descname"><span class="pre">list_playlist_items</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">part</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'snippet'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">playlist_item_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">playlist_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_behalf_of_content_owner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">video_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_data.html#DataClient.list_playlist_items"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._data.DataClient.list_playlist_items" title="Link to this definition"></a></dt>
+<dd><p>Wrapper for the <strong>playlistItems.list</strong> endpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>part</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em>) – <strong>Required.</strong> One or more of:
+- “contentDetails”
+- “id”
+- “snippet”
+- “status”</p></li>
+<li><p><strong>playlist_item_id</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None</em>) – ID of playlist item(s)</p></li>
+<li><p><strong>playlist_id</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None</em>) – <p>ID of playlist(s)</p>
+<p><strong>Exactly one</strong> of <em>id</em> or <em>playlist_id</em> must be supplied.</p>
+</p></li>
+<li><p><strong>max_results</strong> (<em>int</em><em> | </em><em>None</em>) – Maximum items per page (0–50). Larger result sets require
+pagination via <em>page_token</em>.</p></li>
+<li><p><strong>on_behalf_of_content_owner</strong> (<em>str</em><em> | </em><em>None</em>) – ID of content owner</p></li>
+<li><p><strong>page_token</strong> (<em>str</em><em> | </em><em>None</em>) – Token that identifies the results page to return.</p></li>
+<li><p><strong>video_id</strong> (<em>str</em><em> | </em><em>None</em>) – ID of specific video to return playlist items of.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>DataFrame containing the playlist items.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nextPageToken</span></code> if more data are available, else <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[pandas.DataFrame, str | None]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If not exactly one of <em>playlist_id</em> or <em>id</em> is supplied.</p></li>
+<li><p><strong>TypeError</strong> – If an invalid type is supplied.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p><a class="reference external" href="https://developers.google.com/youtube/v3/docs/playlistItems/list">https://developers.google.com/youtube/v3/docs/playlistItems/list</a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._data.DataClient.list_playlists">
+<span class="sig-name descname"><span class="pre">list_playlists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">part</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'snippet'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">playlist_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mine</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_behalf_of_content_owner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_behalf_of_content_owner_channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_data.html#DataClient.list_playlists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._data.DataClient.list_playlists" title="Link to this definition"></a></dt>
+<dd><p>Wrapper for the <strong>playlists.list</strong> endpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>part</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em>) – <strong>Required.</strong> One or more of:
+- “contentDetails”
+- “id”
+- “localizations”
+- “player”
+- “snippet”
+- “status”</p></li>
+<li><p><strong>channel_id</strong> (<em>str</em><em> | </em><em>None</em>) – ID of channel to return playlist items of.</p></li>
+<li><p><strong>playlist_id</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None</em>) – Playlist IDs to retrieve.</p></li>
+<li><p><strong>mine</strong> (<em>bool</em><em> | </em><em>None</em>) – <p><code class="docutils literal notranslate"><span class="pre">True</span></code> to retrieve playlists owned by the authenticated user.</p>
+<p><strong>Exactly one</strong> of <em>channel_id</em>, <em>id</em>, or <em>mine</em> must be supplied.</p>
+</p></li>
+<li><p><strong>hl</strong> (<em>str</em><em> | </em><em>None</em>) – Language code (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;en_US&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;es_MX&quot;</span></code>) used to
+localise the language names in the response.</p></li>
+<li><p><strong>max_results</strong> (<em>int</em><em> | </em><em>None</em>) – Maximum items per page (0–50). Larger result sets require
+pagination via <em>page_token</em>.</p></li>
+<li><p><strong>on_behalf_of_content_owner</strong> (<em>str</em><em> | </em><em>None</em>) – ID of content owner</p></li>
+<li><p><strong>on_behalf_of_content_owner_channel</strong> (<em>str</em><em> | </em><em>None</em>) – ID of the channel to which a video is being added.</p></li>
+<li><p><strong>page_token</strong> (<em>str</em><em> | </em><em>None</em>) – Token that identifies the results page to return.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>DataFrame containing the playlists.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nextPageToken</span></code> if more data are available, else <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[pandas.DataFrame, str | None]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If not exactly one of <em>channel_id</em>, <em>playlist_id</em>, or <em>mine</em> is
+    supplied.</p></li>
+<li><p><strong>TypeError</strong> – If an invalid type is supplied.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p><a class="reference external" href="https://developers.google.com/youtube/v3/docs/playlists/list">https://developers.google.com/youtube/v3/docs/playlists/list</a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._data.DataClient.list_search">
+<span class="sig-name descname"><span class="pre">list_search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">for_content_owner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">for_developer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">for_mine</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">location_radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_behalf_of_content_owner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">published_after</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">date</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">published_before</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">date</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relevance_language</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">safe_search</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topic_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">video_caption</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">video_category_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">video_definition</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">video_dimensions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">video_duration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">video_embeddable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">video_license</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">video_paid_product_placement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">video_syndicated</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">video_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_data.html#DataClient.list_search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._data.DataClient.list_search" title="Link to this definition"></a></dt>
+<dd><p>Wrapper for the <strong>search.list</strong> endpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>q</strong> (<em>str</em><em> | </em><em>None</em>) – Query term to search for. Use Boolean <em>NOT</em> (<code class="docutils literal notranslate"><span class="pre">-</span></code>) and <em>OR</em>
+(<code class="docutils literal notranslate"><span class="pre">|</span></code>) operators for advanced search</p></li>
+<li><p><strong>for_content_owner</strong> (<em>bool</em><em> | </em><em>None</em>) – Boolean to restrict search to only videos owned by content owner identified in
+<cite>on_behalf_of_content_owner</cite> parameter</p></li>
+<li><p><strong>for_developer</strong> (<em>bool</em><em> | </em><em>None</em>) – Boolean to restrict search to only videos uploaded by the developer’s application or website</p></li>
+<li><p><strong>for_mine</strong> (<em>bool</em><em> | </em><em>None</em>) – <p>Boolean to restrict search to only videos uploaded by authenticated user</p>
+<p><strong>Specify 0 or 1</strong> of <em>for_content_owner</em>, <em>for_developer</em>, or <em>for_mine</em></p>
+</p></li>
+<li><p><strong>channel_id</strong> (<em>str</em><em> | </em><em>None</em>) – ID of channel to show results of.</p></li>
+<li><p><strong>channel_type</strong> (<em>str</em><em> | </em><em>None</em>) – Restrict search to a particular type of channel. Acceptable values are:
+- “any”
+- “show”</p></li>
+<li><p><strong>event_type</strong> (<em>str</em><em> | </em><em>None</em>) – <dl class="simple">
+<dt>Only include broadcasts of this type. Acceptable values are:</dt><dd><ul>
+<li><p>”completed”,</p></li>
+<li><p>”live”,</p></li>
+<li><p>”upcoming”</p></li>
+</ul>
+</dd>
+</dl>
+<p>This parameter requires <em>type=”video”</em></p>
+</p></li>
+<li><p><strong>location</strong> (<em>str</em><em> | </em><em>None</em>) – Latitude/longitude of search centre (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;37.42307,-122.08427&quot;</span></code>).
+Requires <em>type=”video”</em> and <em>location_radius</em></p></li>
+<li><p><strong>location_radius</strong> (<em>str</em><em> | </em><em>None</em>) – Distance from <em>location</em> (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;5km&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;10000ft&quot;</span></code>)</p></li>
+<li><p><strong>max_results</strong> (<em>int</em><em> | </em><em>None</em>) – Maximum items per page (0 – 50). Larger result sets require
+pagination via <em>page_token</em></p></li>
+<li><p><strong>on_behalf_of_content_owner</strong> (<em>str</em><em> | </em><em>None</em>) – ID of content owner</p></li>
+<li><p><strong>order</strong> (<em>str</em><em> | </em><em>None</em>) – <dl class="simple">
+<dt>Sort order of results. Acceptable values are:</dt><dd><ul>
+<li><p>”date”,</p></li>
+<li><p>”rating”,</p></li>
+<li><p>”relevance”,</p></li>
+<li><p>”title”,</p></li>
+<li><p>”videoCount”,</p></li>
+<li><p>”viewCount”</p></li>
+</ul>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>page_token</strong> (<em>str</em><em> | </em><em>None</em>) – Token that identifies the results page to return</p></li>
+<li><p><strong>published_after</strong> (<em>datetime</em><em> | </em><em>date</em><em> | </em><em>str</em><em> | </em><em>None</em>) – Earliest date/time (inclusive) the activity occurred.</p></li>
+<li><p><strong>published_before</strong> (<em>datetime</em><em> | </em><em>date</em><em> | </em><em>str</em><em> | </em><em>None</em>) – Latest date/time (exclusive) the activity occurred.</p></li>
+<li><p><strong>region_code</strong> (<em>str</em><em> | </em><em>None</em>) – Two-letter ISO 3166-1 alpha-2 region code used to filter results.</p></li>
+<li><p><strong>relevance_language</strong> (<em>str</em><em> | </em><em>None</em>) – Two-letter ISO 639-1 language code used to filter results.</p></li>
+<li><p><strong>safe_search</strong> (<em>str</em><em> | </em><em>None</em>) – Safe-search filtering. Acceptable values are:
+- “moderate”,
+- “none”,
+- “strict”</p></li>
+<li><p><strong>topic_id</strong> (<em>str</em><em> | </em><em>None</em>) – ID of topic to show results of.</p></li>
+<li><p><strong>type</strong> (<em>str</em><em> | </em><em>None</em>) – Resource type to return. Acceptable values are:
+- “video”
+- “channel”
+- “playlist”</p></li>
+<li><p><strong>video_caption</strong> (<em>str</em><em> | </em><em>None</em>) – Caption filter for video results. Acceptable values are:
+- “any”,
+- “closedCaption”,
+- “none”
+Requires <em>type=”video”</em></p></li>
+<li><p><strong>video_category_id</strong> (<em>str</em><em> | </em><em>None</em>) – ID of video category to show results of.
+Requires <em>type=”video”</em></p></li>
+<li><p><strong>video_definition</strong> (<em>str</em><em> | </em><em>None</em>) – Video definition to show results of. Acceptable values are:
+- “any”,
+- “high”,
+- “standard”
+Requires <em>type=”video”</em></p></li>
+<li><p><strong>video_dimensions</strong> (<em>str</em><em> | </em><em>None</em>) – Video dimensions to show results of. Acceptable values are:
+- “2d”,
+- “3d”,
+- “any”
+Requires <em>type=”video”</em></p></li>
+<li><p><strong>video_duration</strong> (<em>str</em><em> | </em><em>None</em>) – Video duration to show results of. Acceptable values are:
+- “any”,
+- “long”,
+- “medium”,
+- “short”,
+Requires <em>type=”video”</em></p></li>
+<li><p><strong>video_embeddable</strong> (<em>str</em><em> | </em><em>None</em>) – Show videos that can only be embedded into a webpage. Acceptable values are:
+- “any”
+- “true”
+Requires <em>type=”video”</em></p></li>
+<li><p><strong>video_license</strong> (<em>str</em><em> | </em><em>None</em>) – License of videos to show results of. Acceptable values are:
+- “any”
+- “creativeCommon”
+- “youtube”
+Requires <em>type=”video”</em></p></li>
+<li><p><strong>video_paid_product_placement</strong> (<em>str</em><em> | </em><em>None</em>) – Show videos that have paid product placement. Acceptable values are:
+- “any”
+- “true”
+Requires <em>type=”video”</em></p></li>
+<li><p><strong>video_syndicated</strong> (<em>str</em><em> | </em><em>None</em>) – Show videos that can be played outside YouTube.com. Acceptable values are:
+- “any”
+- “true”
+Requires <em>type=”video”</em></p></li>
+<li><p><strong>video_type</strong> (<em>str</em><em> | </em><em>None</em>) – Type of video to show results of. Acceptable values are:
+- “any”
+- “episode”
+- “movie”
+Requires <em>type=”video”</em></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>DataFrame containing the search results.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nextPageToken</span></code> if more data are available, else <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[pandas.DataFrame, str | None]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If not 0 or 1 of <cite>for_content_owner</cite>, <cite>for_developer</cite> or <cite>for_mine</cite> passed</p></li>
+<li><p><strong>TypeError</strong> – If an argument has an invalid type.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p><a class="reference external" href="https://developers.google.com/youtube/v3/docs/search/list">https://developers.google.com/youtube/v3/docs/search/list</a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._data.DataClient.list_subscriptions">
+<span class="sig-name descname"><span class="pre">list_subscriptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">part</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">('contentDetails',</span> <span class="pre">'snippet')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subscription_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mine</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">my_recent_subscribers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">my_subscribers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">for_channel_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_behalf_of_content_owner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_behalf_of_content_owner_channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_data.html#DataClient.list_subscriptions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._data.DataClient.list_subscriptions" title="Link to this definition"></a></dt>
+<dd><p>Wrapper for the <strong>subscriptions.list</strong> endpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>part</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em>) – <strong>Required.</strong> One or more of:
+- <code class="docutils literal notranslate"><span class="pre">&quot;contentDetails&quot;</span></code>
+- <code class="docutils literal notranslate"><span class="pre">&quot;id&quot;</span></code>
+- <code class="docutils literal notranslate"><span class="pre">&quot;snippet&quot;</span></code>
+- <code class="docutils literal notranslate"><span class="pre">&quot;subscriberSnippet&quot;</span></code></p></li>
+<li><p><strong>channel_id</strong> (<em>str</em><em> | </em><em>None</em>) – ID of channel to get subscriptions for.</p></li>
+<li><p><strong>subscription_id</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None</em>) – ID of subscriptions to retrieve.</p></li>
+<li><p><strong>mine</strong> (<em>bool</em><em> | </em><em>None</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> to list subscriptions of the authenticated user</p></li>
+<li><p><strong>my_recent_subscribers</strong> (<em>bool</em><em> | </em><em>None</em>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> to list <em>recent</em> subscribers to the authenticated user</p></li>
+<li><p><strong>my_subscribers</strong> (<em>bool</em><em> | </em><em>None</em>) – <p><code class="docutils literal notranslate"><span class="pre">True</span></code> to list <em>all</em> subscribers to the authenticated user</p>
+<p><strong>Exactly one</strong> of <em>channel_id</em>, <em>id</em>, <em>mine</em>, <em>my_recent_subscribers</em>,
+or <em>my_subscribers</em> must be supplied.</p>
+</p></li>
+<li><p><strong>for_channel_id</strong> (<em>str</em><em> | </em><em>None</em>) – ID of channel to get subscriptions for.</p></li>
+<li><p><strong>max_results</strong> (<em>int</em><em> | </em><em>None</em>) – Maximum items per page (0 – 50). Larger result sets require
+pagination via <em>page_token</em></p></li>
+<li><p><strong>on_behalf_of_content_owner</strong> (<em>str</em><em> | </em><em>None</em>) – ID of content owner</p></li>
+<li><p><strong>on_behalf_of_content_owner_channel</strong> (<em>str</em><em> | </em><em>None</em>) – ID of the channel to which a video is being added.</p></li>
+<li><p><strong>order</strong> (<em>str</em><em> | </em><em>None</em>) – Sort order of results. Acceptable values are:
+- “alphabetical”,
+- “relevance”,
+- “unread”</p></li>
+<li><p><strong>page_token</strong> (<em>str</em><em> | </em><em>None</em>) – Token that identifies the results page to return</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>DataFrame containing the subscriptions.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nextPageToken</span></code> if more data are available, else <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[pandas.DataFrame, str | None]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If the “exactly one” filter rule is violated.</p></li>
+<li><p><strong>TypeError</strong> – If an argument has an invalid type.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p><a class="reference external" href="https://developers.google.com/youtube/v3/docs/subscriptions/list">https://developers.google.com/youtube/v3/docs/subscriptions/list</a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._data.DataClient.list_video_abuse_report_reasons">
+<span class="sig-name descname"><span class="pre">list_video_abuse_report_reasons</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">part</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">('id',</span> <span class="pre">'snippet')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_data.html#DataClient.list_video_abuse_report_reasons"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._data.DataClient.list_video_abuse_report_reasons" title="Link to this definition"></a></dt>
+<dd><p>Wrapper for the <strong>videoAbuseReportReasons.list</strong> endpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>part</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em>) – <strong>Required.</strong> One or more of:
+- “id”
+- “snippet”</p></li>
+<li><p><strong>hl</strong> (<em>str</em><em> | </em><em>None</em>) – Language code (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;en_US&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;es_MX&quot;</span></code>) used to
+localise the language names in the response.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame containing the abuse-report reasons.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If an argument has an invalid type.</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p><a class="reference external" href="https://developers.google.com/youtube/v3/docs/videoAbuseReportReasons/list">https://developers.google.com/youtube/v3/docs/videoAbuseReportReasons/list</a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._data.DataClient.list_video_categories">
+<span class="sig-name descname"><span class="pre">list_video_categories</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">video_category_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_data.html#DataClient.list_video_categories"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._data.DataClient.list_video_categories" title="Link to this definition"></a></dt>
+<dd><p>Wrapper for the <strong>videoCategories.list</strong> endpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>video_category_id</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None</em>) – Comma-separated list of video-category IDs to retrieve</p></li>
+<li><p><strong>region_code</strong> (<em>str</em><em> | </em><em>None</em>) – <p>Two-letter ISO 3166-1 alpha-2 region code used to filter results.</p>
+<p><strong>Exactly one</strong> of <em>region_code</em> or <em>id</em> must be supplied.</p>
+</p></li>
+<li><p><strong>hl</strong> (<em>str</em><em> | </em><em>None</em>) – Language code (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;en_US&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;es_MX&quot;</span></code>) used to
+localise the language names in the response.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame containing the video categories.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If both or neither of <em>region_code</em> and <em>id</em> are supplied.</p></li>
+<li><p><strong>TypeError</strong> – If an argument has an invalid type.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p><a class="reference external" href="https://developers.google.com/youtube/v3/docs/videoCategories/list">https://developers.google.com/youtube/v3/docs/videoCategories/list</a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._data.DataClient.list_videos">
+<span class="sig-name descname"><span class="pre">list_videos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">part</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">('contentDetails',</span> <span class="pre">'snippet')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chart</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">video_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">my_rating</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_behalf_of_content_owner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">video_category_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_data.html#DataClient.list_videos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._data.DataClient.list_videos" title="Link to this definition"></a></dt>
+<dd><p>Wrapper for the <strong>videos.list</strong> endpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>part</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em>) – <strong>Required.</strong> One or more of:
+- “contentDetails”
+- “fileDetails”
+- “id”
+- “liveStreamingDetails”
+- “localizations”
+- “paidProductPlacementDetails”
+- “player”
+- “processingDetails”
+- “recordingDetails”
+- “snippet”
+- “statistics”
+- “status”
+- “suggestions”
+- “topicDetails”</p></li>
+<li><p><strong>chart</strong> (<em>str</em><em> | </em><em>None</em>) – Retrieve the specified chart. Acceptable value:
+- “mostPopular”</p></li>
+<li><p><strong>video_id</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None</em>) – ID of videos to return</p></li>
+<li><p><strong>my_rating</strong> (<em>str</em><em> | </em><em>None</em>) – <p>Filter to videos liked or disliked by the authenticated user.
+Acceptable values are:
+- “like”
+- “dislike”</p>
+<p><strong>Exactly one</strong> of <em>chart</em>, <em>id</em> or <em>my_rating</em> must be supplied.</p>
+</p></li>
+<li><p><strong>hl</strong> (<em>str</em><em> | </em><em>None</em>) – Language code (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;en_US&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;es_MX&quot;</span></code>) used to
+localise the language names in the response.</p></li>
+<li><p><strong>max_height</strong> (<em>int</em><em> | </em><em>None</em>) – Maximum height of embedded player in the player.embedHtml property</p></li>
+<li><p><strong>max_results</strong> (<em>int</em><em> | </em><em>None</em>) – Maximum items per page (0 – 50). Larger result sets require
+pagination via <em>page_token</em></p></li>
+<li><p><strong>max_width</strong> (<em>int</em><em> | </em><em>None</em>) – Maximum width of embedded player in the player.embedHtml property</p></li>
+<li><p><strong>on_behalf_of_content_owner</strong> (<em>str</em><em> | </em><em>None</em>) – ID of content owner</p></li>
+<li><p><strong>page_token</strong> (<em>str</em><em> | </em><em>None</em>) – Token that identifies the results page to return.:contentReference</p></li>
+<li><p><strong>region_code</strong> (<em>str</em><em> | </em><em>None</em>) – Two-letter ISO 3166-1 alpha-2 region code used to filter results.</p></li>
+<li><p><strong>video_category_id</strong> (<em>str</em><em> | </em><em>None</em>) – ID of video-category ID to return.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>DataFrame containing the videos.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nextPageToken</span></code> if more data are available, else <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[pandas.DataFrame, str | None]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If the “exactly one” filter rule is violated.</p></li>
+<li><p><strong>TypeError</strong> – If an argument has an invalid type.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p><a class="reference external" href="https://developers.google.com/youtube/v3/docs/videos/list">https://developers.google.com/youtube/v3/docs/videos/list</a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._data.DataClient.playlist_videos">
+<span class="sig-name descname"><span class="pre">playlist_videos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">playlist_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">part</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'contentDetails'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_data.html#DataClient.playlist_videos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._data.DataClient.playlist_videos" title="Link to this definition"></a></dt>
+<dd><p>Return <strong>all videos</strong> contained in a playlist.</p>
+<p>Internally pages through <code class="xref py py-meth docutils literal notranslate"><span class="pre">playlistItems.list()</span></code> until every item is
+retrieved.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>playlist_id</strong> (<em>str</em>) – <strong>Required.</strong> ID of the playlist to get videos from.</p></li>
+<li><p><strong>part</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em>) – <strong>Required.</strong> One or more of:
+- “id”
+- “snippet”
+- “contentDetails”
+- “status”</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>All videos in <em>playlist_id</em>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If a parameter has an invalid type.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._data.DataClient.video_metadata">
+<span class="sig-name descname"><span class="pre">video_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">part</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">('snippet',</span> <span class="pre">'contentDetails')</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_data.html#DataClient.video_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._data.DataClient.video_metadata" title="Link to this definition"></a></dt>
+<dd><p>Return metadata for one or more videos.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>video_id</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em>) – <strong>Required.</strong> ID of the video(s) to get metadata for.</p></li>
+<li><p><strong>part</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em>) – <strong>Required.</strong> Most relevant parts are:
+- “contentDetails”
+- “status”
+- “snippet”</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>All videos in <em>video_id</em>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If a parameter has an invalid type.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Jake Davis.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

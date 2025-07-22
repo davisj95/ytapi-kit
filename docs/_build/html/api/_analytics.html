@@ -1,0 +1,1243 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>&lt;no title&gt; &mdash; ytapi-kit 0.1.0.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=540db47b"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            ytapi-kit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">AnalyticsClient</span></code></a><ul>
+<li><a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.channel_ad_performance"><code class="docutils literal notranslate"><span class="pre">AnalyticsClient.channel_ad_performance()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.channel_demographics"><code class="docutils literal notranslate"><span class="pre">AnalyticsClient.channel_demographics()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.channel_devices"><code class="docutils literal notranslate"><span class="pre">AnalyticsClient.channel_devices()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.channel_geography"><code class="docutils literal notranslate"><span class="pre">AnalyticsClient.channel_geography()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.channel_membership_cancellation"><code class="docutils literal notranslate"><span class="pre">AnalyticsClient.channel_membership_cancellation()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.channel_playback_details"><code class="docutils literal notranslate"><span class="pre">AnalyticsClient.channel_playback_details()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.channel_playback_location"><code class="docutils literal notranslate"><span class="pre">AnalyticsClient.channel_playback_location()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.channel_sharing_services"><code class="docutils literal notranslate"><span class="pre">AnalyticsClient.channel_sharing_services()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.channel_stats"><code class="docutils literal notranslate"><span class="pre">AnalyticsClient.channel_stats()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.channel_time_period"><code class="docutils literal notranslate"><span class="pre">AnalyticsClient.channel_time_period()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.channel_top_videos"><code class="docutils literal notranslate"><span class="pre">AnalyticsClient.channel_top_videos()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.channel_traffic_sources"><code class="docutils literal notranslate"><span class="pre">AnalyticsClient.channel_traffic_sources()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.playlist_top_videos"><code class="docutils literal notranslate"><span class="pre">AnalyticsClient.playlist_top_videos()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="docutils literal notranslate"><span class="pre">AnalyticsClient.reports_query()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.video_audience_retention"><code class="docutils literal notranslate"><span class="pre">AnalyticsClient.video_audience_retention()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.video_demographics"><code class="docutils literal notranslate"><span class="pre">AnalyticsClient.video_demographics()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.video_devices"><code class="docutils literal notranslate"><span class="pre">AnalyticsClient.video_devices()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.video_geography"><code class="docutils literal notranslate"><span class="pre">AnalyticsClient.video_geography()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.video_live_position"><code class="docutils literal notranslate"><span class="pre">AnalyticsClient.video_live_position()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.video_playback_details"><code class="docutils literal notranslate"><span class="pre">AnalyticsClient.video_playback_details()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.video_playback_location"><code class="docutils literal notranslate"><span class="pre">AnalyticsClient.video_playback_location()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.video_sharing_services"><code class="docutils literal notranslate"><span class="pre">AnalyticsClient.video_sharing_services()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.video_stats"><code class="docutils literal notranslate"><span class="pre">AnalyticsClient.video_stats()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.video_time_period"><code class="docutils literal notranslate"><span class="pre">AnalyticsClient.video_time_period()</span></code></a></li>
+<li><a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.video_traffic_sources"><code class="docutils literal notranslate"><span class="pre">AnalyticsClient.video_traffic_sources()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ytapi-kit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">&lt;no title&gt;</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/_analytics.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <dl class="py class" id="module-ytapi_kit._analytics">
+<dt class="sig sig-object py" id="ytapi_kit._analytics.AnalyticsClient">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ytapi_kit._analytics.</span></span><span class="sig-name descname"><span class="pre">AnalyticsClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AuthorizedSession</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ytapi_kit/_analytics.html#AnalyticsClient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._analytics.AnalyticsClient" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Tiny Analytics client with retries, type‑coercion, and rate‑limit detection.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._analytics.AnalyticsClient.channel_ad_performance">
+<span class="sig-name descname"><span class="pre">channel_ad_performance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_analytics.html#AnalyticsClient.channel_ad_performance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._analytics.AnalyticsClient.channel_ad_performance" title="Link to this definition"></a></dt>
+<dd><p>Inspect ad-revenue performance for the authenticated channel.</p>
+<p>The helper queries the Analytics API with
+<code class="docutils literal notranslate"><span class="pre">dimensions=(&quot;adType&quot;)</span></code>—<em>display</em>, <em>bumper</em>, <em>skippable in-stream</em>, etc.—
+and defaults to the <code class="docutils literal notranslate"><span class="pre">adRate</span></code> metric (revenue per 1 000 monetized
+playbacks).  Override <code class="docutils literal notranslate"><span class="pre">metrics</span></code> in <code class="docutils literal notranslate"><span class="pre">**kw</span></code> if you need additional
+figures such as <code class="docutils literal notranslate"><span class="pre">grossRevenue</span></code> or <code class="docutils literal notranslate"><span class="pre">cpm</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>**kw</strong> – Keyword arguments forwarded unchanged to
+<a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a> – e.g. <code class="docutils literal notranslate"><span class="pre">start_date</span></code>, <code class="docutils literal notranslate"><span class="pre">end_date</span></code>,
+or a custom <code class="docutils literal notranslate"><span class="pre">filters</span></code> string.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>One row per <em>adType</em> with the requested metric
+columns.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>QuotaExceeded / AnalyticsError</strong> – Propagated from
+    <a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a>.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">yt</span> <span class="o">=</span> <span class="n">AnalyticsClient</span><span class="p">(</span><span class="n">creds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">yt</span><span class="o">.</span><span class="n">channel_ad_performance</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">metrics</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;adRate&quot;</span><span class="p">,</span> <span class="s2">&quot;grossRevenue&quot;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">start_date</span><span class="o">=</span><span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">end_date</span><span class="o">=</span><span class="s2">&quot;2024-12-31&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._analytics.AnalyticsClient.channel_demographics">
+<span class="sig-name descname"><span class="pre">channel_demographics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">demographic</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'ageGroup'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_analytics.html#AnalyticsClient.channel_demographics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._analytics.AnalyticsClient.channel_demographics" title="Link to this definition"></a></dt>
+<dd><p>Break down channel’s audience by age and/or gender.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>demographic</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – A single literal or an iterable chosen from:
+- <code class="docutils literal notranslate"><span class="pre">&quot;ageGroup&quot;</span></code> – 13-17, 18-24, …, 65-plus <em>(default)</em>
+- <code class="docutils literal notranslate"><span class="pre">&quot;gender&quot;</span></code> – <em>male</em>, <em>female</em>, <em>user-specified</em>
+Pass both to obtain a multi-dimension report, e.g.
+<code class="docutils literal notranslate"><span class="pre">demographic=(&quot;ageGroup&quot;,</span> <span class="pre">&quot;gender&quot;)</span></code>.</p></li>
+<li><p><strong>**kw</strong> – Extra keyword arguments forwarded verbatim to
+<a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a> (for example <code class="docutils literal notranslate"><span class="pre">start_date</span></code>,
+<code class="docutils literal notranslate"><span class="pre">end_date</span></code>, or a custom <code class="docutils literal notranslate"><span class="pre">metrics</span></code> tuple).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>One row per demographic combo.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If <em>demographic</em> contains anything outside
+    <code class="docutils literal notranslate"><span class="pre">{&quot;ageGroup&quot;,</span> <span class="pre">&quot;gender&quot;}</span></code>.</p></li>
+<li><p><strong>QuotaExceeded / AnalyticsError</strong> – Propagated from
+    <a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">yt</span> <span class="o">=</span> <span class="n">AnalyticsClient</span><span class="p">(</span><span class="n">creds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">yt</span><span class="o">.</span><span class="n">channel_demographics</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">demographic</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;ageGroup&quot;</span><span class="p">,</span> <span class="s2">&quot;gender&quot;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">start_date</span><span class="o">=</span><span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">end_date</span><span class="o">=</span><span class="s2">&quot;2024-06-30&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._analytics.AnalyticsClient.channel_devices">
+<span class="sig-name descname"><span class="pre">channel_devices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">device_info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'deviceType'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_analytics.html#AnalyticsClient.channel_devices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._analytics.AnalyticsClient.channel_devices" title="Link to this definition"></a></dt>
+<dd><p>Break down channel stats by viewers’ device characteristics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>device_info</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – <p>Either a single literal or an iterable drawn from:
+- <code class="docutils literal notranslate"><span class="pre">&quot;deviceType&quot;</span></code> – desktop, mobile, tablet, TV, etc. <em>(default)</em>
+- <code class="docutils literal notranslate"><span class="pre">&quot;operatingSystem&quot;</span></code> – iOS, Android, Windows, macOS, etc.</p>
+<p>You may pass both to get a multi-dimension report, e.g.
+<code class="docutils literal notranslate"><span class="pre">device_info=(&quot;deviceType&quot;,</span> <span class="pre">&quot;operatingSystem&quot;)</span></code>.</p>
+</p></li>
+<li><p><strong>**kw</strong> – Additional keyword arguments forwarded unchanged to
+<a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a> (such as <code class="docutils literal notranslate"><span class="pre">start_date</span></code>, <code class="docutils literal notranslate"><span class="pre">metrics</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>One row per device characteristic.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If <em>device_info</em> contains anything outside
+    <code class="docutils literal notranslate"><span class="pre">{&quot;deviceType&quot;,</span> <span class="pre">&quot;operatingSystem&quot;}</span></code>.</p></li>
+<li><p><strong>QuotaExceeded / AnalyticsError</strong> – Propagated from
+    <a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">yt</span> <span class="o">=</span> <span class="n">AnalyticsClient</span><span class="p">(</span><span class="n">creds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">yt</span><span class="o">.</span><span class="n">channel_devices</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">device_info</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;deviceType&quot;</span><span class="p">,</span> <span class="s2">&quot;operatingSystem&quot;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">start_date</span><span class="o">=</span><span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">end_date</span><span class="o">=</span><span class="s2">&quot;2024-06-30&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._analytics.AnalyticsClient.channel_geography">
+<span class="sig-name descname"><span class="pre">channel_geography</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">geo_dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'country'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_analytics.html#AnalyticsClient.channel_geography"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._analytics.AnalyticsClient.channel_geography" title="Link to this definition"></a></dt>
+<dd><p>Returns channel stats by geographical region (e.g. “country”, “city”, etc.)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>geo_dim</strong> (<em>str</em><em>, </em><em>optional</em>) – Geographic granularity—
+<code class="docutils literal notranslate"><span class="pre">'country'</span></code> (default), <code class="docutils literal notranslate"><span class="pre">'province'</span></code>, <code class="docutils literal notranslate"><span class="pre">'dma'</span></code>, or <code class="docutils literal notranslate"><span class="pre">'city'</span></code>.</p></li>
+<li><p><strong>max_results</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximum rows per API page. Defaults to 200.</p></li>
+<li><p><strong>**kw</strong> – Extra keyword arguments forwarded intact to
+<a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a> (e.g. <code class="docutils literal notranslate"><span class="pre">start_date</span></code>, <code class="docutils literal notranslate"><span class="pre">end_date</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dataframe with one row per <em>geo_dim</em>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If <em>geo_dim</em> is not one of the allowed values.</p></li>
+<li><p><strong>QuotaExceeded / AnalyticsError</strong> – Propagated from
+    <a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">yt</span> <span class="o">=</span> <span class="n">AnalyticsClient</span><span class="p">(</span><span class="n">creds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">yt</span><span class="o">.</span><span class="n">channel_geography</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">geo_dim</span><span class="o">=</span><span class="s2">&quot;dma&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">start_date</span><span class="o">=</span><span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">end_date</span><span class="o">=</span><span class="s2">&quot;2024-01-31&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._analytics.AnalyticsClient.channel_membership_cancellation">
+<span class="sig-name descname"><span class="pre">channel_membership_cancellation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_analytics.html#AnalyticsClient.channel_membership_cancellation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._analytics.AnalyticsClient.channel_membership_cancellation" title="Link to this definition"></a></dt>
+<dd><p>Analyse <strong>why</strong> paying members cancel their channel memberships.</p>
+<p>The report groups rows by <code class="docutils literal notranslate"><span class="pre">membershipCancellationSurveyReason</span></code> and
+returns the metric <code class="docutils literal notranslate"><span class="pre">membershipsCancellationSurveyResponses</span></code> (count of
+answers per reason).  Use this to spot the top churn drivers—price,
+content cadence, “just browsing,” etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>**kw</strong> – Keyword arguments forwarded unchanged to
+<a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a> – e.g. <code class="docutils literal notranslate"><span class="pre">start_date</span></code>, <code class="docutils literal notranslate"><span class="pre">end_date</span></code>,
+or a custom <code class="docutils literal notranslate"><span class="pre">filters</span></code> string.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>One row per <em>membershipCancellationSurveyReason</em>
+with the <code class="docutils literal notranslate"><span class="pre">membershipsCancellationSurveyResponses</span></code> metric.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>QuotaExceeded / AnalyticsError</strong> – Propagated from
+    <a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a>.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">yt</span> <span class="o">=</span> <span class="n">AnalyticsClient</span><span class="p">(</span><span class="n">creds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">yt</span><span class="o">.</span><span class="n">channel_membership_cancellation</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">start_date</span><span class="o">=</span><span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">end_date</span><span class="o">=</span><span class="s2">&quot;2024-06-30&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._analytics.AnalyticsClient.channel_playback_details">
+<span class="sig-name descname"><span class="pre">channel_playback_details</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">detail</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'liveOrOnDemand'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_analytics.html#AnalyticsClient.channel_playback_details"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._analytics.AnalyticsClient.channel_playback_details" title="Link to this definition"></a></dt>
+<dd><p>Break down channel stats by a playback-detail dimension (live vs. VOD, etc.).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>detail</strong> (<em>str</em><em>, </em><em>optional</em>) – Dimension to split by—must be one of
+<code class="docutils literal notranslate"><span class="pre">'creatorContentType'</span></code>, <code class="docutils literal notranslate"><span class="pre">'liveOrOnDemand'</span></code>,
+<code class="docutils literal notranslate"><span class="pre">'subscribedStatus'</span></code>, <code class="docutils literal notranslate"><span class="pre">'youtubeProduct'</span></code>.
+Defaults to <code class="docutils literal notranslate"><span class="pre">'liveOrOnDemand'</span></code>.</p></li>
+<li><p><strong>**kw</strong> – Extra keyword arguments forwarded verbatim to
+<a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a> (e.g. <code class="docutils literal notranslate"><span class="pre">start_date</span></code>, <code class="docutils literal notranslate"><span class="pre">metrics</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>One row per <em>detail</em> value, with the metrics
+requested (default <code class="docutils literal notranslate"><span class="pre">views</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">estimatedMinutesWatched</span></code>).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If <em>detail</em> is not one of the allowed literals.</p></li>
+<li><p><strong>QuotaExceeded / AnalyticsError</strong> – Propagated from
+    <a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">yt</span> <span class="o">=</span> <span class="n">AnalyticsClient</span><span class="p">(</span><span class="n">creds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">yt</span><span class="o">.</span><span class="n">channel_playback_details</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;subscribedStatus&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">start_date</span><span class="o">=</span><span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">end_date</span><span class="o">=</span><span class="s2">&quot;2024-06-30&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._analytics.AnalyticsClient.channel_playback_location">
+<span class="sig-name descname"><span class="pre">channel_playback_location</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">detail</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_analytics.html#AnalyticsClient.channel_playback_location"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._analytics.AnalyticsClient.channel_playback_location" title="Link to this definition"></a></dt>
+<dd><p>Return where viewers watched channel videos (YouTube, embedded players, etc.).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>detail</strong> (<em>bool</em><em>, </em><em>optional</em>) – <ul>
+<li><p><strong>False</strong> (default) – group results by high-level
+<code class="docutils literal notranslate"><span class="pre">insightPlaybackLocationType</span></code> (e.g. <em>EMBEDDED</em>, <em>YOUTUBE</em>).</p></li>
+<li><p><strong>True</strong> – drill into <code class="docutils literal notranslate"><span class="pre">insightPlaybackLocationDetail</span></code>; the API
+automatically filters to <code class="docutils literal notranslate"><span class="pre">insightPlaybackLocationType==EMBEDDED</span></code>
+and caps <cite>max_results</cite> at 25.</p></li>
+</ul>
+</p></li>
+<li><p><strong>max_results</strong> (<em>int</em><em>, </em><em>optional</em>) – Requested page size. Ignored
+when <em>detail</em> is <code class="docutils literal notranslate"><span class="pre">True</span></code> because the API hard-caps it.</p></li>
+<li><p><strong>**kw</strong> – Extra keyword arguments forwarded verbatim to
+<a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a> (e.g. <code class="docutils literal notranslate"><span class="pre">start_date</span></code>, <code class="docutils literal notranslate"><span class="pre">end_date</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>One row per <em>playback-location</em>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>QuotaExceeded / AnalyticsError</strong> – Propagated from
+    <a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a>.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">yt</span> <span class="o">=</span> <span class="n">AnalyticsClient</span><span class="p">(</span><span class="n">creds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">yt</span><span class="o">.</span><span class="n">channel_playback_location</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">detail</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">start_date</span><span class="o">=</span><span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">end_date</span><span class="o">=</span><span class="s2">&quot;2024-03-31&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._analytics.AnalyticsClient.channel_sharing_services">
+<span class="sig-name descname"><span class="pre">channel_sharing_services</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_analytics.html#AnalyticsClient.channel_sharing_services"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._analytics.AnalyticsClient.channel_sharing_services" title="Link to this definition"></a></dt>
+<dd><p>Show which social / messaging platforms drove shares to the channel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>**kw</strong> – Keyword arguments forwarded unchanged to
+<a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a> – e.g. <code class="docutils literal notranslate"><span class="pre">start_date</span></code>, <code class="docutils literal notranslate"><span class="pre">end_date</span></code>,
+or a custom <code class="docutils literal notranslate"><span class="pre">filters</span></code> string.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>One row per <em>sharingService</em>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>QuotaExceeded / AnalyticsError</strong> – Propagated from
+    <a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a>.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">yt</span> <span class="o">=</span> <span class="n">AnalyticsClient</span><span class="p">(</span><span class="n">creds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">yt</span><span class="o">.</span><span class="n">channel_sharing_services</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">start_date</span><span class="o">=</span><span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">end_date</span><span class="o">=</span><span class="s2">&quot;2024-06-30&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._analytics.AnalyticsClient.channel_stats">
+<span class="sig-name descname"><span class="pre">channel_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_analytics.html#AnalyticsClient.channel_stats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._analytics.AnalyticsClient.channel_stats" title="Link to this definition"></a></dt>
+<dd><p>Get stats for a channel.</p>
+<p>This is a generic channel stats helper: whatever metrics/dimensions you pass
+through <code class="docutils literal notranslate"><span class="pre">**kw</span></code> pass to <a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a>, which means
+you can ask for any Analytics combo without creating a new wrapper.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>**kw</strong> – Keyword arguments forwarded verbatim to
+<a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a> — for example <code class="docutils literal notranslate"><span class="pre">metrics</span></code>,
+<code class="docutils literal notranslate"><span class="pre">dimensions</span></code>, <code class="docutils literal notranslate"><span class="pre">start_date</span></code>, <code class="docutils literal notranslate"><span class="pre">end_date</span></code>, <code class="docutils literal notranslate"><span class="pre">filters</span></code>, etc.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>One row per requested <em>dimension(s)</em>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>QuotaExceeded / AnalyticsError</strong> – Propagated from
+    <a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a>.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">yt</span> <span class="o">=</span> <span class="n">AnalyticsClient</span><span class="p">(</span><span class="n">creds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">yt</span><span class="o">.</span><span class="n">channel_stats</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">metrics</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;views&quot;</span><span class="p">,</span> <span class="s2">&quot;likes&quot;</span><span class="p">,</span> <span class="s2">&quot;comments&quot;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">start_date</span><span class="o">=</span><span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">end_date</span><span class="o">=</span><span class="s2">&quot;2024-06-30&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._analytics.AnalyticsClient.channel_time_period">
+<span class="sig-name descname"><span class="pre">channel_time_period</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_period</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'month'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_analytics.html#AnalyticsClient.channel_time_period"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._analytics.AnalyticsClient.channel_time_period" title="Link to this definition"></a></dt>
+<dd><p>Summarise channel performance by calendar <strong>day</strong> or <strong>month</strong>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time_period</strong> (<em>str</em><em>, </em><em>optional</em>) – Reporting grain—either <code class="docutils literal notranslate"><span class="pre">&quot;day&quot;</span></code> or
+<code class="docutils literal notranslate"><span class="pre">&quot;month&quot;</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;month&quot;</span></code>.</p></li>
+<li><p><strong>start_date</strong> (<em>str</em><em> | </em><em>datetime.date</em>) – ISO <code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span></code> or date object
+marking the start of the reporting window (inclusive).</p></li>
+<li><p><strong>end_date</strong> (<em>str</em><em> | </em><em>datetime.date</em>) – ISO <code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span></code> or date object
+marking the end of the reporting window (inclusive).</p></li>
+<li><p><strong>max_results</strong> (<em>int</em><em> | </em><em>None</em><em>, </em><em>optional</em>) – Number of rows to return.</p></li>
+<li><p><strong>**kw</strong> – Keyword arguments forwarded unchanged to
+<a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a> – e.g. <code class="docutils literal notranslate"><span class="pre">start_date</span></code>, <code class="docutils literal notranslate"><span class="pre">end_date</span></code>,
+or a custom <code class="docutils literal notranslate"><span class="pre">filters</span></code> string.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>One row per  <em>{day | month}</em>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If <em>time_period</em> is not <code class="docutils literal notranslate"><span class="pre">&quot;day&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;month&quot;</span></code>.</p></li>
+<li><p><strong>QuotaExceeded / AnalyticsError</strong> – Propagated from
+    <a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">yt</span> <span class="o">=</span> <span class="n">AnalyticsClient</span><span class="p">(</span><span class="n">creds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">yt</span><span class="o">.</span><span class="n">channel_time_period</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">time_period</span><span class="o">=</span><span class="s2">&quot;day&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">start_date</span><span class="o">=</span><span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">end_date</span><span class="o">=</span><span class="s2">&quot;2024-01-31&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._analytics.AnalyticsClient.channel_top_videos">
+<span class="sig-name descname"><span class="pre">channel_top_videos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_analytics.html#AnalyticsClient.channel_top_videos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._analytics.AnalyticsClient.channel_top_videos" title="Link to this definition"></a></dt>
+<dd><p>Return the top-performing videos in the channel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>**kw</strong> – Keyword arguments forwarded unchanged to
+<a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a> – e.g. <code class="docutils literal notranslate"><span class="pre">start_date</span></code>, <code class="docutils literal notranslate"><span class="pre">end_date</span></code>,
+or a custom <code class="docutils literal notranslate"><span class="pre">filters</span></code> string.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>One row per <em>video</em>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>QuotaExceeded / AnalyticsError</strong> – Propagated from
+    <a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a>.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">yt</span> <span class="o">=</span> <span class="n">AnalyticsClient</span><span class="p">(</span><span class="n">creds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">yt</span><span class="o">.</span><span class="n">channel_top_videos</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">metrics</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;views&quot;</span><span class="p">,</span> <span class="s2">&quot;likes&quot;</span><span class="p">,</span> <span class="s2">&quot;comments&quot;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">start_date</span><span class="o">=</span><span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">end_date</span><span class="o">=</span><span class="s2">&quot;2024-06-30&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._analytics.AnalyticsClient.channel_traffic_sources">
+<span class="sig-name descname"><span class="pre">channel_traffic_sources</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">detail</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_analytics.html#AnalyticsClient.channel_traffic_sources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._analytics.AnalyticsClient.channel_traffic_sources" title="Link to this definition"></a></dt>
+<dd><p>Break down traffic sources for the channel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>detail</strong> (<em>str</em><em> | </em><em>None</em><em>, </em><em>optional</em>) – <ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">None</span></code> (default) – group rows by high-level
+<strong>insightTrafficSourceType</strong> (e.g. <em>YT_SEARCH</em>, <em>RELATED_VIDEO</em>).</p></li>
+<li><p>Any literal in
+<code class="docutils literal notranslate"><span class="pre">{&quot;ADVERTISING&quot;,</span> <span class="pre">&quot;CAMPAIGN_CARD&quot;,</span> <span class="pre">&quot;END_SCREEN&quot;,</span> <span class="pre">&quot;EXT_URL&quot;,</span>
+<span class="pre">&quot;HASHTAGS&quot;,</span> <span class="pre">&quot;NOTIFICATION&quot;,</span> <span class="pre">&quot;RELATED_VIDEO&quot;,</span> <span class="pre">&quot;SOUND_PAGE&quot;,</span>
+<span class="pre">&quot;SUBSCRIBER&quot;,</span> <span class="pre">&quot;YT_CHANNEL&quot;,</span> <span class="pre">&quot;YT_OTHER_PAGE&quot;,</span> <span class="pre">&quot;YT_SEARCH&quot;,</span>
+<span class="pre">&quot;VIDEO_REMIXES&quot;}</span></code> – drill into
+<strong>insightTrafficSourceDetail</strong> for that specific type.</p></li>
+</ul>
+</p></li>
+<li><p><strong>**kw</strong> – Keyword arguments forwarded unchanged to
+<a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a> – e.g. <code class="docutils literal notranslate"><span class="pre">start_date</span></code>, <code class="docutils literal notranslate"><span class="pre">end_date</span></code>,
+or a custom <code class="docutils literal notranslate"><span class="pre">filters</span></code> string.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>If <em>detail</em> is <code class="docutils literal notranslate"><span class="pre">None</span></code> – one row per <em>insightTrafficSourceType</em>.</p></li>
+<li><p>If <em>detail</em> is provided – one row per <em>insightTrafficSourceDetail</em>.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If <em>detail</em> is not <code class="docutils literal notranslate"><span class="pre">None</span></code> and not in the allowed literal
+    set shown above.</p></li>
+<li><p><strong>QuotaExceeded / AnalyticsError</strong> – Propagated from
+    <a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">yt</span> <span class="o">=</span> <span class="n">AnalyticsClient</span><span class="p">(</span><span class="n">creds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">yt</span><span class="o">.</span><span class="n">channel_traffic_sources</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;YT_SEARCH&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">start_date</span><span class="o">=</span><span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">end_date</span><span class="o">=</span><span class="s2">&quot;2024-03-31&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._analytics.AnalyticsClient.playlist_top_videos">
+<span class="sig-name descname"><span class="pre">playlist_top_videos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">playlist_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_analytics.html#AnalyticsClient.playlist_top_videos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._analytics.AnalyticsClient.playlist_top_videos" title="Link to this definition"></a></dt>
+<dd><p>Return the top-performing videos within one or more playlists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>playlist_ids</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em>) – One or more YouTube playlist IDs.</p></li>
+<li><p><strong>**kw</strong> – Keyword arguments forwarded unchanged to
+<a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a> – e.g. <code class="docutils literal notranslate"><span class="pre">start_date</span></code>, <code class="docutils literal notranslate"><span class="pre">end_date</span></code>,
+or a custom <code class="docutils literal notranslate"><span class="pre">filters</span></code> string.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>One row per <em>video × playlist</em> , with whatever metrics
+requested (defaults to <code class="docutils literal notranslate"><span class="pre">views</span></code> and <code class="docutils literal notranslate"><span class="pre">estimatedMinutesWatched</span></code>).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>QuotaExceeded / AnalyticsError</strong> – Propagated from
+    <a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a>.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">yt</span> <span class="o">=</span> <span class="n">AnalyticsClient</span><span class="p">(</span><span class="n">creds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">yt</span><span class="o">.</span><span class="n">playlist_top_videos</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">[</span><span class="s2">&quot;PL9tY0BWXOZFtQ-GG8X2E8oia-MfeLeGKv&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">metrics</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;views&quot;</span><span class="p">,</span> <span class="s2">&quot;likes&quot;</span><span class="p">,</span> <span class="s2">&quot;comments&quot;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">start_date</span><span class="o">=</span><span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">end_date</span><span class="o">=</span><span class="s2">&quot;2024-06-30&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._analytics.AnalyticsClient.reports_query">
+<span class="sig-name descname"><span class="pre">reports_query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'channel==MINE'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimensions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">date</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'2000-01-01'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">date</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">currency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_historical_channel_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_analytics.html#AnalyticsClient.reports_query"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="Link to this definition"></a></dt>
+<dd><p>Send a single <em>YouTube Analytics</em> <cite>reports.query</cite> request and return the
+result as a pandas DataFrame`.</p>
+<p>Most other functions in this package are wrappers for this function with
+some arguments already populated. If none of the other prebuilt functions
+work for your use case, this is the function to turn to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ids</strong> (<em>str</em><em>, </em><em>optional</em>) – The <cite>ids</cite> request parameter.  Defaults to
+<code class="docutils literal notranslate"><span class="pre">&quot;channel==MINE&quot;</span></code> (i.e. the authorised user’s own channel).</p></li>
+<li><p><strong>metrics</strong> (<em>Iterable</em><em>[</em><em>str</em><em>] </em><em>| </em><em>str</em><em>, </em><em>optional</em>) – Comma-separated string <em>or</em>
+iterable of metric names.  If None, defaults to
+<code class="docutils literal notranslate"><span class="pre">(&quot;views&quot;,</span> <span class="pre">&quot;estimatedMinutesWatched&quot;)</span></code>.  <strong>Must</strong> contain at
+least one metric.</p></li>
+<li><p><strong>dimensions</strong> (<em>Iterable</em><em>[</em><em>str</em><em>] </em><em>| </em><em>str</em><em>, </em><em>optional</em>) – Comma-separated string or
+iterable of dimension names.</p></li>
+<li><p><strong>sort</strong> (<em>str</em><em>, </em><em>optional</em>) – Sort order.  If <code class="docutils literal notranslate"><span class="pre">None</span></code> we auto-sort descending
+on the <em>first</em> metric (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;-views&quot;</span></code>).</p></li>
+<li><p><strong>max_results</strong> (<em>int</em><em> | </em><em>None</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">None</span></code> defaults to <code class="docutils literal notranslate"><span class="pre">10</span></code>.</p></li>
+<li><p><strong>filters</strong> (<em>str</em><em>, </em><em>optional</em>) – Raw filter string, e.g.
+<code class="docutils literal notranslate"><span class="pre">&quot;country==US;video==abc123&quot;</span></code>.</p></li>
+<li><p><strong>start_date</strong> (<em>str</em><em> | </em><em>date</em><em>, </em><em>optional</em>) – Start of reporting window
+(inclusive). If you pass a <code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.date</span></code>, we convert it to
+ISO-8601.</p></li>
+<li><p><strong>end_date</strong> (<em>str</em><em> | </em><em>date</em><em> | </em><em>None</em><em>, </em><em>optional</em>) – End of reporting window
+(inclusive).  <code class="docutils literal notranslate"><span class="pre">None</span></code> ⇒ today.</p></li>
+<li><p><strong>currency</strong> (<em>str</em><em>, </em><em>optional</em>) – 3-letter ISO code when requesting revenue
+metrics.</p></li>
+<li><p><strong>start_index</strong> (<em>int</em><em>, </em><em>optional</em>) – 1-based pagination index.</p></li>
+<li><p><strong>include_historical_channel_data</strong> (<em>bool</em><em>, </em><em>optional</em>) – When <code class="docutils literal notranslate"><span class="pre">True</span></code>,
+include data from before the channel was linked to the current
+owner.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tidy dataframe whose columns mirror the API’s
+<code class="docutils literal notranslate"><span class="pre">columnHeaders</span></code> list, with dtypes coerced to sensible pandas types
+(<code class="docutils literal notranslate"><span class="pre">Int64</span></code>, <code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">datetime64[ns]</span></code>).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>QuotaExceeded</strong> – If the API replies with HTTP 403 and a quota-related
+    error code (<code class="docutils literal notranslate"><span class="pre">quotaExceeded</span></code>, <code class="docutils literal notranslate"><span class="pre">userRateLimitExceeded</span></code> …).</p></li>
+<li><p><strong>YTAPIError</strong> – For any other failure (4xx, 5xx).</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">yt</span> <span class="o">=</span> <span class="n">AnalyticsClient</span><span class="p">(</span><span class="n">creds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">yt</span><span class="o">.</span><span class="n">reports_query</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;views&quot;</span><span class="p">,</span> <span class="s2">&quot;likes&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">dimensions</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;day&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">start_date</span><span class="o">=</span><span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">end_date</span><span class="o">=</span><span class="s2">&quot;2024-01-31&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">max_results</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._analytics.AnalyticsClient.video_audience_retention">
+<span class="sig-name descname"><span class="pre">video_audience_retention</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">audience_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_analytics.html#AnalyticsClient.video_audience_retention"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._analytics.AnalyticsClient.video_audience_retention" title="Link to this definition"></a></dt>
+<dd><p>Chart how well viewers stick around for each video (audience‐retention).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>video_ids</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em>) – One or more YouTube video IDs.</p></li>
+<li><p><strong>audience_type</strong> (<em>str</em><em> | </em><em>None</em><em>, </em><em>optional</em>) – <p>Filter the report by viewer origin:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;ORGANIC&quot;</span></code> – regular, unpaid views</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;AD_INSTREAM&quot;</span></code> – pre-roll / mid-roll ad views</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;AD_INDISPLAY&quot;</span></code> – video discovery ads</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">None</span></code> (default) – all audiences combined</p></li>
+</ul>
+<p>Any other literal triggers a tidy bullet-listed <cite>ValueError</cite>.</p>
+</p></li>
+<li><p><strong>**kw</strong> – Keyword arguments forwarded unchanged to
+<a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a> – e.g. <code class="docutils literal notranslate"><span class="pre">start_date</span></code>, <code class="docutils literal notranslate"><span class="pre">end_date</span></code>,
+or a custom <code class="docutils literal notranslate"><span class="pre">filters</span></code> string.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>One row per <em>video × elapsedVideoTimeRatio</em> bucket,
+with the <code class="docutils literal notranslate"><span class="pre">audienceWatchRatio</span></code> metric.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If <em>audience_type</em> is not <code class="docutils literal notranslate"><span class="pre">None</span></code> and not in
+    <code class="docutils literal notranslate"><span class="pre">{&quot;ORGANIC&quot;,</span> <span class="pre">&quot;AD_INSTREAM&quot;,</span> <span class="pre">&quot;AD_INDISPLAY&quot;}</span></code>.</p></li>
+<li><p><strong>QuotaExceeded / AnalyticsError</strong> – Propagated from
+    <a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">yt</span> <span class="o">=</span> <span class="n">AnalyticsClient</span><span class="p">(</span><span class="n">creds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">yt</span><span class="o">.</span><span class="n">video_audience_retention</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">[</span><span class="s2">&quot;dQw4w9WgXcQ&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">audience_type</span><span class="o">=</span><span class="s2">&quot;ORGANIC&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">start_date</span><span class="o">=</span><span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">end_date</span><span class="o">=</span><span class="s2">&quot;2024-03-31&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._analytics.AnalyticsClient.video_demographics">
+<span class="sig-name descname"><span class="pre">video_demographics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">demographic</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'ageGroup'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_analytics.html#AnalyticsClient.video_demographics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._analytics.AnalyticsClient.video_demographics" title="Link to this definition"></a></dt>
+<dd><p>Break down each video’s audience by age and/or gender.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>video_ids</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em>) – One or more YouTube video IDs.</p></li>
+<li><p><strong>demographic</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – A single literal or an iterable chosen from:
+- <code class="docutils literal notranslate"><span class="pre">&quot;ageGroup&quot;</span></code> – 13-17, 18-24, …, 65-plus <em>(default)</em>
+- <code class="docutils literal notranslate"><span class="pre">&quot;gender&quot;</span></code> – <em>male</em>, <em>female</em>, <em>user-specified</em>
+Pass both to obtain a multi-dimension report, e.g.
+<code class="docutils literal notranslate"><span class="pre">demographic=(&quot;ageGroup&quot;,</span> <span class="pre">&quot;gender&quot;)</span></code>.</p></li>
+<li><p><strong>**kw</strong> – Extra keyword arguments forwarded verbatim to
+<a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a> (for example <code class="docutils literal notranslate"><span class="pre">start_date</span></code>,
+<code class="docutils literal notranslate"><span class="pre">end_date</span></code>, or a custom <code class="docutils literal notranslate"><span class="pre">metrics</span></code> tuple).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>One row per <em>video × demographic combo</em> with the
+requested metrics (defaults to <code class="docutils literal notranslate"><span class="pre">views</span></code> and
+<code class="docutils literal notranslate"><span class="pre">estimatedMinutesWatched</span></code> if not overridden).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If <em>demographic</em> contains anything outside
+    <code class="docutils literal notranslate"><span class="pre">{&quot;ageGroup&quot;,</span> <span class="pre">&quot;gender&quot;}</span></code>.</p></li>
+<li><p><strong>QuotaExceeded / AnalyticsError</strong> – Propagated from
+    <a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">yt</span> <span class="o">=</span> <span class="n">AnalyticsClient</span><span class="p">(</span><span class="n">creds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">yt</span><span class="o">.</span><span class="n">video_demographics</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">[</span><span class="s2">&quot;dQw4w9WgXcQ&quot;</span><span class="p">,</span> <span class="s2">&quot;HEXWRTEbj1I&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">demographic</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;ageGroup&quot;</span><span class="p">,</span> <span class="s2">&quot;gender&quot;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">start_date</span><span class="o">=</span><span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">end_date</span><span class="o">=</span><span class="s2">&quot;2024-06-30&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._analytics.AnalyticsClient.video_devices">
+<span class="sig-name descname"><span class="pre">video_devices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">device_info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'deviceType'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_analytics.html#AnalyticsClient.video_devices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._analytics.AnalyticsClient.video_devices" title="Link to this definition"></a></dt>
+<dd><p>Break down each video by viewers’ device characteristics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>video_ids</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em>) – One or more YouTube video IDs.</p></li>
+<li><p><strong>device_info</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – <p>Either a single literal or an iterable drawn from:
+- <code class="docutils literal notranslate"><span class="pre">&quot;deviceType&quot;</span></code> – desktop, mobile, tablet, TV, etc. <em>(default)</em>
+- <code class="docutils literal notranslate"><span class="pre">&quot;operatingSystem&quot;</span></code> – iOS, Android, Windows, macOS, etc.</p>
+<p>You may pass both to get a multi-dimension report, e.g.
+<code class="docutils literal notranslate"><span class="pre">device_info=(&quot;deviceType&quot;,</span> <span class="pre">&quot;operatingSystem&quot;)</span></code>.</p>
+</p></li>
+<li><p><strong>**kw</strong> – Additional keyword arguments forwarded unchanged to
+<a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a> (such as <code class="docutils literal notranslate"><span class="pre">start_date</span></code>, <code class="docutils literal notranslate"><span class="pre">metrics</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>One row per <em>video × device combo</em> containing the
+requested metrics (defaults to <code class="docutils literal notranslate"><span class="pre">views</span></code> and
+<code class="docutils literal notranslate"><span class="pre">estimatedMinutesWatched</span></code> if not overridden).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If <em>device_info</em> contains anything outside
+    <code class="docutils literal notranslate"><span class="pre">{&quot;deviceType&quot;,</span> <span class="pre">&quot;operatingSystem&quot;}</span></code>.</p></li>
+<li><p><strong>QuotaExceeded / AnalyticsError</strong> – Propagated from
+    <a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">yt</span> <span class="o">=</span> <span class="n">AnalyticsClient</span><span class="p">(</span><span class="n">creds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">yt</span><span class="o">.</span><span class="n">video_devices</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">[</span><span class="s2">&quot;dQw4w9WgXcQ&quot;</span><span class="p">,</span> <span class="s2">&quot;HEXWRTEbj1I&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">device_info</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;deviceType&quot;</span><span class="p">,</span> <span class="s2">&quot;operatingSystem&quot;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">start_date</span><span class="o">=</span><span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">end_date</span><span class="o">=</span><span class="s2">&quot;2024-06-30&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._analytics.AnalyticsClient.video_geography">
+<span class="sig-name descname"><span class="pre">video_geography</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">geo_dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'country'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_analytics.html#AnalyticsClient.video_geography"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._analytics.AnalyticsClient.video_geography" title="Link to this definition"></a></dt>
+<dd><p>Returns video stats by geographical region (e.g. “country”, “city”, etc.)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>video_ids</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em>) – One or more YouTube video IDs.</p></li>
+<li><p><strong>geo_dim</strong> (<em>str</em><em>, </em><em>optional</em>) – Geographic granularity—
+<code class="docutils literal notranslate"><span class="pre">'country'</span></code> (default), <code class="docutils literal notranslate"><span class="pre">'province'</span></code>, <code class="docutils literal notranslate"><span class="pre">'dma'</span></code>, or <code class="docutils literal notranslate"><span class="pre">'city'</span></code>.</p></li>
+<li><p><strong>max_results</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximum rows per API page. Defaults to 200.</p></li>
+<li><p><strong>**kw</strong> – Extra keyword arguments forwarded intact to
+<a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a> (e.g. <code class="docutils literal notranslate"><span class="pre">start_date</span></code>, <code class="docutils literal notranslate"><span class="pre">end_date</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dataframe with one row per <em>video × geo_dim</em>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If <em>geo_dim</em> is not one of the allowed values.</p></li>
+<li><p><strong>QuotaExceeded / AnalyticsError</strong> – Propagated from
+    <a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">yt</span> <span class="o">=</span> <span class="n">AnalyticsClient</span><span class="p">(</span><span class="n">creds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">yt</span><span class="o">.</span><span class="n">video_geography</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">[</span><span class="s2">&quot;dQw4w9WgXcQ&quot;</span><span class="p">,</span> <span class="s2">&quot;HEXWRTEbj1I&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">geo_dim</span><span class="o">=</span><span class="s2">&quot;dma&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">start_date</span><span class="o">=</span><span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">end_date</span><span class="o">=</span><span class="s2">&quot;2024-01-31&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._analytics.AnalyticsClient.video_live_position">
+<span class="sig-name descname"><span class="pre">video_live_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'peakConcurrentViewers'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_analytics.html#AnalyticsClient.video_live_position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._analytics.AnalyticsClient.video_live_position" title="Link to this definition"></a></dt>
+<dd><p>Fetch live-stream performance by in-broadcast position.</p>
+<p>The API’s <strong>liveStreamPosition</strong> dimension buckets data by how far a viewer
+was into the stream when they joined (0–10 %, 10–25 %, etc.).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>video_ids</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em>) – One or more YouTube video IDs.</p></li>
+<li><p><strong>metrics</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Metric name or collection
+drawn from:
+- <code class="docutils literal notranslate"><span class="pre">&quot;averageConcurrentViewers&quot;</span></code>
+- <code class="docutils literal notranslate"><span class="pre">&quot;peakConcurrentViewers&quot;</span></code> <em>(default)</em>
+Pass a list/tuple when you need both.</p></li>
+<li><p><strong>**kw</strong> – Keyword arguments forwarded unchanged to
+<a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a> – e.g. <code class="docutils literal notranslate"><span class="pre">start_date</span></code>, <code class="docutils literal notranslate"><span class="pre">end_date</span></code>,
+or a custom <code class="docutils literal notranslate"><span class="pre">filters</span></code> string.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>One row per <em>video × liveStreamPosition bucket</em> with
+the requested metric columns.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If <em>metrics</em> is empty or contains anything outside
+    <code class="docutils literal notranslate"><span class="pre">{&quot;averageConcurrentViewers&quot;,</span> <span class="pre">&quot;peakConcurrentViewers&quot;}</span></code>.</p></li>
+<li><p><strong>QuotaExceeded / AnalyticsError</strong> – Propagated from
+    <a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">yt</span> <span class="o">=</span> <span class="n">AnalyticsClient</span><span class="p">(</span><span class="n">creds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">yt</span><span class="o">.</span><span class="n">video_live_position</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">[</span><span class="s2">&quot;dQw4w9WgXcQ&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">metrics</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;averageConcurrentViewers&quot;</span><span class="p">,</span> <span class="s2">&quot;peakConcurrentViewers&quot;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">start_date</span><span class="o">=</span><span class="s2">&quot;2024-05-01&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">end_date</span><span class="o">=</span><span class="s2">&quot;2024-05-31&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._analytics.AnalyticsClient.video_playback_details">
+<span class="sig-name descname"><span class="pre">video_playback_details</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">detail</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'liveOrOnDemand'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_analytics.html#AnalyticsClient.video_playback_details"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._analytics.AnalyticsClient.video_playback_details" title="Link to this definition"></a></dt>
+<dd><p>Break down each video by a playback-detail dimension (live vs. VOD, etc.).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>video_ids</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em>) – One or more YouTube video IDs.</p></li>
+<li><p><strong>detail</strong> (<em>str</em><em>, </em><em>optional</em>) – Dimension to split by—must be one of
+<code class="docutils literal notranslate"><span class="pre">'creatorContentType'</span></code>, <code class="docutils literal notranslate"><span class="pre">'liveOrOnDemand'</span></code>,
+<code class="docutils literal notranslate"><span class="pre">'subscribedStatus'</span></code>, <code class="docutils literal notranslate"><span class="pre">'youtubeProduct'</span></code>.
+Defaults to <code class="docutils literal notranslate"><span class="pre">'liveOrOnDemand'</span></code>.</p></li>
+<li><p><strong>**kw</strong> – Extra keyword arguments forwarded verbatim to
+<a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a> (e.g. <code class="docutils literal notranslate"><span class="pre">start_date</span></code>, <code class="docutils literal notranslate"><span class="pre">metrics</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>One row per <em>video × detail</em>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If <em>detail</em> is not one of the allowed literals.</p></li>
+<li><p><strong>QuotaExceeded / AnalyticsError</strong> – Propagated from
+    <a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">yt</span> <span class="o">=</span> <span class="n">AnalyticsClient</span><span class="p">(</span><span class="n">creds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">yt</span><span class="o">.</span><span class="n">video_playback_details</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">[</span><span class="s2">&quot;dQw4w9WgXcQ&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;subscribedStatus&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">start_date</span><span class="o">=</span><span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">end_date</span><span class="o">=</span><span class="s2">&quot;2024-06-30&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._analytics.AnalyticsClient.video_playback_location">
+<span class="sig-name descname"><span class="pre">video_playback_location</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">detail</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_analytics.html#AnalyticsClient.video_playback_location"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._analytics.AnalyticsClient.video_playback_location" title="Link to this definition"></a></dt>
+<dd><p>Return where viewers watched each video (YouTube, embedded players, etc.).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>video_ids</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em>) – One or more YouTube video IDs.</p></li>
+<li><p><strong>detail</strong> (<em>bool</em><em>, </em><em>optional</em>) – <ul>
+<li><p><strong>False</strong> (default) – group results by high-level
+<code class="docutils literal notranslate"><span class="pre">insightPlaybackLocationType</span></code> (e.g. <em>EMBEDDED</em>, <em>YOUTUBE</em>).</p></li>
+<li><p><strong>True</strong> – drill into <code class="docutils literal notranslate"><span class="pre">insightPlaybackLocationDetail</span></code>; the API
+automatically filters to <code class="docutils literal notranslate"><span class="pre">insightPlaybackLocationType==EMBEDDED</span></code>
+and caps <cite>max_results</cite> at 25.</p></li>
+</ul>
+</p></li>
+<li><p><strong>max_results</strong> (<em>int</em><em>, </em><em>optional</em>) – Requested page size. Ignored
+when <em>detail</em> is <code class="docutils literal notranslate"><span class="pre">True</span></code> because the API hard-caps it.</p></li>
+<li><p><strong>**kw</strong> – Extra keyword arguments forwarded verbatim to
+<a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a> (e.g. <code class="docutils literal notranslate"><span class="pre">start_date</span></code>, <code class="docutils literal notranslate"><span class="pre">end_date</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>One row per <em>video × playback-location</em></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>QuotaExceeded / AnalyticsError</strong> – Propagated from
+    <a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a>.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">yt</span> <span class="o">=</span> <span class="n">AnalyticsClient</span><span class="p">(</span><span class="n">creds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">yt</span><span class="o">.</span><span class="n">video_playback_location</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">[</span><span class="s2">&quot;dQw4w9WgXcQ&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">detail</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">start_date</span><span class="o">=</span><span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">end_date</span><span class="o">=</span><span class="s2">&quot;2024-03-31&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._analytics.AnalyticsClient.video_sharing_services">
+<span class="sig-name descname"><span class="pre">video_sharing_services</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_analytics.html#AnalyticsClient.video_sharing_services"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._analytics.AnalyticsClient.video_sharing_services" title="Link to this definition"></a></dt>
+<dd><p>Show which social / messaging platforms drove shares for each video.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>video_ids</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em>) – One or more YouTube video IDs.</p></li>
+<li><p><strong>**kw</strong> – Keyword arguments forwarded unchanged to
+<a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a> – e.g. <code class="docutils literal notranslate"><span class="pre">start_date</span></code>, <code class="docutils literal notranslate"><span class="pre">end_date</span></code>,
+or a custom <code class="docutils literal notranslate"><span class="pre">filters</span></code> string.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>One row per <em>video × sharingService</em>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>QuotaExceeded / AnalyticsError</strong> – Propagated from
+    <a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a>.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">yt</span> <span class="o">=</span> <span class="n">AnalyticsClient</span><span class="p">(</span><span class="n">creds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">yt</span><span class="o">.</span><span class="n">video_sharing_services</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">[</span><span class="s2">&quot;dQw4w9WgXcQ&quot;</span><span class="p">,</span> <span class="s2">&quot;HEXWRTEbj1I&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">start_date</span><span class="o">=</span><span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">end_date</span><span class="o">=</span><span class="s2">&quot;2024-06-30&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._analytics.AnalyticsClient.video_stats">
+<span class="sig-name descname"><span class="pre">video_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_analytics.html#AnalyticsClient.video_stats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._analytics.AnalyticsClient.video_stats" title="Link to this definition"></a></dt>
+<dd><p>Get stats for one or more videos.</p>
+<p>This is a generic video stats helper: whatever metrics/dimensions you pass
+through <code class="docutils literal notranslate"><span class="pre">**kw</span></code> pass to <a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a>, which means
+you can ask for any Analytics combo without creating a new wrapper.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>video_ids</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em>) – One or more YouTube video IDs.</p></li>
+<li><p><strong>**kw</strong> – Keyword arguments forwarded verbatim to
+<a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a> — for example <code class="docutils literal notranslate"><span class="pre">metrics</span></code>,
+<code class="docutils literal notranslate"><span class="pre">dimensions</span></code>, <code class="docutils literal notranslate"><span class="pre">start_date</span></code>, <code class="docutils literal notranslate"><span class="pre">end_date</span></code>, <code class="docutils literal notranslate"><span class="pre">filters</span></code>, etc.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>One row per <em>video × requested dimension(s)</em> with the
+metrics you asked for (defaults to <code class="docutils literal notranslate"><span class="pre">views</span></code> and
+<code class="docutils literal notranslate"><span class="pre">estimatedMinutesWatched</span></code>).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>QuotaExceeded / AnalyticsError</strong> – Propagated from
+    <a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a>.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">yt</span> <span class="o">=</span> <span class="n">AnalyticsClient</span><span class="p">(</span><span class="n">creds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">yt</span><span class="o">.</span><span class="n">video_stats</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">[</span><span class="s2">&quot;dQw4w9WgXcQ&quot;</span><span class="p">,</span> <span class="s2">&quot;HEXWRTEbj1I&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">metrics</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;views&quot;</span><span class="p">,</span> <span class="s2">&quot;likes&quot;</span><span class="p">,</span> <span class="s2">&quot;comments&quot;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">start_date</span><span class="o">=</span><span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">end_date</span><span class="o">=</span><span class="s2">&quot;2024-06-30&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._analytics.AnalyticsClient.video_time_period">
+<span class="sig-name descname"><span class="pre">video_time_period</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_period</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'month'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_analytics.html#AnalyticsClient.video_time_period"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._analytics.AnalyticsClient.video_time_period" title="Link to this definition"></a></dt>
+<dd><p>Summarise video performance by calendar <strong>day</strong> or <strong>month</strong>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>video_ids</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em>) – One or more YouTube video IDs.</p></li>
+<li><p><strong>time_period</strong> (<em>str</em><em>, </em><em>optional</em>) – Reporting grain—either <code class="docutils literal notranslate"><span class="pre">&quot;day&quot;</span></code> or
+<code class="docutils literal notranslate"><span class="pre">&quot;month&quot;</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;month&quot;</span></code>.</p></li>
+<li><p><strong>start_date</strong> (<em>str</em><em> | </em><em>datetime.date</em>) – ISO <code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span></code> or date object
+marking the start of the reporting window (inclusive).</p></li>
+<li><p><strong>end_date</strong> (<em>str</em><em> | </em><em>datetime.date</em>) – ISO <code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span></code> or date object
+marking the end of the reporting window (inclusive).</p></li>
+<li><p><strong>max_results</strong> (<em>int</em><em> | </em><em>None</em><em>, </em><em>optional</em>) – Number of rows to return.</p></li>
+<li><p><strong>**kw</strong> – Keyword arguments forwarded unchanged to
+<a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a> – e.g. <code class="docutils literal notranslate"><span class="pre">start_date</span></code>, <code class="docutils literal notranslate"><span class="pre">end_date</span></code>,
+or a custom <code class="docutils literal notranslate"><span class="pre">filters</span></code> string.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>One row per <em>video × {day | month}</em> with the metrics
+requested (defaults to <code class="docutils literal notranslate"><span class="pre">views</span></code> and <code class="docutils literal notranslate"><span class="pre">estimatedMinutesWatched</span></code>).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If <em>time_period</em> is not <code class="docutils literal notranslate"><span class="pre">&quot;day&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;month&quot;</span></code>.</p></li>
+<li><p><strong>QuotaExceeded / AnalyticsError</strong> – Propagated from
+    <a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">yt</span> <span class="o">=</span> <span class="n">AnalyticsClient</span><span class="p">(</span><span class="n">creds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">yt</span><span class="o">.</span><span class="n">video_time_period</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">[</span><span class="s2">&quot;dQw4w9WgXcQ&quot;</span><span class="p">,</span> <span class="s2">&quot;HEXWRTEbj1I&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">time_period</span><span class="o">=</span><span class="s2">&quot;day&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">start_date</span><span class="o">=</span><span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">end_date</span><span class="o">=</span><span class="s2">&quot;2024-01-31&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ytapi_kit._analytics.AnalyticsClient.video_traffic_sources">
+<span class="sig-name descname"><span class="pre">video_traffic_sources</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">detail</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/ytapi_kit/_analytics.html#AnalyticsClient.video_traffic_sources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ytapi_kit._analytics.AnalyticsClient.video_traffic_sources" title="Link to this definition"></a></dt>
+<dd><p>Break down traffic sources for one or more videos.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>video_ids</strong> (<em>str</em><em> | </em><em>Sequence</em><em>[</em><em>str</em><em>]</em>) – One or more YouTube video IDs.</p></li>
+<li><p><strong>detail</strong> (<em>str</em><em> | </em><em>None</em><em>, </em><em>optional</em>) – <ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">None</span></code> (default) – group rows by high-level
+<strong>insightTrafficSourceType</strong> (e.g. <em>YT_SEARCH</em>, <em>RELATED_VIDEO</em>).</p></li>
+<li><p>Any literal in
+<code class="docutils literal notranslate"><span class="pre">{&quot;ADVERTISING&quot;,</span> <span class="pre">&quot;CAMPAIGN_CARD&quot;,</span> <span class="pre">&quot;END_SCREEN&quot;,</span> <span class="pre">&quot;EXT_URL&quot;,</span>
+<span class="pre">&quot;HASHTAGS&quot;,</span> <span class="pre">&quot;NOTIFICATION&quot;,</span> <span class="pre">&quot;RELATED_VIDEO&quot;,</span> <span class="pre">&quot;SOUND_PAGE&quot;,</span>
+<span class="pre">&quot;SUBSCRIBER&quot;,</span> <span class="pre">&quot;YT_CHANNEL&quot;,</span> <span class="pre">&quot;YT_OTHER_PAGE&quot;,</span> <span class="pre">&quot;YT_SEARCH&quot;,</span>
+<span class="pre">&quot;VIDEO_REMIXES&quot;}</span></code> – drill into
+<strong>insightTrafficSourceDetail</strong> for that specific type.</p></li>
+</ul>
+</p></li>
+<li><p><strong>**kw</strong> – Keyword arguments forwarded unchanged to
+<a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a> – e.g. <code class="docutils literal notranslate"><span class="pre">start_date</span></code>, <code class="docutils literal notranslate"><span class="pre">end_date</span></code>,
+or a custom <code class="docutils literal notranslate"><span class="pre">filters</span></code> string.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>If <em>detail</em> is <code class="docutils literal notranslate"><span class="pre">None</span></code> – one row per <em>video ×
+insightTrafficSourceType</em>.</p></li>
+<li><p>If <em>detail</em> is provided – one row per <em>video ×
+insightTrafficSourceDetail</em>.</p></li>
+</ul>
+<p>Metrics default to <code class="docutils literal notranslate"><span class="pre">views</span></code> and <code class="docutils literal notranslate"><span class="pre">estimatedMinutesWatched</span></code> unless
+overridden via <code class="docutils literal notranslate"><span class="pre">**kw</span></code>.</p>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If <em>detail</em> is not <code class="docutils literal notranslate"><span class="pre">None</span></code> and not in the allowed literal
+    set shown above.</p></li>
+<li><p><strong>QuotaExceeded / AnalyticsError</strong> – Propagated from
+    <a class="reference internal" href="#ytapi_kit._analytics.AnalyticsClient.reports_query" title="ytapi_kit._analytics.AnalyticsClient.reports_query"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reports_query()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">yt</span> <span class="o">=</span> <span class="n">AnalyticsClient</span><span class="p">(</span><span class="n">creds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">yt</span><span class="o">.</span><span class="n">video_traffic_sources</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">[</span><span class="s2">&quot;dQw4w9WgXcQ&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;YT_SEARCH&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">start_date</span><span class="o">=</span><span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">end_date</span><span class="o">=</span><span class="s2">&quot;2024-03-31&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Jake Davis.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

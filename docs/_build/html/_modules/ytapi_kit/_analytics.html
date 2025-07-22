@@ -1,0 +1,1540 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ytapi_kit._analytics &mdash; ytapi-kit 0.1.0.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=540db47b"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            ytapi-kit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ytapi-kit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ytapi_kit._analytics</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ytapi_kit._analytics</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">concurrent.futures</span><span class="w"> </span><span class="kn">import</span> <span class="n">ThreadPoolExecutor</span><span class="p">,</span> <span class="n">as_completed</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">google.auth.transport.requests</span><span class="w"> </span><span class="kn">import</span> <span class="n">AuthorizedSession</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">._errors</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._util</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># Possible Dimensions ---------------------------------------------------------</span>
+<span class="n">RESOURCE_DIMENSIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;video&quot;</span><span class="p">,</span> <span class="s2">&quot;playlist&quot;</span><span class="p">,</span> <span class="s2">&quot;channel&quot;</span><span class="p">}</span>
+<span class="n">GEOGRAPHIC_DIMENSIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;country&quot;</span><span class="p">,</span> <span class="s2">&quot;province&quot;</span><span class="p">,</span> <span class="s2">&quot;dma&quot;</span><span class="p">,</span> <span class="s2">&quot;city&quot;</span><span class="p">}</span>
+<span class="n">TIME_PERIOD_DIMENSIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;day&quot;</span><span class="p">,</span> <span class="s2">&quot;month&quot;</span><span class="p">}</span>
+<span class="n">PLAYBACK_LOCATION_DIMENSIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;insightPlaybackLocationType&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;insightPlaybackLocationDetail&quot;</span><span class="p">}</span>
+<span class="n">PLAYBACK_DETAIL_DIMENSIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;creatorContentType&quot;</span><span class="p">,</span><span class="s2">&quot;liveOrOnDemand&quot;</span><span class="p">,</span>
+                              <span class="s2">&quot;subscribedStatus&quot;</span><span class="p">,</span><span class="s2">&quot;youtubeProduct&quot;</span><span class="p">}</span>
+<span class="n">TRAFFIC_SOURCE_DIMENSIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;insightTrafficSourceType&quot;</span><span class="p">,</span>
+                             <span class="s2">&quot;insightTrafficSourceDetail&quot;</span><span class="p">}</span>
+<span class="n">DEVICE_DIMENSIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;deviceType&quot;</span><span class="p">,</span> <span class="s2">&quot;operatingSystem&quot;</span><span class="p">}</span>
+<span class="n">DEMOGRAPHIC_DIMENSIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ageGroup&quot;</span><span class="p">,</span> <span class="s2">&quot;gender&quot;</span><span class="p">}</span>
+<span class="n">CONTENT_SHARING_DIMENSIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;sharingService&quot;</span><span class="p">}</span>
+<span class="n">AUDIENCE_RETENTION_DIMENSIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;elapsedVideoTimeRatio&quot;</span><span class="p">}</span>
+<span class="n">LIVESTREAM_DIMENSIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;livestreamPosition&quot;</span><span class="p">}</span>
+<span class="n">MEMBERSHIP_CANCELLATION_DIMENSIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;membershipsCancellationSurveyReason&quot;</span><span class="p">}</span>
+<span class="n">AD_PERFORMANCE_DIMENSIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;adType&quot;</span><span class="p">}</span>
+
+<span class="c1"># Possible Metrics ------------------------------------------------------------</span>
+<span class="n">VIEW_METRICS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;engagedViews&quot;</span><span class="p">,</span> <span class="s2">&quot;views&quot;</span><span class="p">,</span> <span class="s2">&quot;playlistViews&quot;</span><span class="p">,</span> <span class="s2">&quot;redViews&quot;</span><span class="p">,</span> <span class="s2">&quot;viewerPercentage&quot;</span><span class="p">}</span>
+<span class="n">WATCH_TIME_METRICS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;estimatedMinutesWatched&quot;</span><span class="p">,</span> <span class="s2">&quot;estimatedRedMinutesWatched&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;averageViewDuration&quot;</span><span class="p">,</span> <span class="s2">&quot;averageViewPercentage&quot;</span><span class="p">}</span>
+<span class="n">ENGAGEMENT_METRICS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;comments&quot;</span><span class="p">,</span> <span class="s2">&quot;likes&quot;</span><span class="p">,</span> <span class="s2">&quot;dislikes&quot;</span><span class="p">,</span> <span class="s2">&quot;shares&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;subscribersGained&quot;</span><span class="p">,</span> <span class="s2">&quot;subscribersLost&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;videosAddedToPlaylists&quot;</span><span class="p">,</span> <span class="s2">&quot;videosRemovedFromPlaylists&quot;</span><span class="p">}</span>
+<span class="n">PLAYLIST_METRICS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;averageTimeInPlaylist&quot;</span><span class="p">,</span> <span class="s2">&quot;playlistAverageViewDuration&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;playlistEstimatedMinutesWatched&quot;</span><span class="p">,</span> <span class="s2">&quot;playlistSaves&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;playlistStarts&quot;</span><span class="p">,</span> <span class="s2">&quot;playlistViews&quot;</span><span class="p">,</span> <span class="s2">&quot;viewsPerPlaylistStart&quot;</span><span class="p">}</span>
+<span class="n">ANNOTATION_METRICS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;annotationImpressions&quot;</span><span class="p">,</span> <span class="s2">&quot;annotationClickableImpressions&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;annotationClicks&quot;</span><span class="p">,</span> <span class="s2">&quot;annotationClickThroughRate&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;annotationClosableImpressions&quot;</span><span class="p">,</span> <span class="s2">&quot;annotationCloses&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;annotationCloseRate&quot;</span><span class="p">}</span>
+<span class="n">CARD_METRICS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;cardImpressions&quot;</span><span class="p">,</span> <span class="s2">&quot;cardClicks&quot;</span><span class="p">,</span> <span class="s2">&quot;cardClickRate&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;cardTeaserImpressions&quot;</span><span class="p">,</span> <span class="s2">&quot;cardTeaserClicks&quot;</span><span class="p">,</span> <span class="s2">&quot;cardTeaserClickRate&quot;</span><span class="p">}</span>
+<span class="n">LIVESTREAM_METRICS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;averageConcurrentViewers&quot;</span><span class="p">,</span> <span class="s2">&quot;peakConcurrentViewers&quot;</span><span class="p">}</span>
+<span class="n">AUDIENCE_RETENTION_METRICS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;audienceWatchRatio&quot;</span><span class="p">,</span> <span class="s2">&quot;relativeRetentionPerformance&quot;</span><span class="p">,</span>
+                              <span class="s2">&quot;startedWatching&quot;</span><span class="p">,</span><span class="s2">&quot;stoppedWatching&quot;</span><span class="p">,</span>
+                              <span class="s2">&quot;totalSegmentImpressions&quot;</span><span class="p">}</span>
+<span class="n">MEMBERSHIP_CANCELLATION_METRICS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;membershipsCancellationSurveyResponses&quot;</span><span class="p">}</span>
+<span class="n">ESTIMATED_REVENUE_METRICS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;estimatedRevenue&quot;</span><span class="p">,</span> <span class="s2">&quot;estimatedAdRevenue&quot;</span><span class="p">,</span>
+                             <span class="s2">&quot;estimatedRedPartnerRevenue&quot;</span><span class="p">}</span>
+<span class="n">AD_PERFORMANCE_METRICS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;grossRevenue&quot;</span><span class="p">,</span> <span class="s2">&quot;cpm&quot;</span><span class="p">,</span> <span class="s2">&quot;adImpressions&quot;</span><span class="p">,</span>
+                          <span class="s2">&quot;monetizedPlaybacks&quot;</span><span class="p">,</span> <span class="s2">&quot;playbackBasedCpm&quot;</span><span class="p">}</span>
+
+<span class="c1"># Possible Filters ------------------------------------------------------------</span>
+
+<span class="n">RESOURCE_FILTERS</span> <span class="o">=</span> <span class="p">{</span><span class="o">*</span><span class="n">RESOURCE_DIMENSIONS</span><span class="p">,</span> <span class="s2">&quot;group&quot;</span><span class="p">}</span>
+<span class="n">GEOGRAPHIC_FILTERS</span> <span class="o">=</span> <span class="p">{</span><span class="o">*</span><span class="n">GEOGRAPHIC_DIMENSIONS</span><span class="p">,</span> <span class="s2">&quot;continent&quot;</span><span class="p">,</span> <span class="s2">&quot;subContinent&quot;</span><span class="p">}</span>
+<span class="n">AUDIENCE_RETENTION_FILTERS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;audienceType&quot;</span><span class="p">}</span>
+<span class="n">TRAFFIC_DETAIL_TYPES</span> <span class="o">=</span> <span class="p">{</span>
+   <span class="s2">&quot;ADVERTISING&quot;</span><span class="p">,</span> <span class="s2">&quot;CAMPAIGN_CARD&quot;</span><span class="p">,</span> <span class="s2">&quot;END_SCREEN&quot;</span><span class="p">,</span> <span class="s2">&quot;EXT_URL&quot;</span><span class="p">,</span> <span class="s2">&quot;HASHTAGS&quot;</span><span class="p">,</span>
+   <span class="s2">&quot;NOTIFICATION&quot;</span><span class="p">,</span> <span class="s2">&quot;RELATED_VIDEO&quot;</span><span class="p">,</span> <span class="s2">&quot;SOUND_PAGE&quot;</span><span class="p">,</span> <span class="s2">&quot;SUBSCRIBER&quot;</span><span class="p">,</span>
+   <span class="s2">&quot;YT_CHANNEL&quot;</span><span class="p">,</span> <span class="s2">&quot;YT_OTHER_PAGE&quot;</span><span class="p">,</span> <span class="s2">&quot;YT_SEARCH&quot;</span><span class="p">,</span> <span class="s2">&quot;VIDEO_REMIXES&quot;</span>
+<span class="p">}</span>
+<span class="n">AUDIENCE_TYPES</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ORGANIC&quot;</span><span class="p">,</span> <span class="s2">&quot;AD_INSTREAM&quot;</span><span class="p">,</span> <span class="s2">&quot;AD_INDISPLAY&quot;</span><span class="p">}</span>
+
+<span class="c1"># ----------------------------------------------------------------------------</span>
+<span class="c1"># 1.Auth helpers — build an *AuthorizedSession* ready for the client</span>
+<span class="c1"># ----------------------------------------------------------------------------</span>
+
+
+
+<div class="viewcode-block" id="AnalyticsClient">
+<a class="viewcode-back" href="../../api/_analytics.html#ytapi_kit._analytics.AnalyticsClient">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AnalyticsClient</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tiny Analytics client with retries, type‑coercion, and rate‑limit detection.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">:</span> <span class="n">AuthorizedSession</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">session</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="s2">&quot;https://youtubeanalytics.googleapis.com/v2/reports&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc</span><span class="p">,</span> <span class="n">tb</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1"># Helper Methods</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_to_dataframe</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;columnHeaders&quot;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rows&quot;</span><span class="p">,</span> <span class="p">[]),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">h</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">headers</span><span class="p">])</span>
+
+        <span class="n">dtype_map</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;INTEGER&quot;</span><span class="p">:</span> <span class="s2">&quot;Int64&quot;</span><span class="p">,</span> <span class="s2">&quot;FLOAT&quot;</span><span class="p">:</span> <span class="s2">&quot;float&quot;</span><span class="p">,</span> <span class="s2">&quot;DATE&quot;</span><span class="p">:</span> <span class="s2">&quot;datetime64[ns]&quot;</span><span class="p">}</span>
+        <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">headers</span><span class="p">:</span>
+            <span class="n">dtype</span> <span class="o">=</span> <span class="n">dtype_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dataType&quot;</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">dtype</span><span class="p">:</span>
+                <span class="n">df</span><span class="p">[</span><span class="n">h</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">h</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;day&quot;</span><span class="p">,</span> <span class="s2">&quot;month&quot;</span><span class="p">}</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">):</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">df</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_resolve_max_results</span><span class="p">(</span><span class="n">time_period</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">start_date</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">date</span><span class="p">,</span>
+                             <span class="n">max_results</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">max_results</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">max_results</span>
+        <span class="k">if</span> <span class="n">time_period</span> <span class="o">==</span> <span class="s2">&quot;day&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">end_date</span><span class="p">)</span> <span class="o">-</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">start_date</span><span class="p">))</span><span class="o">.</span><span class="n">days</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">time_period</span> <span class="o">==</span> <span class="s2">&quot;month&quot;</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">start_date</span><span class="p">)</span>
+            <span class="n">e</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">end_date</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">year</span> <span class="o">-</span> <span class="n">s</span><span class="o">.</span><span class="n">year</span><span class="p">)</span> <span class="o">*</span> <span class="mi">12</span> <span class="o">+</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">month</span> <span class="o">-</span> <span class="n">s</span><span class="o">.</span><span class="n">month</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;time_period must be &#39;day&#39; or &#39;month&#39; when max_results is omitted&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="AnalyticsClient.reports_query">
+<a class="viewcode-back" href="../../api/_analytics.html#ytapi_kit._analytics.AnalyticsClient.reports_query">[docs]</a>
+    <span class="nd">@runtime_typecheck</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reports_query</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="o">*</span><span class="p">,</span>
+            <span class="n">ids</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;channel==MINE&quot;</span><span class="p">,</span>
+            <span class="n">metrics</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">dimensions</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">sort</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">max_results</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+            <span class="n">filters</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">start_date</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">date</span> <span class="o">=</span> <span class="s2">&quot;2000-01-01&quot;</span><span class="p">,</span>
+            <span class="n">end_date</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">date</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">currency</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">start_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">include_historical_channel_data</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Send a single *YouTube Analytics* `reports.query` request and return the</span>
+<span class="sd">        result as a pandas DataFrame`.</span>
+
+<span class="sd">        Most other functions in this package are wrappers for this function with</span>
+<span class="sd">        some arguments already populated. If none of the other prebuilt functions</span>
+<span class="sd">        work for your use case, this is the function to turn to.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            ids (str, optional): The `ids` request parameter.  Defaults to</span>
+<span class="sd">                ``&quot;channel==MINE&quot;`` (i.e. the authorised user’s own channel).</span>
+<span class="sd">            metrics (Iterable[str] | str, optional): Comma-separated string *or*</span>
+<span class="sd">                iterable of metric names.  If None, defaults to</span>
+<span class="sd">                ``(&quot;views&quot;, &quot;estimatedMinutesWatched&quot;)``.  **Must** contain at</span>
+<span class="sd">                least one metric.</span>
+<span class="sd">            dimensions (Iterable[str] | str, optional): Comma-separated string or</span>
+<span class="sd">                iterable of dimension names.</span>
+<span class="sd">            sort (str, optional): Sort order.  If ``None`` we auto-sort descending</span>
+<span class="sd">                on the *first* metric (e.g. ``&quot;-views&quot;``).</span>
+<span class="sd">            max_results (int | None, optional):  ``None`` defaults to ``10``.</span>
+<span class="sd">            filters (str, optional): Raw filter string, e.g.</span>
+<span class="sd">                ``&quot;country==US;video==abc123&quot;``.</span>
+<span class="sd">            start_date (str | date, optional): Start of reporting window</span>
+<span class="sd">                (inclusive). If you pass a :class:`datetime.date`, we convert it to</span>
+<span class="sd">                ISO-8601.</span>
+<span class="sd">            end_date (str | date | None, optional): End of reporting window</span>
+<span class="sd">                (inclusive).  ``None`` ⇒ today.</span>
+<span class="sd">            currency (str, optional): 3-letter ISO code when requesting revenue</span>
+<span class="sd">                metrics.</span>
+<span class="sd">            start_index (int, optional): 1-based pagination index.</span>
+<span class="sd">            include_historical_channel_data (bool, optional): When ``True``,</span>
+<span class="sd">                include data from before the channel was linked to the current</span>
+<span class="sd">                owner.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.DataFrame: A tidy dataframe whose columns mirror the API’s</span>
+<span class="sd">            ``columnHeaders`` list, with dtypes coerced to sensible pandas types</span>
+<span class="sd">            (``Int64``, ``float``, ``datetime64[ns]``).</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            QuotaExceeded: If the API replies with HTTP 403 and a quota-related</span>
+<span class="sd">                error code (``quotaExceeded``, ``userRateLimitExceeded`` …).</span>
+<span class="sd">            YTAPIError: For any other failure (4xx, 5xx).</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; yt = AnalyticsClient(creds)</span>
+<span class="sd">            &gt;&gt;&gt; df = yt.reports_query(</span>
+<span class="sd">            ...     metrics=[&quot;views&quot;, &quot;likes&quot;],</span>
+<span class="sd">            ...     dimensions=[&quot;day&quot;],</span>
+<span class="sd">            ...     start_date=&quot;2024-01-01&quot;,</span>
+<span class="sd">            ...     end_date=&quot;2024-01-31&quot;,</span>
+<span class="sd">            ...     max_results=None,</span>
+<span class="sd">            ... )</span>
+<span class="sd">            &gt;&gt;&gt; df.head()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">metrics</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">metrics</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;views&quot;</span><span class="p">,</span> <span class="s2">&quot;estimatedMinutesWatched&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">end_date</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">end_date</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">sort</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">metrics</span><span class="p">:</span>
+            <span class="n">first_metric</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">metrics</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">metrics</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">metrics</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">sort</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;-</span><span class="si">{</span><span class="n">first_metric</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;ids&quot;</span><span class="p">:</span> <span class="n">ids</span><span class="p">,</span>
+            <span class="s2">&quot;startDate&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">start_date</span><span class="p">),</span>
+            <span class="s2">&quot;endDate&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">end_date</span><span class="p">),</span>
+            <span class="s2">&quot;metrics&quot;</span><span class="p">:</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">metrics</span><span class="p">))</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">metrics</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">metrics</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">dimensions</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;dimensions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">dimensions</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">filters</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;filters&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">filters</span>
+        <span class="k">if</span> <span class="n">sort</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;sort&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sort</span>
+        <span class="k">if</span> <span class="n">max_results</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;maxResults&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">max_results</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">currency</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;currency&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">currency</span>
+        <span class="k">if</span> <span class="n">start_index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;startIndex&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">start_index</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">include_historical_channel_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;includeHistoricalChannelData&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">include_historical_channel_data</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+        <span class="n">raise_for_status</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_dataframe</span><span class="p">(</span><span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">())</span></div>
+
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1"># Helper to fan‑out over many IDs</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_per_id</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="o">*</span><span class="p">,</span>
+            <span class="n">id_kind</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">id_vals</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+            <span class="n">extra_filters</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+            <span class="n">concurrency</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span>  <span class="c1"># tweak to taste (≤10 QPS is safe)</span>
+            <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fan-out over many IDs **in parallel** and concat the frames.&quot;&quot;&quot;</span>
+        <span class="n">ids_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">id_vals</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">id_vals</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="nb">list</span><span class="p">(</span><span class="n">id_vals</span><span class="p">)</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">_one</span><span class="p">(</span><span class="n">_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+            <span class="n">filters</span> <span class="o">=</span> <span class="s2">&quot;;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="o">*</span><span class="n">extra_filters</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">id_kind</span><span class="si">}</span><span class="s2">==</span><span class="si">{</span><span class="n">_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">])</span> <span class="k">if</span> <span class="n">extra_filters</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">id_kind</span><span class="si">}</span><span class="s2">==</span><span class="si">{</span><span class="n">_id</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reports_query</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="n">filters</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+
+        <span class="c1"># Pool size = min(concurrency, #ids) so we don&#39;t spawn useless threads</span>
+        <span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="n">concurrency</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ids_list</span><span class="p">)))</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+            <span class="c1"># Submit tasks</span>
+            <span class="n">futures</span> <span class="o">=</span> <span class="p">[</span><span class="n">pool</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">_one</span><span class="p">,</span> <span class="n">_id</span><span class="p">)</span> <span class="k">for</span> <span class="n">_id</span> <span class="ow">in</span> <span class="n">ids_list</span><span class="p">]</span>
+
+            <span class="c1"># Collect as they finish (maintains retry/back-off behaviour inside reports_query)</span>
+            <span class="n">frames</span> <span class="o">=</span> <span class="p">[</span><span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span> <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">as_completed</span><span class="p">(</span><span class="n">futures</span><span class="p">)]</span>
+
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">frames</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">if</span> <span class="n">frames</span> <span class="k">else</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1"># Geographic Functions ----------------------------------------------------</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+<div class="viewcode-block" id="AnalyticsClient.video_geography">
+<a class="viewcode-back" href="../../api/_analytics.html#ytapi_kit._analytics.AnalyticsClient.video_geography">[docs]</a>
+    <span class="nd">@runtime_typecheck</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">video_geography</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">video_ids</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">geo_dim</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;country&quot;</span><span class="p">,</span>
+            <span class="n">max_results</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns video stats by geographical region (e.g. &quot;country&quot;, &quot;city&quot;, etc.)</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            video_ids (str | Sequence[str]): One or more YouTube video IDs.</span>
+<span class="sd">            geo_dim (str, optional): Geographic granularity—</span>
+<span class="sd">                ``&#39;country&#39;`` (default), ``&#39;province&#39;``, ``&#39;dma&#39;``, or ``&#39;city&#39;``.</span>
+<span class="sd">            max_results (int, optional): Maximum rows per API page. Defaults to 200.</span>
+<span class="sd">            **kw: Extra keyword arguments forwarded intact to</span>
+<span class="sd">                :py:meth:`reports_query` (e.g. ``start_date``, ``end_date``).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.DataFrame: A dataframe with one row per *video × geo_dim*.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If *geo_dim* is not one of the allowed values.</span>
+<span class="sd">            QuotaExceeded / AnalyticsError: Propagated from</span>
+<span class="sd">                :py:meth:`reports_query`.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; yt = AnalyticsClient(creds)</span>
+<span class="sd">            &gt;&gt;&gt; df = yt.video_geography(</span>
+<span class="sd">            ...     [&quot;dQw4w9WgXcQ&quot;, &quot;HEXWRTEbj1I&quot;],</span>
+<span class="sd">            ...     geo_dim=&quot;dma&quot;,</span>
+<span class="sd">            ...     start_date=&quot;2024-01-01&quot;,</span>
+<span class="sd">            ...     end_date=&quot;2024-01-31&quot;,</span>
+<span class="sd">            ... )</span>
+<span class="sd">            &gt;&gt;&gt; df.head()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">geo_dim</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">GEOGRAPHIC_DIMENSIONS</span><span class="p">:</span>
+            <span class="n">_raise_invalid_argument</span><span class="p">(</span><span class="s2">&quot;geo_dim&quot;</span><span class="p">,</span> <span class="n">geo_dim</span><span class="p">,</span> <span class="n">GEOGRAPHIC_DIMENSIONS</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_id</span><span class="p">(</span>
+            <span class="n">id_kind</span><span class="o">=</span><span class="s2">&quot;video&quot;</span><span class="p">,</span>
+            <span class="n">id_vals</span><span class="o">=</span><span class="n">video_ids</span><span class="p">,</span>
+            <span class="n">dimensions</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;video&quot;</span><span class="p">,</span> <span class="n">geo_dim</span><span class="p">),</span>
+            <span class="n">max_results</span><span class="o">=</span><span class="n">max_results</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AnalyticsClient.channel_geography">
+<a class="viewcode-back" href="../../api/_analytics.html#ytapi_kit._analytics.AnalyticsClient.channel_geography">[docs]</a>
+    <span class="nd">@runtime_typecheck</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">channel_geography</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">geo_dim</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;country&quot;</span><span class="p">,</span>
+                    <span class="n">max_results</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns channel stats by geographical region (e.g. &quot;country&quot;, &quot;city&quot;, etc.)</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            geo_dim (str, optional): Geographic granularity—</span>
+<span class="sd">                ``&#39;country&#39;`` (default), ``&#39;province&#39;``, ``&#39;dma&#39;``, or ``&#39;city&#39;``.</span>
+<span class="sd">            max_results (int, optional): Maximum rows per API page. Defaults to 200.</span>
+<span class="sd">            **kw: Extra keyword arguments forwarded intact to</span>
+<span class="sd">                :py:meth:`reports_query` (e.g. ``start_date``, ``end_date``).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.DataFrame: A dataframe with one row per *geo_dim*.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If *geo_dim* is not one of the allowed values.</span>
+<span class="sd">            QuotaExceeded / AnalyticsError: Propagated from</span>
+<span class="sd">                :py:meth:`reports_query`.</span>
+
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; yt = AnalyticsClient(creds)</span>
+<span class="sd">            &gt;&gt;&gt; df = yt.channel_geography(</span>
+<span class="sd">            ...     geo_dim=&quot;dma&quot;,</span>
+<span class="sd">            ...     start_date=&quot;2024-01-01&quot;,</span>
+<span class="sd">            ...     end_date=&quot;2024-01-31&quot;,</span>
+<span class="sd">            ... )</span>
+<span class="sd">            &gt;&gt;&gt; df.head()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">geo_dim</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">GEOGRAPHIC_DIMENSIONS</span><span class="p">:</span>
+            <span class="n">_raise_invalid_argument</span><span class="p">(</span><span class="s2">&quot;geo_dim&quot;</span><span class="p">,</span> <span class="n">geo_dim</span><span class="p">,</span> <span class="n">GEOGRAPHIC_DIMENSIONS</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reports_query</span><span class="p">(</span>
+            <span class="n">dimensions</span><span class="o">=</span><span class="p">(</span><span class="n">geo_dim</span><span class="p">,),</span>
+            <span class="n">max_results</span><span class="o">=</span><span class="n">max_results</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1"># Playback Location Functions ---------------------------------------------</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+<div class="viewcode-block" id="AnalyticsClient.video_playback_location">
+<a class="viewcode-back" href="../../api/_analytics.html#ytapi_kit._analytics.AnalyticsClient.video_playback_location">[docs]</a>
+    <span class="nd">@runtime_typecheck</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">video_playback_location</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">video_ids</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">detail</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                                <span class="n">max_results</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return where viewers watched each video (YouTube, embedded players, etc.).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            video_ids (str | Sequence[str]): One or more YouTube video IDs.</span>
+<span class="sd">            detail (bool, optional):</span>
+<span class="sd">                * **False** (default) – group results by high-level</span>
+<span class="sd">                  ``insightPlaybackLocationType`` (e.g. *EMBEDDED*, *YOUTUBE*).</span>
+<span class="sd">                * **True** – drill into ``insightPlaybackLocationDetail``; the API</span>
+<span class="sd">                  automatically filters to ``insightPlaybackLocationType==EMBEDDED``</span>
+<span class="sd">                  and caps `max_results` at 25.</span>
+<span class="sd">            max_results (int, optional): Requested page size. Ignored</span>
+<span class="sd">                when *detail* is ``True`` because the API hard-caps it.</span>
+<span class="sd">            **kw: Extra keyword arguments forwarded verbatim to</span>
+<span class="sd">                :py:meth:`reports_query` (e.g. ``start_date``, ``end_date``).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.DataFrame: One row per *video × playback-location*</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            QuotaExceeded / AnalyticsError: Propagated from</span>
+<span class="sd">                :py:meth:`reports_query`.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; yt = AnalyticsClient(creds)</span>
+<span class="sd">            &gt;&gt;&gt; df = yt.video_playback_location(</span>
+<span class="sd">            ...     [&quot;dQw4w9WgXcQ&quot;],</span>
+<span class="sd">            ...     detail=True,</span>
+<span class="sd">            ...     start_date=&quot;2024-01-01&quot;,</span>
+<span class="sd">            ...     end_date=&quot;2024-03-31&quot;,</span>
+<span class="sd">            ... )</span>
+<span class="sd">            &gt;&gt;&gt; df.head()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dim</span> <span class="o">=</span> <span class="s2">&quot;insightPlaybackLocationDetail&quot;</span> <span class="k">if</span> <span class="n">detail</span> <span class="k">else</span> <span class="s2">&quot;insightPlaybackLocationType&quot;</span>
+        <span class="n">extras</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;insightPlaybackLocationType==EMBEDDED&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">detail</span> <span class="k">else</span> <span class="p">[]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_id</span><span class="p">(</span>
+            <span class="n">id_kind</span><span class="o">=</span><span class="s2">&quot;video&quot;</span><span class="p">,</span>
+            <span class="n">id_vals</span><span class="o">=</span><span class="n">video_ids</span><span class="p">,</span>
+            <span class="n">extra_filters</span><span class="o">=</span><span class="n">extras</span><span class="p">,</span>
+            <span class="n">dimensions</span><span class="o">=</span><span class="p">(</span><span class="n">dim</span><span class="p">,),</span>
+            <span class="n">max_results</span><span class="o">=</span><span class="n">max_results</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">detail</span> <span class="k">else</span> <span class="mi">25</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AnalyticsClient.channel_playback_location">
+<a class="viewcode-back" href="../../api/_analytics.html#ytapi_kit._analytics.AnalyticsClient.channel_playback_location">[docs]</a>
+    <span class="nd">@runtime_typecheck</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">channel_playback_location</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">detail</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                                  <span class="n">max_results</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return where viewers watched channel videos (YouTube, embedded players, etc.).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            detail (bool, optional):</span>
+<span class="sd">                * **False** (default) – group results by high-level</span>
+<span class="sd">                  ``insightPlaybackLocationType`` (e.g. *EMBEDDED*, *YOUTUBE*).</span>
+<span class="sd">                * **True** – drill into ``insightPlaybackLocationDetail``; the API</span>
+<span class="sd">                  automatically filters to ``insightPlaybackLocationType==EMBEDDED``</span>
+<span class="sd">                  and caps `max_results` at 25.</span>
+<span class="sd">            max_results (int, optional): Requested page size. Ignored</span>
+<span class="sd">                when *detail* is ``True`` because the API hard-caps it.</span>
+<span class="sd">            **kw: Extra keyword arguments forwarded verbatim to</span>
+<span class="sd">                :py:meth:`reports_query` (e.g. ``start_date``, ``end_date``).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.DataFrame: One row per *playback-location*.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            QuotaExceeded / AnalyticsError: Propagated from</span>
+<span class="sd">                :py:meth:`reports_query`.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; yt = AnalyticsClient(creds)</span>
+<span class="sd">            &gt;&gt;&gt; df = yt.channel_playback_location(</span>
+<span class="sd">            ...     detail=True,</span>
+<span class="sd">            ...     start_date=&quot;2024-01-01&quot;,</span>
+<span class="sd">            ...     end_date=&quot;2024-03-31&quot;,</span>
+<span class="sd">            ... )</span>
+<span class="sd">            &gt;&gt;&gt; df.head()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dim</span> <span class="o">=</span> <span class="s2">&quot;insightPlaybackLocationDetail&quot;</span> <span class="k">if</span> <span class="n">detail</span> <span class="k">else</span> <span class="s2">&quot;insightPlaybackLocationType&quot;</span>
+        <span class="n">filters</span> <span class="o">=</span> <span class="s2">&quot;insightPlaybackLocationType==EMBEDDED&quot;</span> <span class="k">if</span> <span class="n">detail</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reports_query</span><span class="p">(</span>
+            <span class="n">dimensions</span><span class="o">=</span><span class="p">(</span><span class="n">dim</span><span class="p">,),</span>
+            <span class="n">filters</span><span class="o">=</span><span class="n">filters</span><span class="p">,</span>
+            <span class="n">max_results</span><span class="o">=</span><span class="n">max_results</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">detail</span> <span class="k">else</span> <span class="mi">25</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1"># Playback Details Functions ----------------------------------------------</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+<div class="viewcode-block" id="AnalyticsClient.video_playback_details">
+<a class="viewcode-back" href="../../api/_analytics.html#ytapi_kit._analytics.AnalyticsClient.video_playback_details">[docs]</a>
+    <span class="nd">@runtime_typecheck</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">video_playback_details</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">video_ids</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span>
+                               <span class="n">detail</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;liveOrOnDemand&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Break down each video by a playback-detail dimension (live vs. VOD, etc.).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            video_ids (str | Sequence[str]): One or more YouTube video IDs.</span>
+<span class="sd">            detail (str, optional): Dimension to split by—must be one of</span>
+<span class="sd">                ``&#39;creatorContentType&#39;``, ``&#39;liveOrOnDemand&#39;``,</span>
+<span class="sd">                ``&#39;subscribedStatus&#39;``, ``&#39;youtubeProduct&#39;``.</span>
+<span class="sd">                Defaults to ``&#39;liveOrOnDemand&#39;``.</span>
+<span class="sd">            **kw: Extra keyword arguments forwarded verbatim to</span>
+<span class="sd">                :py:meth:`reports_query` (e.g. ``start_date``, ``metrics``).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.DataFrame: One row per *video × detail*.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If *detail* is not one of the allowed literals.</span>
+<span class="sd">            QuotaExceeded / AnalyticsError: Propagated from</span>
+<span class="sd">                :py:meth:`reports_query`.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; yt = AnalyticsClient(creds)</span>
+<span class="sd">            &gt;&gt;&gt; df = yt.video_playback_details(</span>
+<span class="sd">            ...     [&quot;dQw4w9WgXcQ&quot;],</span>
+<span class="sd">            ...     detail=&quot;subscribedStatus&quot;,</span>
+<span class="sd">            ...     start_date=&quot;2024-01-01&quot;,</span>
+<span class="sd">            ...     end_date=&quot;2024-06-30&quot;,</span>
+<span class="sd">            ... )</span>
+<span class="sd">            &gt;&gt;&gt; df.head()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">detail</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">PLAYBACK_DETAIL_DIMENSIONS</span><span class="p">:</span>
+            <span class="n">_raise_invalid_argument</span><span class="p">(</span><span class="s2">&quot;detail&quot;</span><span class="p">,</span> <span class="n">detail</span><span class="p">,</span> <span class="n">PLAYBACK_DETAIL_DIMENSIONS</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_id</span><span class="p">(</span>
+            <span class="n">id_kind</span><span class="o">=</span><span class="s2">&quot;video&quot;</span><span class="p">,</span>
+            <span class="n">id_vals</span><span class="o">=</span><span class="n">video_ids</span><span class="p">,</span>
+            <span class="n">dimensions</span><span class="o">=</span><span class="p">(</span><span class="n">detail</span><span class="p">,),</span>
+            <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AnalyticsClient.channel_playback_details">
+<a class="viewcode-back" href="../../api/_analytics.html#ytapi_kit._analytics.AnalyticsClient.channel_playback_details">[docs]</a>
+    <span class="nd">@runtime_typecheck</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">channel_playback_details</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">detail</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;liveOrOnDemand&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Break down channel stats by a playback-detail dimension (live vs. VOD, etc.).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            detail (str, optional): Dimension to split by—must be one of</span>
+<span class="sd">                ``&#39;creatorContentType&#39;``, ``&#39;liveOrOnDemand&#39;``,</span>
+<span class="sd">                ``&#39;subscribedStatus&#39;``, ``&#39;youtubeProduct&#39;``.</span>
+<span class="sd">                Defaults to ``&#39;liveOrOnDemand&#39;``.</span>
+<span class="sd">            **kw: Extra keyword arguments forwarded verbatim to</span>
+<span class="sd">                :py:meth:`reports_query` (e.g. ``start_date``, ``metrics``).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.DataFrame: One row per *detail* value, with the metrics</span>
+<span class="sd">            requested (default ``views`` &amp; ``estimatedMinutesWatched``).</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If *detail* is not one of the allowed literals.</span>
+<span class="sd">            QuotaExceeded / AnalyticsError: Propagated from</span>
+<span class="sd">                :py:meth:`reports_query`.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; yt = AnalyticsClient(creds)</span>
+<span class="sd">            &gt;&gt;&gt; df = yt.channel_playback_details(</span>
+<span class="sd">            ...     detail=&quot;subscribedStatus&quot;,</span>
+<span class="sd">            ...     start_date=&quot;2024-01-01&quot;,</span>
+<span class="sd">            ...     end_date=&quot;2024-06-30&quot;,</span>
+<span class="sd">            ... )</span>
+<span class="sd">            &gt;&gt;&gt; df.head()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">detail</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">PLAYBACK_DETAIL_DIMENSIONS</span><span class="p">:</span>
+            <span class="n">_raise_invalid_argument</span><span class="p">(</span><span class="s2">&quot;detail&quot;</span><span class="p">,</span> <span class="n">detail</span><span class="p">,</span> <span class="n">PLAYBACK_DETAIL_DIMENSIONS</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reports_query</span><span class="p">(</span>
+            <span class="n">dimensions</span><span class="o">=</span><span class="p">(</span><span class="n">detail</span><span class="p">,),</span>
+            <span class="o">**</span><span class="n">kw</span>
+        <span class="p">)</span></div>
+
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1"># Device Functions --------------------------------------------------------</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+<div class="viewcode-block" id="AnalyticsClient.video_devices">
+<a class="viewcode-back" href="../../api/_analytics.html#ytapi_kit._analytics.AnalyticsClient.video_devices">[docs]</a>
+    <span class="nd">@runtime_typecheck</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">video_devices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">video_ids</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span>
+                      <span class="n">device_info</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;deviceType&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Break down each video by viewers’ device characteristics.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            video_ids (str | Sequence[str]): One or more YouTube video IDs.</span>
+<span class="sd">            device_info (str | Sequence[str], optional):</span>
+<span class="sd">                Either a single literal or an iterable drawn from:</span>
+<span class="sd">                - ``&quot;deviceType&quot;`` – desktop, mobile, tablet, TV, etc. *(default)*</span>
+<span class="sd">                - ``&quot;operatingSystem&quot;`` – iOS, Android, Windows, macOS, etc.</span>
+
+<span class="sd">                You may pass both to get a multi-dimension report, e.g.</span>
+<span class="sd">                ``device_info=(&quot;deviceType&quot;, &quot;operatingSystem&quot;)``.</span>
+<span class="sd">            **kw: Additional keyword arguments forwarded unchanged to</span>
+<span class="sd">                :py:meth:`reports_query` (such as ``start_date``, ``metrics``).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.DataFrame: One row per *video × device combo* containing the</span>
+<span class="sd">            requested metrics (defaults to ``views`` and</span>
+<span class="sd">            ``estimatedMinutesWatched`` if not overridden).</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If *device_info* contains anything outside</span>
+<span class="sd">                ``{&quot;deviceType&quot;, &quot;operatingSystem&quot;}``.</span>
+<span class="sd">            QuotaExceeded / AnalyticsError: Propagated from</span>
+<span class="sd">                :py:meth:`reports_query`.</span>
+
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; yt = AnalyticsClient(creds)</span>
+<span class="sd">            &gt;&gt;&gt; df = yt.video_devices(</span>
+<span class="sd">            ...     [&quot;dQw4w9WgXcQ&quot;, &quot;HEXWRTEbj1I&quot;],</span>
+<span class="sd">            ...     device_info=(&quot;deviceType&quot;, &quot;operatingSystem&quot;),</span>
+<span class="sd">            ...     start_date=&quot;2024-01-01&quot;,</span>
+<span class="sd">            ...     end_date=&quot;2024-06-30&quot;,</span>
+<span class="sd">            ... )</span>
+<span class="sd">            &gt;&gt;&gt; df.head()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dims</span> <span class="o">=</span> <span class="n">_string_to_tuple</span><span class="p">(</span><span class="n">device_info</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">set</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="n">DEVICE_DIMENSIONS</span><span class="p">):</span>
+            <span class="n">_raise_invalid_argument</span><span class="p">(</span><span class="s2">&quot;device_info&quot;</span><span class="p">,</span> <span class="n">device_info</span><span class="p">,</span>
+                                         <span class="n">DEVICE_DIMENSIONS</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_id</span><span class="p">(</span>
+            <span class="n">id_kind</span><span class="o">=</span><span class="s2">&quot;video&quot;</span><span class="p">,</span>
+            <span class="n">id_vals</span><span class="o">=</span><span class="n">video_ids</span><span class="p">,</span>
+            <span class="n">dimensions</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AnalyticsClient.channel_devices">
+<a class="viewcode-back" href="../../api/_analytics.html#ytapi_kit._analytics.AnalyticsClient.channel_devices">[docs]</a>
+    <span class="nd">@runtime_typecheck</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">channel_devices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span>
+                        <span class="n">device_info</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;deviceType&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Break down channel stats by viewers’ device characteristics.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            device_info (str | Sequence[str], optional):</span>
+<span class="sd">                Either a single literal or an iterable drawn from:</span>
+<span class="sd">                - ``&quot;deviceType&quot;`` – desktop, mobile, tablet, TV, etc. *(default)*</span>
+<span class="sd">                - ``&quot;operatingSystem&quot;`` – iOS, Android, Windows, macOS, etc.</span>
+
+<span class="sd">                You may pass both to get a multi-dimension report, e.g.</span>
+<span class="sd">                ``device_info=(&quot;deviceType&quot;, &quot;operatingSystem&quot;)``.</span>
+<span class="sd">            **kw: Additional keyword arguments forwarded unchanged to</span>
+<span class="sd">                :py:meth:`reports_query` (such as ``start_date``, ``metrics``).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.DataFrame: One row per device characteristic.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If *device_info* contains anything outside</span>
+<span class="sd">                ``{&quot;deviceType&quot;, &quot;operatingSystem&quot;}``.</span>
+<span class="sd">            QuotaExceeded / AnalyticsError: Propagated from</span>
+<span class="sd">                :py:meth:`reports_query`.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; yt = AnalyticsClient(creds)</span>
+<span class="sd">            &gt;&gt;&gt; df = yt.channel_devices(</span>
+<span class="sd">            ...     device_info=(&quot;deviceType&quot;, &quot;operatingSystem&quot;),</span>
+<span class="sd">            ...     start_date=&quot;2024-01-01&quot;,</span>
+<span class="sd">            ...     end_date=&quot;2024-06-30&quot;,</span>
+<span class="sd">            ... )</span>
+<span class="sd">            &gt;&gt;&gt; df.head()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dims</span> <span class="o">=</span> <span class="n">_string_to_tuple</span><span class="p">(</span><span class="n">device_info</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">set</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="n">DEVICE_DIMENSIONS</span><span class="p">):</span>
+            <span class="n">_raise_invalid_argument</span><span class="p">(</span><span class="s2">&quot;device_info&quot;</span><span class="p">,</span> <span class="n">device_info</span><span class="p">,</span>
+                                         <span class="n">DEVICE_DIMENSIONS</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reports_query</span><span class="p">(</span><span class="n">dimensions</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span></div>
+
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1"># Demographic Functions ---------------------------------------------------</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+<div class="viewcode-block" id="AnalyticsClient.video_demographics">
+<a class="viewcode-back" href="../../api/_analytics.html#ytapi_kit._analytics.AnalyticsClient.video_demographics">[docs]</a>
+    <span class="nd">@runtime_typecheck</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">video_demographics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">video_ids</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span>
+            <span class="n">demographic</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;ageGroup&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Break down each video’s audience by age and/or gender.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            video_ids (str | Sequence[str]): One or more YouTube video IDs.</span>
+<span class="sd">            demographic (str | Sequence[str], optional):</span>
+<span class="sd">                A single literal or an iterable chosen from:</span>
+<span class="sd">                - ``&quot;ageGroup&quot;`` – 13-17, 18-24, …, 65-plus *(default)*</span>
+<span class="sd">                - ``&quot;gender&quot;`` – *male*, *female*, *user-specified*</span>
+<span class="sd">                Pass both to obtain a multi-dimension report, e.g.</span>
+<span class="sd">                ``demographic=(&quot;ageGroup&quot;, &quot;gender&quot;)``.</span>
+<span class="sd">            **kw: Extra keyword arguments forwarded verbatim to</span>
+<span class="sd">                :py:meth:`reports_query` (for example ``start_date``,</span>
+<span class="sd">                ``end_date``, or a custom ``metrics`` tuple).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.DataFrame: One row per *video × demographic combo* with the</span>
+<span class="sd">            requested metrics (defaults to ``views`` and</span>
+<span class="sd">            ``estimatedMinutesWatched`` if not overridden).</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If *demographic* contains anything outside</span>
+<span class="sd">                ``{&quot;ageGroup&quot;, &quot;gender&quot;}``.</span>
+<span class="sd">            QuotaExceeded / AnalyticsError: Propagated from</span>
+<span class="sd">                :py:meth:`reports_query`.</span>
+
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; yt = AnalyticsClient(creds)</span>
+<span class="sd">            &gt;&gt;&gt; df = yt.video_demographics(</span>
+<span class="sd">            ...     [&quot;dQw4w9WgXcQ&quot;, &quot;HEXWRTEbj1I&quot;],</span>
+<span class="sd">            ...     demographic=(&quot;ageGroup&quot;, &quot;gender&quot;),</span>
+<span class="sd">            ...     start_date=&quot;2024-01-01&quot;,</span>
+<span class="sd">            ...     end_date=&quot;2024-06-30&quot;,</span>
+<span class="sd">            ... )</span>
+<span class="sd">            &gt;&gt;&gt; df.head()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dims</span> <span class="o">=</span> <span class="n">_string_to_tuple</span><span class="p">(</span><span class="n">demographic</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">set</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="n">DEMOGRAPHIC_DIMENSIONS</span><span class="p">):</span>
+            <span class="n">_raise_invalid_argument</span><span class="p">(</span><span class="s2">&quot;demographic&quot;</span><span class="p">,</span> <span class="n">demographic</span><span class="p">,</span>
+                                         <span class="n">DEMOGRAPHIC_DIMENSIONS</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_id</span><span class="p">(</span>
+            <span class="n">id_kind</span><span class="o">=</span><span class="s2">&quot;video&quot;</span><span class="p">,</span>
+            <span class="n">id_vals</span><span class="o">=</span><span class="n">video_ids</span><span class="p">,</span>
+            <span class="n">dimensions</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AnalyticsClient.channel_demographics">
+<a class="viewcode-back" href="../../api/_analytics.html#ytapi_kit._analytics.AnalyticsClient.channel_demographics">[docs]</a>
+    <span class="nd">@runtime_typecheck</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">channel_demographics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span>
+            <span class="n">demographic</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;ageGroup&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Break down channel&#39;s audience by age and/or gender.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            demographic (str | Sequence[str], optional):</span>
+<span class="sd">                A single literal or an iterable chosen from:</span>
+<span class="sd">                - ``&quot;ageGroup&quot;`` – 13-17, 18-24, …, 65-plus *(default)*</span>
+<span class="sd">                - ``&quot;gender&quot;`` – *male*, *female*, *user-specified*</span>
+<span class="sd">                Pass both to obtain a multi-dimension report, e.g.</span>
+<span class="sd">                ``demographic=(&quot;ageGroup&quot;, &quot;gender&quot;)``.</span>
+<span class="sd">            **kw: Extra keyword arguments forwarded verbatim to</span>
+<span class="sd">                :py:meth:`reports_query` (for example ``start_date``,</span>
+<span class="sd">                ``end_date``, or a custom ``metrics`` tuple).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.DataFrame: One row per demographic combo.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If *demographic* contains anything outside</span>
+<span class="sd">                ``{&quot;ageGroup&quot;, &quot;gender&quot;}``.</span>
+<span class="sd">            QuotaExceeded / AnalyticsError: Propagated from</span>
+<span class="sd">                :py:meth:`reports_query`.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; yt = AnalyticsClient(creds)</span>
+<span class="sd">            &gt;&gt;&gt; df = yt.channel_demographics(</span>
+<span class="sd">            ...     demographic=(&quot;ageGroup&quot;, &quot;gender&quot;),</span>
+<span class="sd">            ...     start_date=&quot;2024-01-01&quot;,</span>
+<span class="sd">            ...     end_date=&quot;2024-06-30&quot;,</span>
+<span class="sd">            ... )</span>
+<span class="sd">            &gt;&gt;&gt; df.head()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dims</span> <span class="o">=</span> <span class="n">_string_to_tuple</span><span class="p">(</span><span class="n">demographic</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">set</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="n">DEMOGRAPHIC_DIMENSIONS</span><span class="p">):</span>
+            <span class="n">_raise_invalid_argument</span><span class="p">(</span><span class="s2">&quot;demographic&quot;</span><span class="p">,</span> <span class="n">demographic</span><span class="p">,</span>
+                                         <span class="n">DEMOGRAPHIC_DIMENSIONS</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reports_query</span><span class="p">(</span><span class="n">dimensions</span><span class="o">=</span><span class="n">dims</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span></div>
+
+
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1"># Statistics Functions ----------------------------------------------------</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+<div class="viewcode-block" id="AnalyticsClient.video_stats">
+<a class="viewcode-back" href="../../api/_analytics.html#ytapi_kit._analytics.AnalyticsClient.video_stats">[docs]</a>
+    <span class="nd">@runtime_typecheck</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">video_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">video_ids</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get stats for one or more videos.</span>
+
+<span class="sd">        This is a generic video stats helper: whatever metrics/dimensions you pass</span>
+<span class="sd">        through ``**kw`` pass to :py:meth:`reports_query`, which means</span>
+<span class="sd">        you can ask for any Analytics combo without creating a new wrapper.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            video_ids (str | Sequence[str]): One or more YouTube video IDs.</span>
+<span class="sd">            **kw:  Keyword arguments forwarded verbatim to</span>
+<span class="sd">                :py:meth:`reports_query` — for example ``metrics``,</span>
+<span class="sd">                ``dimensions``, ``start_date``, ``end_date``, ``filters``, etc.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.DataFrame: One row per *video × requested dimension(s)* with the</span>
+<span class="sd">            metrics you asked for (defaults to ``views`` and</span>
+<span class="sd">            ``estimatedMinutesWatched``).</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            QuotaExceeded / AnalyticsError: Propagated from</span>
+<span class="sd">                :py:meth:`reports_query`.</span>
+
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; yt = AnalyticsClient(creds)</span>
+<span class="sd">            &gt;&gt;&gt; df = yt.video_stats(</span>
+<span class="sd">            ...     [&quot;dQw4w9WgXcQ&quot;, &quot;HEXWRTEbj1I&quot;],</span>
+<span class="sd">            ...     metrics=(&quot;views&quot;, &quot;likes&quot;, &quot;comments&quot;),</span>
+<span class="sd">            ...     start_date=&quot;2024-01-01&quot;,</span>
+<span class="sd">            ...     end_date=&quot;2024-06-30&quot;,</span>
+<span class="sd">            ... )</span>
+<span class="sd">            &gt;&gt;&gt; df.head()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_id</span><span class="p">(</span>
+            <span class="n">id_kind</span><span class="o">=</span><span class="s2">&quot;video&quot;</span><span class="p">,</span>
+            <span class="n">id_vals</span><span class="o">=</span><span class="n">video_ids</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AnalyticsClient.channel_stats">
+<a class="viewcode-back" href="../../api/_analytics.html#ytapi_kit._analytics.AnalyticsClient.channel_stats">[docs]</a>
+    <span class="nd">@runtime_typecheck</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">channel_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get stats for a channel.</span>
+
+<span class="sd">        This is a generic channel stats helper: whatever metrics/dimensions you pass</span>
+<span class="sd">        through ``**kw`` pass to :py:meth:`reports_query`, which means</span>
+<span class="sd">        you can ask for any Analytics combo without creating a new wrapper.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            **kw:  Keyword arguments forwarded verbatim to</span>
+<span class="sd">                :py:meth:`reports_query` — for example ``metrics``,</span>
+<span class="sd">                ``dimensions``, ``start_date``, ``end_date``, ``filters``, etc.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.DataFrame: One row per requested *dimension(s)*.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            QuotaExceeded / AnalyticsError: Propagated from</span>
+<span class="sd">                :py:meth:`reports_query`.</span>
+
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; yt = AnalyticsClient(creds)</span>
+<span class="sd">            &gt;&gt;&gt; df = yt.channel_stats(</span>
+<span class="sd">            ...     metrics=(&quot;views&quot;, &quot;likes&quot;, &quot;comments&quot;),</span>
+<span class="sd">            ...     start_date=&quot;2024-01-01&quot;,</span>
+<span class="sd">            ...     end_date=&quot;2024-06-30&quot;,</span>
+<span class="sd">            ... )</span>
+<span class="sd">            &gt;&gt;&gt; df.head()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reports_query</span><span class="p">(</span>
+            <span class="o">**</span><span class="n">kw</span>
+        <span class="p">)</span></div>
+
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1"># Sharing Services Functions ----------------------------------------------</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+<div class="viewcode-block" id="AnalyticsClient.video_sharing_services">
+<a class="viewcode-back" href="../../api/_analytics.html#ytapi_kit._analytics.AnalyticsClient.video_sharing_services">[docs]</a>
+    <span class="nd">@runtime_typecheck</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">video_sharing_services</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">video_ids</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Show which social / messaging platforms drove shares for each video.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            video_ids (str | Sequence[str]): One or more YouTube video IDs.</span>
+<span class="sd">            **kw: Keyword arguments forwarded unchanged to</span>
+<span class="sd">                :py:meth:`reports_query` – e.g. ``start_date``, ``end_date``,</span>
+<span class="sd">                or a custom ``filters`` string.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.DataFrame: One row per *video × sharingService*.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            QuotaExceeded / AnalyticsError: Propagated from</span>
+<span class="sd">                :py:meth:`reports_query`.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; yt = AnalyticsClient(creds)</span>
+<span class="sd">            &gt;&gt;&gt; df = yt.video_sharing_services(</span>
+<span class="sd">            ...     [&quot;dQw4w9WgXcQ&quot;, &quot;HEXWRTEbj1I&quot;],</span>
+<span class="sd">            ...     start_date=&quot;2024-01-01&quot;,</span>
+<span class="sd">            ...     end_date=&quot;2024-06-30&quot;,</span>
+<span class="sd">            ... )</span>
+<span class="sd">            &gt;&gt;&gt; df.head()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_id</span><span class="p">(</span>
+            <span class="n">id_kind</span><span class="o">=</span><span class="s2">&quot;video&quot;</span><span class="p">,</span>
+            <span class="n">id_vals</span><span class="o">=</span><span class="n">video_ids</span><span class="p">,</span>
+            <span class="n">dimensions</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;sharingService&quot;</span><span class="p">,),</span>
+            <span class="n">metrics</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;shares&quot;</span><span class="p">,),</span>
+            <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AnalyticsClient.channel_sharing_services">
+<a class="viewcode-back" href="../../api/_analytics.html#ytapi_kit._analytics.AnalyticsClient.channel_sharing_services">[docs]</a>
+    <span class="nd">@runtime_typecheck</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">channel_sharing_services</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Show which social / messaging platforms drove shares to the channel.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            **kw: Keyword arguments forwarded unchanged to</span>
+<span class="sd">                :py:meth:`reports_query` – e.g. ``start_date``, ``end_date``,</span>
+<span class="sd">                or a custom ``filters`` string.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.DataFrame: One row per *sharingService*.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            QuotaExceeded / AnalyticsError: Propagated from</span>
+<span class="sd">               :py:meth:`reports_query`.</span>
+
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; yt = AnalyticsClient(creds)</span>
+<span class="sd">            &gt;&gt;&gt; df = yt.channel_sharing_services(</span>
+<span class="sd">            ...     start_date=&quot;2024-01-01&quot;,</span>
+<span class="sd">            ...     end_date=&quot;2024-06-30&quot;,</span>
+<span class="sd">            ... )</span>
+<span class="sd">            &gt;&gt;&gt; df.head()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reports_query</span><span class="p">(</span>
+            <span class="n">dimensions</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;sharingService&quot;</span><span class="p">,),</span>
+            <span class="n">metrics</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;shares&quot;</span><span class="p">,),</span>
+            <span class="o">**</span><span class="n">kw</span>
+        <span class="p">)</span></div>
+
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1"># Time Period Functions ---------------------------------------------------</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+<div class="viewcode-block" id="AnalyticsClient.video_time_period">
+<a class="viewcode-back" href="../../api/_analytics.html#ytapi_kit._analytics.AnalyticsClient.video_time_period">[docs]</a>
+    <span class="nd">@runtime_typecheck</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">video_time_period</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">video_ids</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span>
+                          <span class="n">time_period</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;month&quot;</span><span class="p">,</span> <span class="n">start_date</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">date</span><span class="p">,</span>
+                          <span class="n">end_date</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">date</span><span class="p">,</span> <span class="n">max_results</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                          <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Summarise video performance by calendar **day** or **month**.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            video_ids (str | Sequence[str]): One or more YouTube video IDs.</span>
+<span class="sd">            time_period (str, optional): Reporting grain—either ``&quot;day&quot;`` or</span>
+<span class="sd">                ``&quot;month&quot;``. Defaults to ``&quot;month&quot;``.</span>
+<span class="sd">            start_date (str | datetime.date): ISO ``YYYY-MM-DD`` or date object</span>
+<span class="sd">                marking the start of the reporting window (inclusive).</span>
+<span class="sd">            end_date (str | datetime.date): ISO ``YYYY-MM-DD`` or date object</span>
+<span class="sd">                marking the end of the reporting window (inclusive).</span>
+<span class="sd">            max_results (int | None, optional): Number of rows to return.</span>
+<span class="sd">            **kw: Keyword arguments forwarded unchanged to</span>
+<span class="sd">                :py:meth:`reports_query` – e.g. ``start_date``, ``end_date``,</span>
+<span class="sd">                or a custom ``filters`` string.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.DataFrame: One row per *video × {day | month}* with the metrics</span>
+<span class="sd">            requested (defaults to ``views`` and ``estimatedMinutesWatched``).</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If *time_period* is not ``&quot;day&quot;`` or ``&quot;month&quot;``.</span>
+<span class="sd">            QuotaExceeded / AnalyticsError: Propagated from</span>
+<span class="sd">                :py:meth:`reports_query`.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; yt = AnalyticsClient(creds)</span>
+<span class="sd">            &gt;&gt;&gt; df = yt.video_time_period(</span>
+<span class="sd">            ...     [&quot;dQw4w9WgXcQ&quot;, &quot;HEXWRTEbj1I&quot;],</span>
+<span class="sd">            ...     time_period=&quot;day&quot;,</span>
+<span class="sd">            ...     start_date=&quot;2024-01-01&quot;,</span>
+<span class="sd">            ...     end_date=&quot;2024-01-31&quot;,</span>
+<span class="sd">            ... )</span>
+<span class="sd">            &gt;&gt;&gt; df.head()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">time_period</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">TIME_PERIOD_DIMENSIONS</span><span class="p">:</span>
+            <span class="n">_raise_invalid_argument</span><span class="p">(</span><span class="s2">&quot;time_period&quot;</span><span class="p">,</span> <span class="n">time_period</span><span class="p">,</span>
+                                         <span class="n">TIME_PERIOD_DIMENSIONS</span><span class="p">)</span>
+        <span class="n">resolved_max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_max_results</span><span class="p">(</span><span class="n">time_period</span><span class="p">,</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">,</span> <span class="n">max_results</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_id</span><span class="p">(</span>
+            <span class="n">id_kind</span><span class="o">=</span><span class="s2">&quot;video&quot;</span><span class="p">,</span>
+            <span class="n">id_vals</span><span class="o">=</span><span class="n">video_ids</span><span class="p">,</span>
+            <span class="n">dimensions</span><span class="o">=</span><span class="p">(</span><span class="n">time_period</span><span class="p">,),</span>
+            <span class="n">start_date</span><span class="o">=</span><span class="n">start_date</span><span class="p">,</span>
+            <span class="n">end_date</span><span class="o">=</span><span class="n">end_date</span><span class="p">,</span>
+            <span class="n">sort</span><span class="o">=</span><span class="n">time_period</span><span class="p">,</span>
+            <span class="n">max_results</span><span class="o">=</span><span class="n">resolved_max</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AnalyticsClient.channel_time_period">
+<a class="viewcode-back" href="../../api/_analytics.html#ytapi_kit._analytics.AnalyticsClient.channel_time_period">[docs]</a>
+    <span class="nd">@runtime_typecheck</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">channel_time_period</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">time_period</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;month&quot;</span><span class="p">,</span>
+                            <span class="n">start_date</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">date</span><span class="p">,</span>
+                            <span class="n">max_results</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Summarise channel performance by calendar **day** or **month**.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            time_period (str, optional): Reporting grain—either ``&quot;day&quot;`` or</span>
+<span class="sd">                ``&quot;month&quot;``. Defaults to ``&quot;month&quot;``.</span>
+<span class="sd">            start_date (str | datetime.date): ISO ``YYYY-MM-DD`` or date object</span>
+<span class="sd">                marking the start of the reporting window (inclusive).</span>
+<span class="sd">            end_date (str | datetime.date): ISO ``YYYY-MM-DD`` or date object</span>
+<span class="sd">                marking the end of the reporting window (inclusive).</span>
+<span class="sd">            max_results (int | None, optional): Number of rows to return.</span>
+<span class="sd">            **kw: Keyword arguments forwarded unchanged to</span>
+<span class="sd">                :py:meth:`reports_query` – e.g. ``start_date``, ``end_date``,</span>
+<span class="sd">                or a custom ``filters`` string.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.DataFrame: One row per  *{day | month}*.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If *time_period* is not ``&quot;day&quot;`` or ``&quot;month&quot;``.</span>
+<span class="sd">            QuotaExceeded / AnalyticsError: Propagated from</span>
+<span class="sd">                :py:meth:`reports_query`.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; yt = AnalyticsClient(creds)</span>
+<span class="sd">            &gt;&gt;&gt; df = yt.channel_time_period(</span>
+<span class="sd">            ...     time_period=&quot;day&quot;,</span>
+<span class="sd">            ...     start_date=&quot;2024-01-01&quot;,</span>
+<span class="sd">            ...     end_date=&quot;2024-01-31&quot;,</span>
+<span class="sd">            ... )</span>
+<span class="sd">            &gt;&gt;&gt; df.head()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">time_period</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">TIME_PERIOD_DIMENSIONS</span><span class="p">:</span>
+            <span class="n">_raise_invalid_argument</span><span class="p">(</span><span class="s2">&quot;time_period&quot;</span><span class="p">,</span> <span class="n">time_period</span><span class="p">,</span>
+                                         <span class="n">TIME_PERIOD_DIMENSIONS</span><span class="p">)</span>
+        <span class="n">resolved_max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_max_results</span><span class="p">(</span><span class="n">time_period</span><span class="p">,</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">,</span> <span class="n">max_results</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reports_query</span><span class="p">(</span>
+            <span class="n">dimensions</span><span class="o">=</span><span class="p">(</span><span class="n">time_period</span><span class="p">,),</span>
+            <span class="n">start_date</span><span class="o">=</span><span class="n">start_date</span><span class="p">,</span>
+            <span class="n">end_date</span><span class="o">=</span><span class="n">end_date</span><span class="p">,</span>
+            <span class="n">sort</span><span class="o">=</span><span class="n">time_period</span><span class="p">,</span>
+            <span class="n">max_results</span><span class="o">=</span><span class="n">resolved_max</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1"># Top Videos Functions ----------------------------------------------------</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+<div class="viewcode-block" id="AnalyticsClient.playlist_top_videos">
+<a class="viewcode-back" href="../../api/_analytics.html#ytapi_kit._analytics.AnalyticsClient.playlist_top_videos">[docs]</a>
+    <span class="nd">@runtime_typecheck</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">playlist_top_videos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">playlist_ids</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the top-performing videos within one or more playlists.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            playlist_ids (str | Sequence[str]): One or more YouTube playlist IDs.</span>
+<span class="sd">            **kw: Keyword arguments forwarded unchanged to</span>
+<span class="sd">                :py:meth:`reports_query` – e.g. ``start_date``, ``end_date``,</span>
+<span class="sd">                or a custom ``filters`` string.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.DataFrame: One row per *video × playlist* , with whatever metrics</span>
+<span class="sd">            requested (defaults to ``views`` and ``estimatedMinutesWatched``).</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            QuotaExceeded / AnalyticsError: Propagated from</span>
+<span class="sd">                :py:meth:`reports_query`.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; yt = AnalyticsClient(creds)</span>
+<span class="sd">            &gt;&gt;&gt; df = yt.playlist_top_videos(</span>
+<span class="sd">            ...     [&quot;PL9tY0BWXOZFtQ-GG8X2E8oia-MfeLeGKv&quot;],</span>
+<span class="sd">            ...     metrics=(&quot;views&quot;, &quot;likes&quot;, &quot;comments&quot;),</span>
+<span class="sd">            ...     start_date=&quot;2024-01-01&quot;,</span>
+<span class="sd">            ...     end_date=&quot;2024-06-30&quot;,</span>
+<span class="sd">            ... )</span>
+<span class="sd">            &gt;&gt;&gt; df.head()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_id</span><span class="p">(</span>
+            <span class="n">id_kind</span><span class="o">=</span><span class="s2">&quot;playlist&quot;</span><span class="p">,</span>
+            <span class="n">id_vals</span><span class="o">=</span><span class="n">playlist_ids</span><span class="p">,</span>
+            <span class="n">dimensions</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;video&quot;</span><span class="p">,),</span>
+            <span class="n">extra_filters</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;isCurated==1&quot;</span><span class="p">,),</span>
+            <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AnalyticsClient.channel_top_videos">
+<a class="viewcode-back" href="../../api/_analytics.html#ytapi_kit._analytics.AnalyticsClient.channel_top_videos">[docs]</a>
+    <span class="nd">@runtime_typecheck</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">channel_top_videos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the top-performing videos in the channel.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            **kw: Keyword arguments forwarded unchanged to</span>
+<span class="sd">                :py:meth:`reports_query` – e.g. ``start_date``, ``end_date``,</span>
+<span class="sd">                or a custom ``filters`` string.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.DataFrame: One row per *video*.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            QuotaExceeded / AnalyticsError: Propagated from</span>
+<span class="sd">                :py:meth:`reports_query`.</span>
+
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; yt = AnalyticsClient(creds)</span>
+<span class="sd">            &gt;&gt;&gt; df = yt.channel_top_videos(</span>
+<span class="sd">            ...     metrics=(&quot;views&quot;, &quot;likes&quot;, &quot;comments&quot;),</span>
+<span class="sd">            ...     start_date=&quot;2024-01-01&quot;,</span>
+<span class="sd">            ...     end_date=&quot;2024-06-30&quot;,</span>
+<span class="sd">            ... )</span>
+<span class="sd">            &gt;&gt;&gt; df.head()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reports_query</span><span class="p">(</span>
+            <span class="n">dimensions</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;video&quot;</span><span class="p">,),</span>
+            <span class="o">**</span><span class="n">kw</span>
+        <span class="p">)</span></div>
+
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1"># Traffic Sources Functions -----------------------------------------------</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+<div class="viewcode-block" id="AnalyticsClient.video_traffic_sources">
+<a class="viewcode-back" href="../../api/_analytics.html#ytapi_kit._analytics.AnalyticsClient.video_traffic_sources">[docs]</a>
+    <span class="nd">@runtime_typecheck</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">video_traffic_sources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">video_ids</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span>
+                              <span class="n">detail</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Break down traffic sources for one or more videos.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            video_ids (str | Sequence[str]): One or more YouTube video IDs.</span>
+<span class="sd">            detail (str | None, optional):</span>
+<span class="sd">                * ``None`` (default) – group rows by high-level</span>
+<span class="sd">                  **insightTrafficSourceType** (e.g. *YT_SEARCH*, *RELATED_VIDEO*).</span>
+<span class="sd">                * Any literal in</span>
+<span class="sd">                  ``{&quot;ADVERTISING&quot;, &quot;CAMPAIGN_CARD&quot;, &quot;END_SCREEN&quot;, &quot;EXT_URL&quot;,</span>
+<span class="sd">                  &quot;HASHTAGS&quot;, &quot;NOTIFICATION&quot;, &quot;RELATED_VIDEO&quot;, &quot;SOUND_PAGE&quot;,</span>
+<span class="sd">                  &quot;SUBSCRIBER&quot;, &quot;YT_CHANNEL&quot;, &quot;YT_OTHER_PAGE&quot;, &quot;YT_SEARCH&quot;,</span>
+<span class="sd">                  &quot;VIDEO_REMIXES&quot;}`` – drill into</span>
+<span class="sd">                  **insightTrafficSourceDetail** for that specific type.</span>
+<span class="sd">            **kw: Keyword arguments forwarded unchanged to</span>
+<span class="sd">                :py:meth:`reports_query` – e.g. ``start_date``, ``end_date``,</span>
+<span class="sd">                or a custom ``filters`` string.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.DataFrame:</span>
+<span class="sd">            * If *detail* is ``None`` – one row per *video ×</span>
+<span class="sd">              insightTrafficSourceType*.</span>
+<span class="sd">            * If *detail* is provided – one row per *video ×</span>
+<span class="sd">              insightTrafficSourceDetail*.</span>
+<span class="sd">            Metrics default to ``views`` and ``estimatedMinutesWatched`` unless</span>
+<span class="sd">            overridden via ``**kw``.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If *detail* is not ``None`` and not in the allowed literal</span>
+<span class="sd">                set shown above.</span>
+<span class="sd">            QuotaExceeded / AnalyticsError: Propagated from</span>
+<span class="sd">                :py:meth:`reports_query`.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; yt = AnalyticsClient(creds)</span>
+<span class="sd">            &gt;&gt;&gt; df = yt.video_traffic_sources(</span>
+<span class="sd">            ...     [&quot;dQw4w9WgXcQ&quot;],</span>
+<span class="sd">            ...     detail=&quot;YT_SEARCH&quot;,</span>
+<span class="sd">            ...     start_date=&quot;2024-01-01&quot;,</span>
+<span class="sd">            ...     end_date=&quot;2024-03-31&quot;,</span>
+<span class="sd">            ... )</span>
+<span class="sd">            &gt;&gt;&gt; df.head()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">detail</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">detail</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">TRAFFIC_DETAIL_TYPES</span><span class="p">:</span>
+            <span class="n">_raise_invalid_argument</span><span class="p">(</span><span class="s2">&quot;detail&quot;</span><span class="p">,</span> <span class="n">detail</span><span class="p">,</span>
+                                         <span class="n">TRAFFIC_DETAIL_TYPES</span><span class="p">)</span>
+        <span class="n">dim</span> <span class="o">=</span> <span class="s2">&quot;insightTrafficSourceDetail&quot;</span> <span class="k">if</span> <span class="n">detail</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> \
+            <span class="k">else</span> <span class="s2">&quot;insightTrafficSourceType&quot;</span>
+        <span class="n">extras</span> <span class="o">=</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;insightTrafficSourceType==</span><span class="si">{</span><span class="n">detail</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,)</span> <span class="k">if</span> <span class="n">detail</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> \
+            <span class="k">else</span> <span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_id</span><span class="p">(</span>
+            <span class="n">id_kind</span><span class="o">=</span><span class="s2">&quot;video&quot;</span><span class="p">,</span>
+            <span class="n">id_vals</span><span class="o">=</span><span class="n">video_ids</span><span class="p">,</span>
+            <span class="n">extra_filters</span><span class="o">=</span><span class="n">extras</span><span class="p">,</span>
+            <span class="n">dimensions</span><span class="o">=</span><span class="n">dim</span><span class="p">,</span>
+            <span class="n">max_results</span><span class="o">=</span> <span class="mi">25</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AnalyticsClient.channel_traffic_sources">
+<a class="viewcode-back" href="../../api/_analytics.html#ytapi_kit._analytics.AnalyticsClient.channel_traffic_sources">[docs]</a>
+    <span class="nd">@runtime_typecheck</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">channel_traffic_sources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">detail</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Break down traffic sources for the channel.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            detail (str | None, optional):</span>
+<span class="sd">                * ``None`` (default) – group rows by high-level</span>
+<span class="sd">                  **insightTrafficSourceType** (e.g. *YT_SEARCH*, *RELATED_VIDEO*).</span>
+<span class="sd">                * Any literal in</span>
+<span class="sd">                  ``{&quot;ADVERTISING&quot;, &quot;CAMPAIGN_CARD&quot;, &quot;END_SCREEN&quot;, &quot;EXT_URL&quot;,</span>
+<span class="sd">                  &quot;HASHTAGS&quot;, &quot;NOTIFICATION&quot;, &quot;RELATED_VIDEO&quot;, &quot;SOUND_PAGE&quot;,</span>
+<span class="sd">                  &quot;SUBSCRIBER&quot;, &quot;YT_CHANNEL&quot;, &quot;YT_OTHER_PAGE&quot;, &quot;YT_SEARCH&quot;,</span>
+<span class="sd">                  &quot;VIDEO_REMIXES&quot;}`` – drill into</span>
+<span class="sd">                  **insightTrafficSourceDetail** for that specific type.</span>
+<span class="sd">            **kw: Keyword arguments forwarded unchanged to</span>
+<span class="sd">                :py:meth:`reports_query` – e.g. ``start_date``, ``end_date``,</span>
+<span class="sd">                or a custom ``filters`` string.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.DataFrame:</span>
+<span class="sd">            * If *detail* is ``None`` – one row per *insightTrafficSourceType*.</span>
+<span class="sd">            * If *detail* is provided – one row per *insightTrafficSourceDetail*.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If *detail* is not ``None`` and not in the allowed literal</span>
+<span class="sd">                set shown above.</span>
+<span class="sd">            QuotaExceeded / AnalyticsError: Propagated from</span>
+<span class="sd">                :py:meth:`reports_query`.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; yt = AnalyticsClient(creds)</span>
+<span class="sd">            &gt;&gt;&gt; df = yt.channel_traffic_sources(</span>
+<span class="sd">            ...     detail=&quot;YT_SEARCH&quot;,</span>
+<span class="sd">            ...     start_date=&quot;2024-01-01&quot;,</span>
+<span class="sd">            ...     end_date=&quot;2024-03-31&quot;,</span>
+<span class="sd">            ... )</span>
+<span class="sd">            &gt;&gt;&gt; df.head()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">detail</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">detail</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">TRAFFIC_DETAIL_TYPES</span><span class="p">:</span>
+            <span class="n">_raise_invalid_argument</span><span class="p">(</span><span class="s2">&quot;detail&quot;</span><span class="p">,</span> <span class="n">detail</span><span class="p">,</span>
+                                         <span class="n">TRAFFIC_DETAIL_TYPES</span><span class="p">)</span>
+        <span class="n">dim</span> <span class="o">=</span> <span class="s2">&quot;insightTrafficSourceDetail&quot;</span> <span class="k">if</span> <span class="n">detail</span> \
+            <span class="k">else</span> <span class="s2">&quot;insightTrafficSourceType&quot;</span>
+        <span class="n">filters</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;insightTrafficSourceType==</span><span class="si">{</span><span class="n">detail</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">detail</span> \
+            <span class="k">else</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reports_query</span><span class="p">(</span>
+            <span class="n">dimensions</span><span class="o">=</span><span class="p">(</span><span class="n">dim</span><span class="p">,),</span>
+            <span class="n">filters</span><span class="o">=</span><span class="n">filters</span><span class="p">,</span>
+            <span class="n">max_results</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1"># Audience retention (videos only) ----------------------------------------</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+<div class="viewcode-block" id="AnalyticsClient.video_audience_retention">
+<a class="viewcode-back" href="../../api/_analytics.html#ytapi_kit._analytics.AnalyticsClient.video_audience_retention">[docs]</a>
+    <span class="nd">@runtime_typecheck</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">video_audience_retention</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">video_ids</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span>
+                                 <span class="n">audience_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Chart how well viewers stick around for each video (audience‐retention).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            video_ids (str | Sequence[str]): One or more YouTube video IDs.</span>
+<span class="sd">            audience_type (str | None, optional):</span>
+<span class="sd">                Filter the report by viewer origin:</span>
+
+<span class="sd">                - ``&quot;ORGANIC&quot;`` – regular, unpaid views</span>
+<span class="sd">                - ``&quot;AD_INSTREAM&quot;`` – pre-roll / mid-roll ad views</span>
+<span class="sd">                - ``&quot;AD_INDISPLAY&quot;`` – video discovery ads</span>
+<span class="sd">                - ``None`` (default) – all audiences combined</span>
+
+<span class="sd">                Any other literal triggers a tidy bullet-listed `ValueError`.</span>
+<span class="sd">            **kw: Keyword arguments forwarded unchanged to</span>
+<span class="sd">                :py:meth:`reports_query` – e.g. ``start_date``, ``end_date``,</span>
+<span class="sd">                or a custom ``filters`` string.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.DataFrame: One row per *video × elapsedVideoTimeRatio* bucket,</span>
+<span class="sd">            with the ``audienceWatchRatio`` metric.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If *audience_type* is not ``None`` and not in</span>
+<span class="sd">                ``{&quot;ORGANIC&quot;, &quot;AD_INSTREAM&quot;, &quot;AD_INDISPLAY&quot;}``.</span>
+<span class="sd">            QuotaExceeded / AnalyticsError: Propagated from</span>
+<span class="sd">                :py:meth:`reports_query`.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; yt = AnalyticsClient(creds)</span>
+<span class="sd">            &gt;&gt;&gt; df = yt.video_audience_retention(</span>
+<span class="sd">            ...     [&quot;dQw4w9WgXcQ&quot;],</span>
+<span class="sd">            ...     audience_type=&quot;ORGANIC&quot;,</span>
+<span class="sd">            ...     start_date=&quot;2024-01-01&quot;,</span>
+<span class="sd">            ...     end_date=&quot;2024-03-31&quot;,</span>
+<span class="sd">            ... )</span>
+<span class="sd">            &gt;&gt;&gt; df.head()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">audience_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">audience_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">AUDIENCE_TYPES</span><span class="p">:</span>
+            <span class="n">_raise_invalid_argument</span><span class="p">(</span><span class="s2">&quot;audience_type&quot;</span><span class="p">,</span> <span class="n">audience_type</span><span class="p">,</span>
+                                         <span class="n">AUDIENCE_TYPES</span><span class="p">)</span>
+        <span class="n">extras</span> <span class="o">=</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;audienceType==</span><span class="si">{</span><span class="n">audience_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,)</span> <span class="k">if</span> <span class="n">audience_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> \
+            <span class="k">else</span> <span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_id</span><span class="p">(</span>
+            <span class="n">id_kind</span><span class="o">=</span><span class="s2">&quot;video&quot;</span><span class="p">,</span>
+            <span class="n">id_vals</span><span class="o">=</span><span class="n">video_ids</span><span class="p">,</span>
+            <span class="n">extra_filters</span><span class="o">=</span><span class="n">extras</span><span class="p">,</span>
+            <span class="n">dimensions</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;elapsedVideoTimeRatio&quot;</span><span class="p">,),</span>
+            <span class="n">metrics</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;audienceWatchRatio&quot;</span><span class="p">,),</span>
+            <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+    <span class="c1"># ------------------------------------------------------------------</span>
+    <span class="c1"># Live‑streaming position (videos only) -----------------------------</span>
+    <span class="c1"># ------------------------------------------------------------------</span>
+<div class="viewcode-block" id="AnalyticsClient.video_live_position">
+<a class="viewcode-back" href="../../api/_analytics.html#ytapi_kit._analytics.AnalyticsClient.video_live_position">[docs]</a>
+    <span class="nd">@runtime_typecheck</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">video_live_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">video_ids</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span>
+                            <span class="n">metrics</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;peakConcurrentViewers&quot;</span><span class="p">,</span>
+                            <span class="o">**</span><span class="n">kw</span>
+                            <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Fetch live-stream performance by in-broadcast position.</span>
+
+<span class="sd">        The API’s **liveStreamPosition** dimension buckets data by how far a viewer</span>
+<span class="sd">        was into the stream when they joined (0–10 %, 10–25 %, etc.).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            video_ids (str | Sequence[str]): One or more YouTube video IDs.</span>
+<span class="sd">            metrics (str | Sequence[str], optional): Metric name or collection</span>
+<span class="sd">                drawn from:</span>
+<span class="sd">                - ``&quot;averageConcurrentViewers&quot;``</span>
+<span class="sd">                - ``&quot;peakConcurrentViewers&quot;`` *(default)*</span>
+<span class="sd">                Pass a list/tuple when you need both.</span>
+<span class="sd">            **kw: Keyword arguments forwarded unchanged to</span>
+<span class="sd">                :py:meth:`reports_query` – e.g. ``start_date``, ``end_date``,</span>
+<span class="sd">                or a custom ``filters`` string.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.DataFrame: One row per *video × liveStreamPosition bucket* with</span>
+<span class="sd">            the requested metric columns.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If *metrics* is empty or contains anything outside</span>
+<span class="sd">                ``{&quot;averageConcurrentViewers&quot;, &quot;peakConcurrentViewers&quot;}``.</span>
+<span class="sd">            QuotaExceeded / AnalyticsError: Propagated from</span>
+<span class="sd">                :py:meth:`reports_query`.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; yt = AnalyticsClient(creds)</span>
+<span class="sd">            &gt;&gt;&gt; df = yt.video_live_position(</span>
+<span class="sd">            ...     [&quot;dQw4w9WgXcQ&quot;],</span>
+<span class="sd">            ...     metrics=(&quot;averageConcurrentViewers&quot;, &quot;peakConcurrentViewers&quot;),</span>
+<span class="sd">            ...     start_date=&quot;2024-05-01&quot;,</span>
+<span class="sd">            ...     end_date=&quot;2024-05-31&quot;,</span>
+<span class="sd">            ... )</span>
+<span class="sd">            &gt;&gt;&gt; df.head()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mets</span> <span class="o">=</span> <span class="n">_string_to_tuple</span><span class="p">(</span><span class="n">metrics</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">mets</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">set</span><span class="p">(</span><span class="n">mets</span><span class="p">)</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="n">LIVESTREAM_METRICS</span><span class="p">):</span>
+            <span class="n">_raise_invalid_argument</span><span class="p">(</span><span class="s2">&quot;metrics&quot;</span><span class="p">,</span> <span class="n">metrics</span><span class="p">,</span>
+                                         <span class="n">LIVESTREAM_METRICS</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_id</span><span class="p">(</span>
+            <span class="n">id_kind</span><span class="o">=</span><span class="s2">&quot;video&quot;</span><span class="p">,</span>
+            <span class="n">id_vals</span><span class="o">=</span><span class="n">video_ids</span><span class="p">,</span>
+            <span class="n">dimensions</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;liveStreamPosition&quot;</span><span class="p">,),</span>
+            <span class="n">metrics</span><span class="o">=</span><span class="n">mets</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+    <span class="c1"># ------------------------------------------------------------------</span>
+    <span class="c1"># Membership cancellation (channel only) ---------------------------</span>
+    <span class="c1"># ------------------------------------------------------------------</span>
+<div class="viewcode-block" id="AnalyticsClient.channel_membership_cancellation">
+<a class="viewcode-back" href="../../api/_analytics.html#ytapi_kit._analytics.AnalyticsClient.channel_membership_cancellation">[docs]</a>
+    <span class="nd">@runtime_typecheck</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">channel_membership_cancellation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Analyse **why** paying members cancel their channel memberships.</span>
+
+<span class="sd">        The report groups rows by ``membershipCancellationSurveyReason`` and</span>
+<span class="sd">        returns the metric ``membershipsCancellationSurveyResponses`` (count of</span>
+<span class="sd">        answers per reason).  Use this to spot the top churn drivers—price,</span>
+<span class="sd">        content cadence, “just browsing,” etc.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            **kw: Keyword arguments forwarded unchanged to</span>
+<span class="sd">                :py:meth:`reports_query` – e.g. ``start_date``, ``end_date``,</span>
+<span class="sd">                or a custom ``filters`` string.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.DataFrame: One row per *membershipCancellationSurveyReason*</span>
+<span class="sd">            with the ``membershipsCancellationSurveyResponses`` metric.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            QuotaExceeded / AnalyticsError: Propagated from</span>
+<span class="sd">                :py:meth:`reports_query`.</span>
+
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; yt = AnalyticsClient(creds)</span>
+<span class="sd">            &gt;&gt;&gt; df = yt.channel_membership_cancellation(</span>
+<span class="sd">            ...     start_date=&quot;2024-01-01&quot;,</span>
+<span class="sd">            ...     end_date=&quot;2024-06-30&quot;,</span>
+<span class="sd">            ... )</span>
+<span class="sd">            &gt;&gt;&gt; df.head()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reports_query</span><span class="p">(</span>
+            <span class="n">dimensions</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;membershipCancellationSurveyReason&quot;</span><span class="p">,),</span>
+            <span class="n">metrics</span> <span class="o">=</span><span class="s2">&quot;membershipsCancellationSurveyResponses&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span>
+        <span class="p">)</span></div>
+
+
+    <span class="c1"># ------------------------------------------------------------------</span>
+    <span class="c1"># Ad‑performance ----------------------------------------------------</span>
+    <span class="c1"># ------------------------------------------------------------------</span>
+<div class="viewcode-block" id="AnalyticsClient.channel_ad_performance">
+<a class="viewcode-back" href="../../api/_analytics.html#ytapi_kit._analytics.AnalyticsClient.channel_ad_performance">[docs]</a>
+    <span class="nd">@runtime_typecheck</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">channel_ad_performance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inspect ad-revenue performance for the authenticated channel.</span>
+
+<span class="sd">        The helper queries the Analytics API with</span>
+<span class="sd">        ``dimensions=(&quot;adType&quot;)``—*display*, *bumper*, *skippable in-stream*, etc.—</span>
+<span class="sd">        and defaults to the ``adRate`` metric (revenue per 1 000 monetized</span>
+<span class="sd">        playbacks).  Override ``metrics`` in ``**kw`` if you need additional</span>
+<span class="sd">        figures such as ``grossRevenue`` or ``cpm``.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            **kw: Keyword arguments forwarded unchanged to</span>
+<span class="sd">                :py:meth:`reports_query` – e.g. ``start_date``, ``end_date``,</span>
+<span class="sd">                or a custom ``filters`` string.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.DataFrame: One row per *adType* with the requested metric</span>
+<span class="sd">            columns.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            QuotaExceeded / AnalyticsError: Propagated from</span>
+<span class="sd">                :py:meth:`reports_query`.</span>
+
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; yt = AnalyticsClient(creds)</span>
+<span class="sd">            &gt;&gt;&gt; df = yt.channel_ad_performance(</span>
+<span class="sd">            ...     metrics=(&quot;adRate&quot;, &quot;grossRevenue&quot;),</span>
+<span class="sd">            ...     start_date=&quot;2024-01-01&quot;,</span>
+<span class="sd">            ...     end_date=&quot;2024-12-31&quot;,</span>
+<span class="sd">            ... )</span>
+<span class="sd">            &gt;&gt;&gt; df.head()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reports_query</span><span class="p">(</span><span class="n">dimensions</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;adType&quot;</span><span class="p">,),</span> <span class="n">metrics</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;adRate&quot;</span><span class="p">,),</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Jake Davis.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
